@@ -1,0 +1,42 @@
+body, div, ul, dl, ol, dt, dd, li, p, a, label, span, i, img, input, textarea, header, footer, article, section, nav, aside, figure, h1, h2, h3, h4, h5, h6 {
+  padding: 0;
+  margin: 0;
+  border: 0;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+ul, dl, ol {
+  list-style: none;
+}
+
+input, textarea, a {
+  outline: none;
+}
+
+body {
+  font-size: 14px;
+  min-width: 1200px;
+  font-family: 'Microsoft Yahei', Arial, STHeiti, sans-serif;
+  background: #fff;
+}
+
+a {
+  color: #5d7895;
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+
+.btn {
+  display: inline-block;
+  cursor: pointer;
+}
+
+.icon {
+  display: inline-block;
+}
+
+/*# sourceMappingURL=frame.css.map */
