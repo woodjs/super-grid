@@ -1,0 +1,41 @@
+@import "./core/base";
+@import "./core/reset";
+@import "./core/config";
+
+.sc-grid-wrapper {
+ width:100%;
+ font-size:14px;
+ font-family: "Microsoft Yahei";
+ @include boxSizing(border-box);
+}
+.sc-grid-table{
+ float:left;
+ overflow:hidden;
+ @include boxSizing(border-box);
+}
+.sc-table-header{
+ width:100%;
+ overflow: hidden;
+ line-height: 24px;
+ background: #eee;
+ &:after{
+  content: '';
+  display:block;
+  clear:both;
+ }
+ .sc-table-column{
+  position: relative;
+  float:left;
+  .col-resize{
+   position: absolute;
+   width:14px;
+   right:0;
+   top:0;
+   bottom:0;
+   cursor: col-resize;
+  }
+ }
+}
+.sc-table-content{
+ @include boxSizing(border-box);
+}

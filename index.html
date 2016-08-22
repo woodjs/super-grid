@@ -6,17 +6,211 @@
   <meta name="keywords" content="">
   <meta name="description" content="">
   <title>grid</title>
-  <link rel="stylesheet" type="text/css" href="css/frame.css">
+  <link rel="stylesheet" type="text/css" href="css/gird.css">
+  <style type="text/css">
+    .demo-grid {
+      width: 800px;
+      margin: 50px auto;
+      overflow: auto;
+    }
+  </style>
 </head>
 <body>
-  <div id="grid"></div>
+<div class="demo-grid">
 
-  <script type="text/javascript" src="js/lib/jquery-1.11.3.min.js"></script>
-  <script type="text/javascript" src="js/grid.js"></script>
-  <script type="text/javascript">
-    $(function () {
+  <div class="sc-grid-wrapper" style="width:900px;">
+    <div class="sc-grid-table" style="width:300px;">
+      <div id="grid-table-header-1" style="overflow: hidden">
+        <div class="sc-table-header" style="width: 300px;">
+          <div class="sc-table-column" style="width: 100px"><span class="header-text">测试1</span><span
+              class="col-resize"></span></div>
+          <div class="sc-table-column" style="width: 100px"><span class="header-text">测试2</span><span
+              class="col-resize"></span></div>
+          <div class="sc-table-column" style="width: 100px"><span class="header-text">测试3</span><span
+              class="col-resize"></span></div>
+        </div>
+      </div>
+      <div class="sc-table-content" style="height:120px;overflow:hidden;padding-bottom:17px;" id="grid-table-1">
+        <table style="width: 300px;">
+          <colgroup>
+            <col width="100px"/>
+          </colgroup>
+          <colgroup>
+            <col width="100px"/>
+          </colgroup>
+          <colgroup>
+            <col width="100px"/>
+          </colgroup>
+          <tbody>
+          <tr>
+            <td>test</td>
+            <td>abc</td>
+            <td>ddd1</td>
+          </tr>
+          <tr>
+            <td>test</td>
+            <td>abc</td>
+            <td>ddd2</td>
+          </tr>
+          <tr>
+            <td>test</td>
+            <td>abc</td>
+            <td>ddd3</td>
+          </tr>
+          <tr>
+            <td>test</td>
+            <td>abc</td>
+            <td>ddd4</td>
+          </tr>
+          <tr>
+            <td>test</td>
+            <td>abc</td>
+            <td>ddd5</td>
+          </tr>
+          <tr>
+            <td>test</td>
+            <td>abc</td>
+            <td>ddd6</td>
+          </tr>
+          <tr>
+            <td>test</td>
+            <td>abc</td>
+            <td>ddd7</td>
+          </tr>
+          <tr>
+            <td>test</td>
+            <td>abc</td>
+            <td>ddd8</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
 
+    <div class="sc-grid-table" style="width:300px;">
+      <div id="grid-table-header-2" style="overflow: hidden">
+        <div class="sc-table-header" style="width:617px;">
+          <div class="sc-table-column" style="width: 100px"><span class="header-text">测试1</span><span
+              class="col-resize"></span></div>
+          <div class="sc-table-column" style="width: 100px"><span class="header-text">测试2</span><span
+              class="col-resize"></span></div>
+          <div class="sc-table-column" style="width: 100px"><span class="header-text">测试3</span><span
+              class="col-resize"></span></div>
+          <div class="sc-table-column" style="width: 100px"><span class="header-text">测试1</span><span
+              class="col-resize"></span></div>
+          <div class="sc-table-column" style="width: 100px"><span class="header-text">测试2</span><span
+              class="col-resize"></span></div>
+          <div class="sc-table-column" style="width: 100px"><span class="header-text">测试3</span><span
+              class="col-resize"></span></div>
+        </div>
+      </div>
+      <div class="sc-table-content" style="height:120px;overflow: auto;" id="grid-table-2">
+        <table style="width: 600px;">
+          <colgroup>
+            <col width="100px"/>
+          </colgroup>
+          <colgroup>
+            <col width="100px"/>
+          </colgroup>
+          <colgroup>
+            <col width="100px"/>
+          </colgroup>
+          <colgroup>
+            <col width="100px"/>
+          </colgroup>
+          <colgroup>
+            <col width="100px"/>
+          </colgroup>
+          <colgroup>
+            <col width="100px"/>
+          </colgroup>
+          <tbody>
+          <tr>
+            <td>test</td>
+            <td>abc</td>
+            <td>dd2d</td>
+            <td>test</td>
+            <td>abc</td>
+            <td>ddd</td>
+          </tr>
+          <tr>
+            <td>tes2t</td>
+            <td>abc</td>
+            <td>ddd</td>
+            <td>test</td>
+            <td>a2bc</td>
+            <td>ddd</td>
+          </tr>
+          <tr>
+            <td>test</td>
+            <td>abc</td>
+            <td>d2dd</td>
+            <td>test</td>
+            <td>abc</td>
+            <td>ddd</td>
+          </tr>
+          <tr>
+            <td>test</td>
+            <td>ab2c</td>
+            <td>ddd</td>
+            <td>test</td>
+            <td>abc</td>
+            <td>ddd</td>
+          </tr>
+          <tr>
+            <td>test</td>
+            <td>abc</td>
+            <td>ddd</td>
+            <td>test</td>
+            <td>ab2c</td>
+            <td>d3dd</td>
+          </tr>
+          <tr>
+            <td>tes4t</td>
+            <td>abc</td>
+            <td>ddd</td>
+            <td>test</td>
+            <td>abc</td>
+            <td>d5dd</td>
+          </tr>
+          <tr>
+            <td>test</td>
+            <td>a6bc</td>
+            <td>ddd</td>
+            <td>test</td>
+            <td>abc</td>
+            <td>ddd</td>
+          </tr>
+          <tr>
+            <td>test</td>
+            <td>abc</td>
+            <td>dd6d</td>
+            <td>test</td>
+            <td>ab6c</td>
+            <td>ddd</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<script type="text/javascript" src="js/lib/jquery-1.11.3.min.js"></script>
+<script type="text/javascript" src="js/grid.js"></script>
+<script type="text/javascript">
+
+
+  // Delete the DIV
+  $(function () {
+    $('#grid-table-2').on('mousewheel scroll', function () {
+      $('#grid-table-1').scrollTop($(this).scrollTop());
+      $('#grid-table-header-2').scrollLeft($(this).scrollLeft());
     });
-  </script>
+
+  });
+</script>
 </body>
 </html>
