@@ -1,0 +1,62 @@
+body, div, ul, dl, ol, dt, dd, li, p, a, label, span, i, img, input, textarea, header, footer, article, section, nav, aside, figure, h1, h2, h3, h4, h5, h6 {
+  padding: 0;
+  margin: 0;
+  border: 0;
+}
+
+ul, dl, ol {
+  list-style: none;
+}
+
+input, textarea, a {
+  outline: none;
+}
+
+.sc-grid-wrapper {
+  width: 100%;
+  font-size: 14px;
+  font-family: "Microsoft Yahei";
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.sc-grid-table {
+  float: left;
+  overflow: hidden;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.sc-table-header {
+  width: 100%;
+  overflow: hidden;
+  line-height: 24px;
+  background: #eee;
+}
+.sc-table-header:after {
+  content: '';
+  display: block;
+  clear: both;
+}
+.sc-table-header .sc-table-column {
+  position: relative;
+  float: left;
+}
+.sc-table-header .sc-table-column .col-resize {
+  position: absolute;
+  width: 14px;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  cursor: col-resize;
+}
+
+.sc-table-content {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+/*# sourceMappingURL=gird.css.map */
