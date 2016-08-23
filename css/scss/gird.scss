@@ -16,6 +16,7 @@
 .sc-table-header{
  width:100%;
  overflow: hidden;
+ height:24px;
  line-height: 24px;
  background: #eee;
  &:after{
@@ -26,16 +27,20 @@
  .sc-table-column{
   position: relative;
   float:left;
-  .col-resize{
-   position: absolute;
-   width:14px;
-   right:0;
-   top:0;
-   bottom:0;
-   cursor: col-resize;
-  }
+  @extend %textOverflowEllipsis;
  }
 }
-.sc-table-content{
+.sc-table-wrapper{
  @include boxSizing(border-box);
+ table{
+  table-layout: fixed;
+  border-collapse: collapse;
+  @include boxSizing(border-box);
+  padding: 0;
+  border:0;
+  margin:0;
+ }
+ td{
+  @extend %textOverflowEllipsis;
+ }
 }

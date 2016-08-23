@@ -24,17 +24,17 @@
 
   var util = {
     getScrollbarWidth: function () {
-      var a = document.createElement('div');
-      var b = document.createElement('div');
+      var divA = document.createElement('div');
+      var divB = document.createElement('div');
 
-      a.style.overflowY = 'hidden';
-      b.style.height = '1px';
-      a.appendChild(b);
-      document.body.appendChild(a);
-      var tempWidth = b.clientWidth;
-      a.style.overflowY = 'scroll';
+      divA.style.overflowY = 'hidden';
+      divB.style.height = '1px';
+      divA.appendChild(divB);
+      document.body.appendChild(divA);
+      var tempWidth = divB.clientWidth;
+      divA.style.overflowY = 'scroll';
 
-      return tempWidth - b.clientWidth;
+      return tempWidth - divB.clientWidth;
     }
   };
 

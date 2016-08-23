@@ -1,3 +1,9 @@
+.sc-table-header .sc-table-column, .sc-table-wrapper td {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
 body, div, ul, dl, ol, dt, dd, li, p, a, label, span, i, img, input, textarea, header, footer, article, section, nav, aside, figure, h1, h2, h3, h4, h5, h6 {
   padding: 0;
   margin: 0;
@@ -32,6 +38,7 @@ input, textarea, a {
 .sc-table-header {
   width: 100%;
   overflow: hidden;
+  height: 24px;
   line-height: 24px;
   background: #eee;
 }
@@ -44,19 +51,21 @@ input, textarea, a {
   position: relative;
   float: left;
 }
-.sc-table-header .sc-table-column .col-resize {
-  position: absolute;
-  width: 14px;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  cursor: col-resize;
-}
 
-.sc-table-content {
+.sc-table-wrapper {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
+}
+.sc-table-wrapper table {
+  table-layout: fixed;
+  border-collapse: collapse;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  padding: 0;
+  border: 0;
+  margin: 0;
 }
 
 /*# sourceMappingURL=gird.css.map */
