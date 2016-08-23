@@ -5,6 +5,7 @@
 .sc-grid-wrapper {
  width:100%;
  font-size:14px;
+ overflow: hidden;
  font-family: "Microsoft Yahei";
  @include boxSizing(border-box);
 }

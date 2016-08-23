@@ -193,8 +193,10 @@
 <script type="text/javascript">
 
   var divDragMask = null;
+  var divDragLine = null;
   var $curDragTarget = null;
   var $cols = null;
+  var originPointX = 0;
 
   $(function () {
     $('.sc-table-wrapper').on('mousewheel scroll', function () {
@@ -215,6 +217,7 @@
           $curDragTarget = $this;
 
           createTableDragMask(e);
+          originPointX = e.pageX;
         }
       },
       'mouseenter mousemove': function (e) {
@@ -252,21 +255,28 @@
     var mousePosition = getEventPosition(e);
     var maskLeft = mousePosition.x - maskW / 2;
     var maskTop = mousePosition.y - maskH / 2;
+    var gridWrapperH = $curDragTarget.closest('.sc-grid-wrapper').height();
 
     divDragMask = document.createElement('div');
     divDragMask.style.cssText = 'width:' + maskW + 'px;height:' + maskH + 'px;left:'+ maskLeft + 'px;top:' + maskTop + 'px;position:absolute;background:transparent;z-index:999999;';
 
     document.body.appendChild(divDragMask);
 
+    divDragLine = document.createElement('div');
+    divDragLine.style.cssText = 'width:1px;height:' + gridWrapperH + 'px;left:'+ mousePosition.x +'px;top:'+ $curDragTarget.offset().top +'px;position:absolute;background:black;z-index:999990;';
+
+    document.body.appendChild(divDragLine);
+
     $(divDragMask).on({
-      'mousemove': resizeColumn,
-      'mouseup': deleteTableDragMask
+      'mousemove': dragAndCalculate,
+      'mouseup': finishResizeColumn
     });
 
-    function resizeColumn(e) {
+    function dragAndCalculate(e) {
       var $this = $(this);
       var minColumnW = 20;
       var minTableW = 40;
+      var curDragTargetW = $curDragTarget.width();
       var colIndex = $curDragTarget.data('col-index');
       var maskPosition = getObjectPosition($this);
       var mousePosition = getEventPosition(e);
@@ -277,32 +287,68 @@
       var $curGridTable = $curDragTarget.closest('.sc-grid-table');
       var $gridWrapper = $curDragTarget.closest('.sc-grid-wrapper');
       var gridWrapperW = $gridWrapper.width();
+      var gridWrapperH = $gridWrapper.height();
       var curColumnW = $curCol.width() + gapX;
 
       divDragMask.style.left = mousePosition.x - maskW / 2 + 'px';
 
-      if (curColumnW > minColumnW && (gridWrapperW - ($curGridTable.width() + gapX) > minTableW)) {
-
-        $curDragTarget[0].style.width = $curCol[0].style.width = curColumnW + 'px';
-
-        $curTableHeader[0].style.width = $curTableHeader.width() + gapX + 'px';
-
-
-        if ($curDragTarget.data('frozen') === true) {  // 移动冻结列
-          $curTable[0].style.width = $curTableHeader.width() + 'px';
-          $curGridTable.css({
-            width: $curGridTable.width() + gapX + 'px'
-          }).siblings('.sc-grid-table').css({
-            width: gridWrapperW - $curGridTable.width() + 'px'
-          });
-        } else {
-          $curTable[0].style.width = $curTableHeader.width() - 17 + 'px';
-        }
+      if (curDragTargetW + (mousePosition.x - originPointX) > 20) {
+        divDragLine.style.left = mousePosition.x + 'px';
       }
+//
+//      if (curColumnW > minColumnW && (gridWrapperW - ($curGridTable.width() + gapX) > minTableW)) {
+//
+//        $curDragTarget[0].style.width = $curCol[0].style.width = curColumnW + 'px';
+//
+//        $curTableHeader[0].style.width = $curTableHeader.width() + gapX + 'px';
+//
+//        if ($curDragTarget.data('frozen') === true) {  // 移动冻结列
+//          $curTable[0].style.width = $curTableHeader.width() + 'px';
+//          $curGridTable.css({
+//            width: $curGridTable.width() + gapX + 'px'
+//          }).siblings('.sc-grid-table').css({
+//            width: gridWrapperW - $curGridTable.width() + 'px'
+//          });
+//        } else {
+//          $curTable[0].style.width = $curTableHeader.width() - 17 + 'px';
+//        }
+//      }
     }
 
-    function checkResizeBound() {
+    function finishResizeColumn() {
+      divDragMask && document.body.removeChild(divDragMask);
+      divDragLine && document.body.removeChild(divDragLine);
 
+      resizeColumn();
+    }
+
+    function resizeColumn() {
+      var colIndex = $curDragTarget.data('col-index');
+      var gapX = parseInt(divDragLine.style.left) - originPointX;
+      var $curCol = $($cols[colIndex]).find('col');
+      var $curTable = $curCol.closest('table');
+      var $curTableHeader = $curDragTarget.closest('.sc-table-header');
+      var $curGridTable = $curDragTarget.closest('.sc-grid-table');
+      var $gridWrapper = $curDragTarget.closest('.sc-grid-wrapper');
+      var gridWrapperW = $gridWrapper.width();
+      var gridWrapperH = $gridWrapper.height();
+      var curColumnW = $curCol.width() + gapX;
+
+
+      $curDragTarget[0].style.width = $curCol[0].style.width = curColumnW + 'px';
+
+      $curTableHeader[0].style.width = $curTableHeader.width() + gapX + 'px';
+
+      if ($curDragTarget.data('frozen') === true) {  // 移动冻结列
+        $curTable[0].style.width = $curTableHeader.width() + 'px';
+        $curGridTable.css({
+          width: $curGridTable.width() + gapX + 'px'
+        }).siblings('.sc-grid-table').css({
+          width: gridWrapperW - $curGridTable.width() + 'px'
+        });
+      } else {
+        $curTable[0].style.width = $curTableHeader.width() - 17 + 'px';
+      }
     }
   }
 
@@ -312,10 +358,6 @@
     } else if (window.getSelection) {
       window.getSelection().removeAllRanges();
     }
-  }
-
-  function deleteTableDragMask() {
-    divDragMask && document.body.removeChild(divDragMask);
   }
 
   function getObjectPosition($obj) {

@@ -21,6 +21,7 @@ input, textarea, a {
 .sc-grid-wrapper {
   width: 100%;
   font-size: 14px;
+  overflow: hidden;
   font-family: "Microsoft Yahei";
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
