@@ -9,33 +9,41 @@
   <link rel="stylesheet" type="text/css" href="css/gird.css">
   <style type="text/css">
     .demo-grid {
-      width: 600px;
+      width: 670px;
       margin: 50px auto;
     }
   </style>
 </head>
 <body>
 <div class="demo-grid" id="test1"></div>
-<div class="demo-grid" id="test2"></div>
-
 
 <script type="text/template" id="template1">
 
-  <div class="sc-grid-wrapper-outer" style="width: 600px;">
-    <div class="sc-grid-wrapper" style="width:600px;" id="grid-wrapper-1">
-      <div class="sc-grid-table" style="width:300px;">
-        <div class="sc-table-header-wrapper" style="overflow: hidden">
-          <div class="sc-table-header" style="width: 300px;">
-            <div class="sc-table-column" data-col-index="0" data-frozen="true" style="width: 100px"><span
-                class="header-text">测试1</span></div>
-            <div class="sc-table-column" data-col-index="1" data-frozen="true" style="width: 100px"><span
-                class="header-text">测试2</span></div>
-            <div class="sc-table-column" data-col-index="2" data-frozen="true" style="width: 100px"><span
-                class="header-text">测试3</span></div>
+  <div class="s-grid-wrapper-outer" style="width: 670px;">
+    <div class="s-grid-wrapper" style="width:670px;">
+      <div class="s-grid-table" style="width:370px;">
+        <div class="s-table-header-wrapper" style="overflow: hidden">
+          <div class="s-table-header" style="width: 370px;">
+            <div class="s-table-column s-grid-checkbox" data-col-index="0" data-frozen="true" style="width: 26px"><span
+                class="s-grid-check-wrapper"><span class="s-grid-check"></span></span></div>
+            <div class="s-table-column" data-col-index="1" data-frozen="true" style="width: 44px"><span
+                class="">序号</span></div>
+            <div class="s-table-column" data-col-index="2" data-frozen="true" style="width: 100px"><span
+                class="s-grid-text">测试1</span></div>
+            <div class="s-table-column" data-col-index="3" data-frozen="true" style="width: 100px"><span
+                class="s-grid-text">测试2</span></div>
+            <div class="s-table-column" data-col-index="4" data-frozen="true" style="width: 100px"><span
+                class="s-grid-text">测试3</span></div>
           </div>
         </div>
-        <div class="sc-table-wrapper" style="height:120px;overflow:hidden;padding-bottom:17px;">
-          <table style="width: 300px;" cellpadding="0" cellspacing="0">
+        <div class="s-table-wrapper" style="height:120px;overflow:hidden;padding-bottom:17px;">
+          <table>
+            <colgroup>
+              <col style="width: 26px;"/>
+            </colgroup>
+            <colgroup>
+              <col style="width: 44px;"/>
+            </colgroup>
             <colgroup>
               <col style="width: 100px;"/>
             </colgroup>
@@ -46,42 +54,58 @@
               <col style="width: 100px;"/>
             </colgroup>
             <tbody>
-            <tr data-rowIndex="0">
+            <tr data-rowIndex="0" class="s-grid-row-selected1">
+              <td class="s-grid-checkbox"><span class="s-grid-check-wrapper"><span class="s-grid-check"></span></span></td>
+              <td class="s-grid-rownumber"><span>1</span></td>
               <td>test</td>
               <td>abc</td>
               <td>ddd1</td>
             </tr>
-            <tr data-rowIndex="1">
+            <tr data-rowIndex="1"  class="s-grid-row-hover1">
+              <td class="s-grid-checkbox"><span class="s-grid-check-wrapper"><span class="s-grid-check"></span></span></td>
+              <td class="s-grid-rownumber"><span>2</span></td>
               <td>test</td>
               <td>abc</td>
               <td>ddd2</td>
             </tr>
             <tr data-rowIndex="2">
+              <td class="s-grid-checkbox"><span class="s-grid-check-wrapper"><span class="s-grid-check"></span></span></td>
+              <td class="s-grid-rownumber"><span>3</span></td>
               <td>test</td>
               <td>abc</td>
               <td>ddd3</td>
             </tr>
             <tr data-rowIndex="3">
+              <td class="s-grid-checkbox"><span class="s-grid-check-wrapper"><span class="s-grid-check"></span></span></td>
+              <td class="s-grid-rownumber"><span>4</span></td>
               <td>test</td>
               <td>abc</td>
               <td>ddd4</td>
             </tr>
             <tr data-rowIndex="4">
+              <td class="s-grid-checkbox"><span class="s-grid-check-wrapper"><span class="s-grid-check"></span></span></td>
+              <td class="s-grid-rownumber"><span>5</span></td>
               <td>test</td>
               <td>abc</td>
               <td>ddd5</td>
             </tr>
             <tr data-rowIndex="5">
+              <td class="s-grid-checkbox"><span class="s-grid-check-wrapper"><span class="s-grid-check"></span></span></td>
+              <td class="s-grid-rownumber"><span>6</span></td>
               <td>test</td>
               <td>abc</td>
               <td>ddd6</td>
             </tr>
             <tr data-rowIndex="6">
+              <td class="s-grid-checkbox"><span class="s-grid-check-wrapper"><span class="s-grid-check"></span></span></td>
+              <td class="s-grid-rownumber"><span>7</span></td>
               <td>test</td>
               <td>abc</td>
               <td>ddd7</td>
             </tr>
             <tr data-rowIndex="7">
+              <td class="s-grid-checkbox"><span class="s-grid-check-wrapper"><span class="s-grid-check"></span></span></td>
+              <td class="s-grid-rownumber"><span>8</span></td>
               <td>test</td>
               <td>abc</td>
               <td>ddd8</td>
@@ -91,25 +115,25 @@
         </div>
       </div>
 
-      <div class="sc-grid-table" style="width:300px;">
-        <div class="sc-table-header-wrapper" style="overflow: hidden">
-          <div class="sc-table-header" style="width:617px;">
-            <div class="sc-table-column" data-col-index="3" style="width: 100px"><span class="header-text">测试1</span>
+      <div class="s-grid-table" style="width:300px;">
+        <div class="s-table-header-wrapper" style="overflow: hidden">
+          <div class="s-table-header" style="width:617px;">
+            <div class="s-table-column" data-col-index="5" style="width: 100px"><span class="s-grid-text">测试1</span>
             </div>
-            <div class="sc-table-column" data-col-index="4" style="width: 100px"><span class="header-text">测试2</span>
+            <div class="s-table-column" data-col-index="6" style="width: 100px"><span class="s-grid-text">测试2</span>
             </div>
-            <div class="sc-table-column" data-col-index="5" style="width: 100px"><span class="header-text">测试3</span>
+            <div class="s-table-column" data-col-index="7" style="width: 100px"><span class="s-grid-text">测试3</span>
             </div>
-            <div class="sc-table-column" data-col-index="6" style="width: 100px"><span class="header-text">测试1</span>
+            <div class="s-table-column" data-col-index="8" style="width: 100px"><span class="s-grid-text">测试1</span>
             </div>
-            <div class="sc-table-column" data-col-index="7" style="width: 100px"><span class="header-text">测试2</span>
+            <div class="s-table-column" data-col-index="9" style="width: 100px"><span class="s-grid-text">测试2</span>
             </div>
-            <div class="sc-table-column" data-col-index="8" style="width: 100px"><span class="header-text">测试3</span>
+            <div class="s-table-column" data-col-index="10" style="width: 100px"><span class="s-grid-text">测试3</span>
             </div>
           </div>
         </div>
-        <div class="sc-table-wrapper" style="height:120px;overflow: auto;">
-          <table style="width: 600px;" cellpadding="0" cellspacing="0">
+        <div class="s-table-wrapper" id="a1" style="height:120px;overflow: auto;">
+          <table style="width: 600px;">
             <colgroup>
               <col style="width: 100px;"/>
             </colgroup>
@@ -129,7 +153,7 @@
               <col style="width: 100px;"/>
             </colgroup>
             <tbody>
-            <tr data-rowIndex="0">
+            <tr data-rowIndex="0"  class="s-grid-row-selected1">
               <td>test</td>
               <td>abc</td>
               <td>dd2d</td>
@@ -137,7 +161,7 @@
               <td>abc</td>
               <td>ddd</td>
             </tr>
-            <tr data-rowIndex="1">
+            <tr data-rowIndex="1"  class="s-grid-row-hover1">
               <td>tes2t</td>
               <td>abc</td>
               <td>ddd</td>

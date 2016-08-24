@@ -50,32 +50,32 @@
     initEvents: function ($target) {
       var self = this;
 
-      $target.find('.sc-table-wrapper').on({
+      $target.find('.s-table-wrapper').on({
         'mousewheel': function (e) {
           var $this = $(this);
-          var $closestGridTable = $this.closest('.sc-grid-table');
+          var $closestGridTable = $this.closest('.s-grid-table');
 
           $closestGridTable
-            .siblings('.sc-grid-table')
-            .find('.sc-table-wrapper')
+            .siblings('.s-grid-table')
+            .find('.s-table-wrapper')
             .scrollTop($this.scrollTop());
         },
         'scroll': function (e) {
           var $this = $(this);
-          var $closestGridTable = $this.closest('.sc-grid-table');
+          var $closestGridTable = $this.closest('.s-grid-table');
 
           $closestGridTable
-            .find('.sc-table-header-wrapper')
+            .find('.s-table-header-wrapper')
             .scrollLeft($this.scrollLeft());
 
           $closestGridTable
-            .siblings('.sc-grid-table')
-            .find('.sc-table-wrapper')
+            .siblings('.s-grid-table')
+            .find('.s-table-wrapper')
             .scrollTop($this.scrollTop());
         }
       });
 
-      $target.find('.sc-table-column').on({
+      $target.find('.s-table-column').on({
         'mousedown': function (e) {
           var $this = $(this);
           var offsetLeft = $this.offset().left;
@@ -85,6 +85,9 @@
             $target.jq.$curDragTarget = $this;
             $target.ns.originPointX = e.pageX;
             self.createTableDragMask($target, e);
+            $(document).on({
+              'mousemove': util.clearDocumentSelection
+            });
           }
         },
         'mouseenter mousemove': function (e) {
@@ -108,7 +111,7 @@
       var mousePosition = util.getEventPosition(e);
       var maskLeft = mousePosition.x - maskW / 2;
       var maskTop = mousePosition.y - maskH / 2;
-      var gridWrapperH = $target.jq.$curDragTarget.closest('.sc-grid-wrapper').outerHeight();
+      var gridWrapperH = $target.jq.$curDragTarget.closest('.s-grid-wrapper').outerHeight();
 
       $target.ns.divDragMask = document.createElement('div');
       $target.ns.divDragMask.style.cssText = 'width:' + maskW + 'px;height:' + maskH + 'px;left:' + maskLeft + 'px;top:' + maskTop + 'px;position:absolute;background:transparent;z-index:999999;';
@@ -116,7 +119,7 @@
       document.body.appendChild($target.ns.divDragMask);
 
       $target.ns.divDragLine = document.createElement('div');
-      $target.ns.divDragLine.className = 'sc-grid-drag-line';
+      $target.ns.divDragLine.className = 's-grid-drag-line';
       $target.ns.divDragLine.style.cssText = 'width:1px;height:' + gridWrapperH + 'px;left:' + mousePosition.x + 'px;top:' + $target.jq.$curDragTarget.offset().top + 'px;position:absolute;background:black;z-index:999990;';
 
       document.body.appendChild($target.ns.divDragLine);
@@ -131,8 +134,8 @@
         var minTableW = 40;
         var curDragTargetW = $target.jq.$curDragTarget.outerWidth();
         var mousePosition = util.getEventPosition(e);
-        var $curGridTable = $target.jq.$curDragTarget.closest('.sc-grid-table');
-        var $gridWrapper = $target.jq.$curDragTarget.closest('.sc-grid-wrapper');
+        var $curGridTable = $target.jq.$curDragTarget.closest('.s-grid-table');
+        var $gridWrapper = $target.jq.$curDragTarget.closest('.s-grid-wrapper');
         var gridWrapperW = $gridWrapper.outerWidth();
         var curGridTableW = $curGridTable.outerWidth();
 
@@ -150,6 +153,10 @@
 
         resizeColumn();
 
+        $(document).off({
+          'mousemove': util.clearDocumentSelection
+        });
+
         $target.ns.divDragMask && document.body.removeChild($target.ns.divDragMask);
         $target.ns.divDragLine && document.body.removeChild($target.ns.divDragLine);
 
@@ -161,9 +168,9 @@
         var deltaX = parseInt($target.ns.divDragLine.style.left) - $target.ns.originPointX;
         var $curCol = $($target.jq.$cols[colIndex]).find('col');
         var $curTable = $curCol.closest('table');
-        var $curTableHeader = $target.jq.$curDragTarget.closest('.sc-table-header');
-        var $curGridTable = $target.jq.$curDragTarget.closest('.sc-grid-table');
-        var $gridWrapper = $target.jq.$curDragTarget.closest('.sc-grid-wrapper');
+        var $curTableHeader = $target.jq.$curDragTarget.closest('.s-table-header');
+        var $curGridTable = $target.jq.$curDragTarget.closest('.s-grid-table');
+        var $gridWrapper = $target.jq.$curDragTarget.closest('.s-grid-wrapper');
         var gridWrapperW = $gridWrapper.outerWidth();
         var curColumnW = $curCol.outerWidth() + deltaX;
 
@@ -175,7 +182,7 @@
           $curTable[0].style.width = $curTableHeader.outerWidth() + 'px';
           $curGridTable
             .css({width: $curGridTable.outerWidth() + deltaX + 'px'})
-            .siblings('.sc-grid-table')
+            .siblings('.s-grid-table')
             .css({width: gridWrapperW - $curGridTable.outerWidth() + 'px'});
         } else {
           $curTable[0].style.width = $curTableHeader.outerWidth() - 17 + 'px';

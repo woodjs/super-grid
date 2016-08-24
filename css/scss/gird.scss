@@ -2,9 +2,13 @@
 @import "./core/reset";
 @import "./core/config";
 
-.sc-grid-wrapper-outer{
+.s-grid-wrapper-outer{
  width:100%;
  position: relative;
+ font-family: 'Microsoft Yahei', Arial, STHeiti, sans-serif;
+ font-size:14px;
+ @include boxSizing(border-box);
+ border:1px solid $bdColor;
  &:before{
   content: '';
   background: $bgColor;
@@ -14,49 +18,114 @@
   z-index:-1;
  }
 }
-.sc-grid-wrapper {
- width:100%;
- font-size:14px;
- overflow: hidden;
- font-family: "Microsoft Yahei";
- @include boxSizing(border-box);
-}
-.sc-grid-table{
- float:left;
- overflow:hidden;
- @include boxSizing(border-box);
-}
-.sc-table-header{
+.s-grid-wrapper {
  width:100%;
  overflow: hidden;
- height:24px;
- line-height: 24px;
- background: $bgColor;
- &:after{
-  content: '';
-  display:block;
-  clear:both;
+
+ .s-grid-rownumber{
+  background: $bgColor;
+  text-align: center;
+  border-right:1px solid $bdColor;
  }
- .sc-table-column{
-  position: relative;
+ .s-grid-table{
   float:left;
-  @extend %textOverflowEllipsis;
+  overflow:hidden;
+ }
+
+ .s-table-header{
+  width:100%;
+  overflow: hidden;
+  @include setHeightGroup(24px);
+  background: $bgColor;
+  &:after{
+   content: '';
+   display:block;
+   clear:both;
+  }
+  .s-grid-check-wrapper{
+   display: inline-block;
+   padding: 5px 6px;
+   height: 23px;
+   float:left;
+   .s-grid-check{
+    display: inline-block;
+    width:13px;
+    height:13px;
+    float:left;
+    background: url(images/checkbox.gif) 0 0 no-repeat;
+   }
+  }
+
+  .s-grid-row-selected{
+   .s-grid-check-wrapper{
+    .s-grid-check{
+     background: url(images/checkbox.gif) 0 -13px no-repeat;
+    }
+   }
+  }
+  .s-table-column{
+   position: relative;
+   float:left;
+   @extend %textOverflowEllipsis;
+   padding:0 5px;
+   border:1px solid $bdColor;
+   border-top: 0;
+   border-left:0;
+   height:24px;
+   line-height: 23px;
+   &.s-grid-checkbox{
+    padding:0;
+   }
+  }
+ }
+ .s-table-wrapper{
+  table{
+   table-layout: fixed;
+   border-collapse: collapse;
+   padding: 0;
+   border:0;
+   margin:0;
+  }
+  td{
+   @extend %textOverflowEllipsis;
+   padding:0 5px;
+   border-bottom:1px solid $bdColor;
+   border-right:1px solid $bdColor;
+   height:24px;
+   line-height:23px;
+  }
+  .s-grid-checkbox{
+   background: $bgColor;
+   text-align: center;
+   border-right:1px solid $bdColor;
+   padding:0;
+  }
+  .s-grid-check-wrapper{
+   display: inline-block;
+   padding: 5px 6px;
+   height: 23px;
+   float:left;
+   .s-grid-check{
+    display: inline-block;
+    width:13px;
+    height:13px;
+    float:left;
+    background: url(images/checkbox.gif) 0 0 no-repeat;
+   }
+  }
+  .s-grid-row-hover{
+   background: lighten($themeColor, 40%);
+  }
+  .s-grid-row-selected{
+   background: lighten($themeColor, 30%);
+   .s-grid-check-wrapper{
+    .s-grid-check{
+     background: url(images/checkbox.gif) 0 -13px no-repeat;
+    }
+   }
+  }
  }
 }
-.sc-table-wrapper{
- @include boxSizing(border-box);
- table{
-  table-layout: fixed;
-  border-collapse: collapse;
-  @include boxSizing(border-box);
-  padding: 0;
-  border:0;
-  margin:0;
- }
- td{
-  @extend %textOverflowEllipsis;
- }
-}
-.sc-grid-drag-line{
+.s-grid-drag-line{
  background: #999 !important;
 }

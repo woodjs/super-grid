@@ -1,13 +1,16 @@
-.sc-table-header .sc-table-column, .sc-table-wrapper td {
+.s-grid-wrapper .s-table-header .s-table-column, .s-grid-wrapper .s-table-wrapper td {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
 }
 
-body, div, ul, dl, ol, dt, dd, li, p, a, label, span, i, img, input, textarea, header, footer, article, section, nav, aside, figure, h1, h2, h3, h4, h5, h6 {
+body, div, ul, dl, ol, dt, dd, li, p, a, label, span, i, img, input, textarea, header, footer, article, section, nav, aside, figure, h1, h2, h3, h4, h5, h6, table, thead, tbody, tr, td, th {
   padding: 0;
   margin: 0;
   border: 0;
+  -webkit-box-sizing: inherit;
+  -moz-box-sizing: inherit;
+  box-sizing: inherit;
 }
 
 ul, dl, ol {
@@ -18,11 +21,17 @@ input, textarea, a {
   outline: none;
 }
 
-.sc-grid-wrapper-outer {
+.s-grid-wrapper-outer {
   width: 100%;
   position: relative;
+  font-family: 'Microsoft Yahei', Arial, STHeiti, sans-serif;
+  font-size: 14px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  border: 1px solid #d9d9d9;
 }
-.sc-grid-wrapper-outer:before {
+.s-grid-wrapper-outer:before {
   content: '';
   background: #eee;
   position: absolute;
@@ -31,58 +40,104 @@ input, textarea, a {
   z-index: -1;
 }
 
-.sc-grid-wrapper {
+.s-grid-wrapper {
   width: 100%;
-  font-size: 14px;
   overflow: hidden;
-  font-family: "Microsoft Yahei";
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
 }
-
-.sc-grid-table {
+.s-grid-wrapper .s-grid-rownumber {
+  background: #eee;
+  text-align: center;
+  border-right: 1px solid #d9d9d9;
+}
+.s-grid-wrapper .s-grid-table {
   float: left;
   overflow: hidden;
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
 }
-
-.sc-table-header {
+.s-grid-wrapper .s-table-header {
   width: 100%;
   overflow: hidden;
   height: 24px;
   line-height: 24px;
   background: #eee;
 }
-.sc-table-header:after {
+.s-grid-wrapper .s-table-header:after {
   content: '';
   display: block;
   clear: both;
 }
-.sc-table-header .sc-table-column {
-  position: relative;
+.s-grid-wrapper .s-table-header .s-grid-check-wrapper {
+  display: inline-block;
+  padding: 5px 6px;
+  height: 23px;
   float: left;
 }
-
-.sc-table-wrapper {
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
+.s-grid-wrapper .s-table-header .s-grid-check-wrapper .s-grid-check {
+  display: inline-block;
+  width: 13px;
+  height: 13px;
+  float: left;
+  background: url(images/checkbox.gif) 0 0 no-repeat;
 }
-.sc-table-wrapper table {
+.s-grid-wrapper .s-table-header .s-grid-row-selected .s-grid-check-wrapper .s-grid-check {
+  background: url(images/checkbox.gif) 0 -13px no-repeat;
+}
+.s-grid-wrapper .s-table-header .s-table-column {
+  position: relative;
+  float: left;
+  padding: 0 5px;
+  border: 1px solid #d9d9d9;
+  border-top: 0;
+  border-left: 0;
+  height: 24px;
+  line-height: 23px;
+}
+.s-grid-wrapper .s-table-header .s-table-column.s-grid-checkbox {
+  padding: 0;
+}
+.s-grid-wrapper .s-table-wrapper table {
   table-layout: fixed;
   border-collapse: collapse;
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
   padding: 0;
   border: 0;
   margin: 0;
 }
+.s-grid-wrapper .s-table-wrapper td {
+  padding: 0 5px;
+  border-bottom: 1px solid #d9d9d9;
+  border-right: 1px solid #d9d9d9;
+  height: 24px;
+  line-height: 23px;
+}
+.s-grid-wrapper .s-table-wrapper .s-grid-checkbox {
+  background: #eee;
+  text-align: center;
+  border-right: 1px solid #d9d9d9;
+  padding: 0;
+}
+.s-grid-wrapper .s-table-wrapper .s-grid-check-wrapper {
+  display: inline-block;
+  padding: 5px 6px;
+  height: 23px;
+  float: left;
+}
+.s-grid-wrapper .s-table-wrapper .s-grid-check-wrapper .s-grid-check {
+  display: inline-block;
+  width: 13px;
+  height: 13px;
+  float: left;
+  background: url(images/checkbox.gif) 0 0 no-repeat;
+}
+.s-grid-wrapper .s-table-wrapper .s-grid-row-hover {
+  background: #c5e5fd;
+}
+.s-grid-wrapper .s-table-wrapper .s-grid-row-selected {
+  background: #94cffb;
+}
+.s-grid-wrapper .s-table-wrapper .s-grid-row-selected .s-grid-check-wrapper .s-grid-check {
+  background: url(images/checkbox.gif) 0 -13px no-repeat;
+}
 
-.sc-grid-drag-line {
+.s-grid-drag-line {
   background: #999 !important;
 }
 
