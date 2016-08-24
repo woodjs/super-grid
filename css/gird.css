@@ -18,6 +18,19 @@ input, textarea, a {
   outline: none;
 }
 
+.sc-grid-wrapper-outer {
+  width: 100%;
+  position: relative;
+}
+.sc-grid-wrapper-outer:before {
+  content: '';
+  background: #eee;
+  position: absolute;
+  width: 100%;
+  height: 24px;
+  z-index: -1;
+}
+
 .sc-grid-wrapper {
   width: 100%;
   font-size: 14px;

@@ -2,6 +2,18 @@
 @import "./core/reset";
 @import "./core/config";
 
+.sc-grid-wrapper-outer{
+ width:100%;
+ position: relative;
+ &:before{
+  content: '';
+  background: $bgColor;
+  position: absolute;
+  width:100%;
+  height:24px;
+  z-index:-1;
+ }
+}
 .sc-grid-wrapper {
  width:100%;
  font-size:14px;
@@ -19,7 +31,7 @@
  overflow: hidden;
  height:24px;
  line-height: 24px;
- background: #eee;
+ background: $bgColor;
  &:after{
   content: '';
   display:block;
