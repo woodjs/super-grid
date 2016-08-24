@@ -9,13 +9,17 @@
   <link rel="stylesheet" type="text/css" href="css/gird.css">
   <style type="text/css">
     .demo-grid {
-      width: 800px;
+      width: 600px;
       margin: 50px auto;
     }
   </style>
 </head>
 <body>
-<div class="demo-grid">
+<div class="demo-grid" id="test1"></div>
+<div class="demo-grid" id="test2"></div>
+
+
+<script type="text/template" id="template1">
 
   <div class="sc-grid-wrapper-outer" style="width: 600px;">
     <div class="sc-grid-wrapper" style="width:600px;" id="grid-wrapper-1">
@@ -196,18 +200,13 @@
 
     </div>
   </div>
-
-</div>
-
-
+</script>
 <script type="text/javascript" src="js/lib/jquery-1.11.3.min.js"></script>
 <script type="text/javascript" src="js/grid.js"></script>
 <script type="text/javascript">
   $(function () {
-
     $('.demo-grid').grid();
   });
-
 </script>
 </body>
 </html>

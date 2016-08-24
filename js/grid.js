@@ -12,62 +12,79 @@
   "use strict";
 
   var grid = {
-    init: function () {
+    init: function ($target) {
       var self = this;
 
-      self.initGlobalScope();
-      self.initJqueryObject();
-      self.initEvents();
+      self.render($target);
+      self.initGlobalScope($target);
+      self.initJqueryObject($target);
+      self.initEvents($target);
     },
 
-    initGlobalScope: function () {
+    render: function ($target) {
       var self = this;
 
-      self.globalScope = {};
-
-      self.globalScope.divDragMask = null;
-      self.globalScope.divDragLine = null;
-
-      self.globalScope.originPointX = 0;
+      return $target.html($('#template1').html());
     },
 
-    initJqueryObject: function () {
+    initGlobalScope: function ($target) {
       var self = this;
 
-      self.jqueryObject = {};
+      $target.ns = {};
 
-      self.jqueryObject.$curDragTarget = null;
-      self.jqueryObject.$cols = $('#grid-wrapper-1 colgroup');
+      $target.ns.divDragMask = null;
+      $target.ns.divDragLine = null;
+
+      $target.ns.originPointX = 0;
     },
 
-    initEvents: function () {
+    initJqueryObject: function ($target) {
       var self = this;
 
-      $('.sc-table-wrapper').on('mousewheel scroll', function (e) {
-        var $this = $(this);
-        var $closestGridTable = $this.closest('.sc-grid-table');
+      $target.jq = {};
 
-        $closestGridTable
-          .find('.sc-table-header-wrapper')
-          .scrollLeft($this.scrollLeft());
+      $target.jq.$curDragTarget = null;
+      $target.jq.$cols = $target.find('colgroup');
+    },
 
-        $closestGridTable
-          .siblings('.sc-grid-table')
-          .find('.sc-table-wrapper')
-          .scrollTop($this.scrollTop());
+    initEvents: function ($target) {
+      var self = this;
+
+      $target.find('.sc-table-wrapper').on({
+        'mousewheel': function (e) {
+          var $this = $(this);
+          var $closestGridTable = $this.closest('.sc-grid-table');
+
+          $closestGridTable
+            .siblings('.sc-grid-table')
+            .find('.sc-table-wrapper')
+            .scrollTop($this.scrollTop());
+        },
+        'scroll': function (e) {
+          var $this = $(this);
+          var $closestGridTable = $this.closest('.sc-grid-table');
+
+          $closestGridTable
+            .find('.sc-table-header-wrapper')
+            .scrollLeft($this.scrollLeft());
+
+          $closestGridTable
+            .siblings('.sc-grid-table')
+            .find('.sc-table-wrapper')
+            .scrollTop($this.scrollTop());
+        }
       });
 
-      $('.sc-table-column').on({
+      $target.find('.sc-table-column').on({
         'mousedown': function (e) {
           var $this = $(this);
           var offsetLeft = $this.offset().left;
           var width = $this.outerWidth();
 
           if ((offsetLeft + width - e.pageX) >= 0 && (offsetLeft + width - e.pageX) < 5) {
-            self.jqueryObject.$curDragTarget = $this;
-
-            self.createTableDragMask(e);
-            self.globalScope.originPointX = e.pageX;
+            $target.jq.$curDragTarget = $this;
+            $target.ns.originPointX = e.pageX;
+            self.createTableDragMask($target, e);
           }
         },
         'mouseenter mousemove': function (e) {
@@ -76,47 +93,35 @@
           var width = $this.outerWidth();
 
           if ((offsetLeft + width - e.pageX) >= 0 && (offsetLeft + width - e.pageX) < 5) {
-            $this.css({
-              'cursor': 'col-resize'
-            });
+            $this.css({'cursor': 'col-resize'});
           } else {
-            $this.css({
-              'cursor': 'default'
-            });
+            $this.css({'cursor': 'default'});
           }
-        }
-      });
-
-      $(document).on({
-        'mouseup': function (e) {
-          self.jqueryObject.$curDragTarget = null;
-        },
-        'mousemove': function (e) {
-          util.clearDocumentSelection();
         }
       });
     },
 
-    createTableDragMask: function (e) {
+    createTableDragMask: function ($target, e) {
       var self = this;
       var maskW = '300';
       var maskH = '300';
       var mousePosition = util.getEventPosition(e);
       var maskLeft = mousePosition.x - maskW / 2;
       var maskTop = mousePosition.y - maskH / 2;
-      var gridWrapperH = self.jqueryObject.$curDragTarget.closest('.sc-grid-wrapper').outerHeight();
+      var gridWrapperH = $target.jq.$curDragTarget.closest('.sc-grid-wrapper').outerHeight();
 
-      self.globalScope.divDragMask = document.createElement('div');
-      self.globalScope.divDragMask.style.cssText = 'width:' + maskW + 'px;height:' + maskH + 'px;left:' + maskLeft + 'px;top:' + maskTop + 'px;position:absolute;background:transparent;z-index:999999;';
+      $target.ns.divDragMask = document.createElement('div');
+      $target.ns.divDragMask.style.cssText = 'width:' + maskW + 'px;height:' + maskH + 'px;left:' + maskLeft + 'px;top:' + maskTop + 'px;position:absolute;background:transparent;z-index:999999;';
 
-      document.body.appendChild(self.globalScope.divDragMask);
+      document.body.appendChild($target.ns.divDragMask);
 
-      self.globalScope.divDragLine = document.createElement('div');
-      self.globalScope.divDragLine.style.cssText = 'width:1px;height:' + gridWrapperH + 'px;left:' + mousePosition.x + 'px;top:' + self.jqueryObject.$curDragTarget.offset().top + 'px;position:absolute;background:black;z-index:999990;';
+      $target.ns.divDragLine = document.createElement('div');
+      $target.ns.divDragLine.className = 'sc-grid-drag-line';
+      $target.ns.divDragLine.style.cssText = 'width:1px;height:' + gridWrapperH + 'px;left:' + mousePosition.x + 'px;top:' + $target.jq.$curDragTarget.offset().top + 'px;position:absolute;background:black;z-index:999990;';
 
-      document.body.appendChild(self.globalScope.divDragLine);
+      document.body.appendChild($target.ns.divDragLine);
 
-      $(self.globalScope.divDragMask).on({
+      $($target.ns.divDragMask).on({
         'mousemove': dragAndCalculate,
         'mouseup': finishResizeColumn
       });
@@ -124,59 +129,60 @@
       function dragAndCalculate(e) {
         var minColumnW = 20;
         var minTableW = 40;
-        var curDragTargetW = self.jqueryObject.$curDragTarget.outerWidth();
+        var curDragTargetW = $target.jq.$curDragTarget.outerWidth();
         var mousePosition = util.getEventPosition(e);
-        var $curGridTable = self.jqueryObject.$curDragTarget.closest('.sc-grid-table');
-        var $gridWrapper = self.jqueryObject.$curDragTarget.closest('.sc-grid-wrapper');
+        var $curGridTable = $target.jq.$curDragTarget.closest('.sc-grid-table');
+        var $gridWrapper = $target.jq.$curDragTarget.closest('.sc-grid-wrapper');
         var gridWrapperW = $gridWrapper.outerWidth();
         var curGridTableW = $curGridTable.outerWidth();
 
-        self.globalScope.divDragMask.style.left = mousePosition.x - maskW / 2 + 'px';
+        util.clearDocumentSelection();
 
-        if (curDragTargetW + mousePosition.x - self.globalScope.originPointX >= minColumnW
-          && (mousePosition.x - self.globalScope.originPointX) <= (gridWrapperW - curGridTableW - minTableW)) {
-          self.globalScope.divDragLine.style.left = mousePosition.x + 'px';
+        $target.ns.divDragMask.style.left = mousePosition.x - maskW / 2 + 'px';
+
+        if (curDragTargetW + mousePosition.x - $target.ns.originPointX >= minColumnW
+          && (mousePosition.x - $target.ns.originPointX) <= (gridWrapperW - curGridTableW - minTableW)) {
+          $target.ns.divDragLine.style.left = mousePosition.x + 'px';
         }
       }
 
       function finishResizeColumn() {
 
         resizeColumn();
-        self.globalScope.divDragMask && document.body.removeChild(self.globalScope.divDragMask);
-        self.globalScope.divDragLine && document.body.removeChild(self.globalScope.divDragLine);
+
+        $target.ns.divDragMask && document.body.removeChild($target.ns.divDragMask);
+        $target.ns.divDragLine && document.body.removeChild($target.ns.divDragLine);
+
+        $target.jq.$curDragTarget = null;
       }
 
       function resizeColumn() {
-        var colIndex = self.jqueryObject.$curDragTarget.data('col-index');
-        var deltaX = parseInt(self.globalScope.divDragLine.style.left) - self.globalScope.originPointX;
-        var $curCol = $(self.jqueryObject.$cols[colIndex]).find('col');
+        var colIndex = $target.jq.$curDragTarget.data('col-index');
+        var deltaX = parseInt($target.ns.divDragLine.style.left) - $target.ns.originPointX;
+        var $curCol = $($target.jq.$cols[colIndex]).find('col');
         var $curTable = $curCol.closest('table');
-        var $curTableHeader = self.jqueryObject.$curDragTarget.closest('.sc-table-header');
-        var $curGridTable = self.jqueryObject.$curDragTarget.closest('.sc-grid-table');
-        var $gridWrapper = self.jqueryObject.$curDragTarget.closest('.sc-grid-wrapper');
+        var $curTableHeader = $target.jq.$curDragTarget.closest('.sc-table-header');
+        var $curGridTable = $target.jq.$curDragTarget.closest('.sc-grid-table');
+        var $gridWrapper = $target.jq.$curDragTarget.closest('.sc-grid-wrapper');
         var gridWrapperW = $gridWrapper.outerWidth();
         var curColumnW = $curCol.outerWidth() + deltaX;
 
-
-        self.jqueryObject.$curDragTarget[0].style.width = $curCol[0].style.width = curColumnW + 'px';
+        $target.jq.$curDragTarget[0].style.width = $curCol[0].style.width = curColumnW + 'px';
 
         $curTableHeader[0].style.width = $curTableHeader.outerWidth() + deltaX + 'px';
 
-        if (self.jqueryObject.$curDragTarget.data('frozen') === true) {  // 移动冻结列
+        if ($target.jq.$curDragTarget.data('frozen') === true) {  // 移动冻结列
           $curTable[0].style.width = $curTableHeader.outerWidth() + 'px';
-          $curGridTable.css({
-            width: $curGridTable.outerWidth() + deltaX + 'px'
-          }).siblings('.sc-grid-table').css({
-            width: gridWrapperW - $curGridTable.outerWidth() + 'px'
-          });
+          $curGridTable
+            .css({width: $curGridTable.outerWidth() + deltaX + 'px'})
+            .siblings('.sc-grid-table')
+            .css({width: gridWrapperW - $curGridTable.outerWidth() + 'px'});
         } else {
           $curTable[0].style.width = $curTableHeader.outerWidth() - 17 + 'px';
         }
       }
     }
   };
-
-
 
   var util = {
 
@@ -221,8 +227,7 @@
   $.fn.grid = function () {
 
     return this.each(function () {
-
-      grid.init();
+      grid.init($(this));
     });
   };
 

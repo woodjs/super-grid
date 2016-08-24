@@ -82,4 +82,8 @@ input, textarea, a {
   margin: 0;
 }
 
+.sc-grid-drag-line {
+  background: #999 !important;
+}
+
 /*# sourceMappingURL=gird.css.map */
