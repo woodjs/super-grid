@@ -53,7 +53,22 @@
       $target.find('.s-table-wrapper').on({
         'mousewheel': function (e) {
           var $this = $(this);
+          var $table = $this.find('table');
+          var deltaY = 20;
+          var tableWrapperH = $this.height();
+          var tableH = $table.outerHeight();
+          var boundLength = tableH - tableWrapperH;
           var $closestGridTable = $this.closest('.s-grid-table');
+          var temp;
+
+          console.log($this[0].scrollHeight);
+          if (util.getMousewheelDirection(e) === 'up') {  // 鼠标向上滚动
+            temp = $this.scrollTop() + deltaY;
+            $this.scrollTop(temp <= boundLength ? temp : boundLength);
+          } else {
+            temp = $this.scrollTop() - deltaY;
+            $this.scrollTop(temp >= 0 ? temp : 0);
+          }
 
           $closestGridTable
             .siblings('.s-grid-table')
@@ -226,6 +241,14 @@
         document.selection.empty ? document.selection.empty() : (document.selection = null);
       } else if (window.getSelection) {
         window.getSelection().removeAllRanges();
+      }
+    },
+
+    getMousewheelDirection: function (e) {
+      if (e.originalEvent.wheelDelta) {
+        return e.originalEvent.wheelDelta > 0 ? 'down' : 'up';
+      } else if (e.originalEvent.detail) {
+        return e.originalEvent.detail > 0 ? 'down' : 'up';
       }
     }
   };
