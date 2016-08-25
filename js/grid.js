@@ -19,6 +19,8 @@
       self.initGlobalScope($target);
       self.initJqueryObject($target);
       self.initEvents($target);
+
+      self.scrollbarWidth = util.getScrollbarWidth();
     },
 
     render: function ($target) {
@@ -32,9 +34,7 @@
 
       $target.ns = {};
 
-      $target.ns.divDragMask = null;
       $target.ns.divDragLine = null;
-
       $target.ns.originPointX = 0;
     },
 
@@ -51,23 +51,23 @@
       var self = this;
 
       $target.find('.s-table-wrapper').on({
-        'mousewheel': function (e) {
+        'mousewheel DOMMouseScroll': function (e) {
           var $this = $(this);
           var $table = $this.find('table');
           var deltaY = 20;
           var tableWrapperH = $this.height();
           var tableH = $table.outerHeight();
-          var boundLength = tableH - tableWrapperH;
+          var boundLength = tableH - tableWrapperH + 50;
           var $closestGridTable = $this.closest('.s-grid-table');
           var temp;
 
-          console.log($this[0].scrollHeight);
           if (util.getMousewheelDirection(e) === 'up') {  // 鼠标向上滚动
-            temp = $this.scrollTop() + deltaY;
-            $this.scrollTop(temp <= boundLength ? temp : boundLength);
-          } else {
             temp = $this.scrollTop() - deltaY;
             $this.scrollTop(temp >= 0 ? temp : 0);
+          } else {
+            temp = $this.scrollTop() + deltaY;
+
+            $this.scrollTop(temp <= boundLength ? temp : boundLength);
           }
 
           $closestGridTable
@@ -95,22 +95,21 @@
           var $this = $(this);
           var offsetLeft = $this.offset().left;
           var width = $this.outerWidth();
+          var pointX = offsetLeft + width - e.pageX;
 
-          if ((offsetLeft + width - e.pageX) >= 0 && (offsetLeft + width - e.pageX) < 5) {
+          if (pointX >= 0 && pointX < 5) {
             $target.jq.$curDragTarget = $this;
             $target.ns.originPointX = e.pageX;
             self.createTableDragMask($target, e);
-            $(document).on({
-              'mousemove': util.clearDocumentSelection
-            });
           }
         },
         'mouseenter mousemove': function (e) {
           var $this = $(this);
           var offsetLeft = $this.offset().left;
           var width = $this.outerWidth();
+          var pointX = offsetLeft + width - e.pageX;
 
-          if ((offsetLeft + width - e.pageX) >= 0 && (offsetLeft + width - e.pageX) < 5) {
+          if (pointX >= 0 && pointX < 5) {
             $this.css({'cursor': 'col-resize'});
           } else {
             $this.css({'cursor': 'default'});
@@ -121,25 +120,16 @@
 
     createTableDragMask: function ($target, e) {
       var self = this;
-      var maskW = '300';
-      var maskH = '300';
       var mousePosition = util.getEventPosition(e);
-      var maskLeft = mousePosition.x - maskW / 2;
-      var maskTop = mousePosition.y - maskH / 2;
       var gridWrapperH = $target.jq.$curDragTarget.closest('.s-grid-wrapper').outerHeight();
-
-      $target.ns.divDragMask = document.createElement('div');
-      $target.ns.divDragMask.style.cssText = 'width:' + maskW + 'px;height:' + maskH + 'px;left:' + maskLeft + 'px;top:' + maskTop + 'px;position:absolute;background:transparent;z-index:999999;';
-
-      document.body.appendChild($target.ns.divDragMask);
 
       $target.ns.divDragLine = document.createElement('div');
       $target.ns.divDragLine.className = 's-grid-drag-line';
-      $target.ns.divDragLine.style.cssText = 'width:1px;height:' + gridWrapperH + 'px;left:' + mousePosition.x + 'px;top:' + $target.jq.$curDragTarget.offset().top + 'px;position:absolute;background:black;z-index:999990;';
+      $target.ns.divDragLine.style.cssText = 'width:1px;height:' + gridWrapperH + 'px;left:' + mousePosition.x + 'px;top:' + $target.jq.$curDragTarget.offset().top + 'px;position:absolute;background:black;z-index:999900;';
 
       document.body.appendChild($target.ns.divDragLine);
 
-      $($target.ns.divDragMask).on({
+      $(document).on({
         'mousemove': dragAndCalculate,
         'mouseup': finishResizeColumn
       });
@@ -156,8 +146,6 @@
 
         util.clearDocumentSelection();
 
-        $target.ns.divDragMask.style.left = mousePosition.x - maskW / 2 + 'px';
-
         if (curDragTargetW + mousePosition.x - $target.ns.originPointX >= minColumnW
           && (mousePosition.x - $target.ns.originPointX) <= (gridWrapperW - curGridTableW - minTableW)) {
           $target.ns.divDragLine.style.left = mousePosition.x + 'px';
@@ -169,12 +157,11 @@
         resizeColumn();
 
         $(document).off({
-          'mousemove': util.clearDocumentSelection
+          'mousemove': dragAndCalculate,
+          'mouseup': finishResizeColumn
         });
 
-        $target.ns.divDragMask && document.body.removeChild($target.ns.divDragMask);
         $target.ns.divDragLine && document.body.removeChild($target.ns.divDragLine);
-
         $target.jq.$curDragTarget = null;
       }
 
@@ -193,14 +180,14 @@
 
         $curTableHeader[0].style.width = $curTableHeader.outerWidth() + deltaX + 'px';
 
-        if ($target.jq.$curDragTarget.data('frozen') === true) {  // 移动冻结列
+        if ($curGridTable.data('frozen') === true) {  // 移动冻结列
           $curTable[0].style.width = $curTableHeader.outerWidth() + 'px';
           $curGridTable
             .css({width: $curGridTable.outerWidth() + deltaX + 'px'})
             .siblings('.s-grid-table')
             .css({width: gridWrapperW - $curGridTable.outerWidth() + 'px'});
         } else {
-          $curTable[0].style.width = $curTableHeader.outerWidth() - 17 + 'px';
+          $curTable[0].style.width = $curTableHeader.outerWidth() - self.scrollbarWidth + 'px';
         }
       }
     }
@@ -245,8 +232,8 @@
     },
 
     getMousewheelDirection: function (e) {
-      if (e.originalEvent.wheelDelta) {
-        return e.originalEvent.wheelDelta > 0 ? 'down' : 'up';
+      if (e.originalEvent.wheelDelta) {  // 非firefox
+        return e.originalEvent.wheelDelta > 0 ? 'up' : 'down';
       } else if (e.originalEvent.detail) {
         return e.originalEvent.detail > 0 ? 'down' : 'up';
       }

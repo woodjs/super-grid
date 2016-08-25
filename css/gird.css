@@ -43,6 +43,7 @@ input, textarea, a {
 .s-grid-wrapper {
   width: 100%;
   overflow: hidden;
+  position: relative;
 }
 .s-grid-wrapper .s-grid-rownumber {
   background: #eee;
