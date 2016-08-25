@@ -46,6 +46,7 @@
       $target.jq.$curDragTarget = null;
       $target.jq.$cols = $target.find('colgroup');
       $target.jq.$rows = $target.find('tr');
+      $target.jq.$btnSelectAll = $target.find('.s-table-header .s-grid-check-wrapper');
     },
 
     initEvents: function ($target) {
@@ -135,6 +136,7 @@
           var $temp;
 
           if ($this.is('.s-grid-row-selected')) {
+            $target.jq.$btnSelectAll.removeClass('s-grid-row-selected');
             for (var i = 0; i < $target.jq.$rows.length; i++) {
               $temp = $($target.jq.$rows[i]);
               if ($temp.is('tr[data-row-index="' + rowIndex + '"]')) $temp.removeClass('s-grid-row-selected');
@@ -150,7 +152,7 @@
         }
       });
 
-      $target.find('.s-table-header .s-grid-check-wrapper').on({
+      $target.jq.$btnSelectAll.on({
         'click': function (e) {
           var $this = $(this);
 
@@ -265,13 +267,6 @@
       divA.style.overflowY = 'scroll';
 
       return tempWidth - divB.clientWidth;
-    },
-
-    getObjectPosition: function ($obj) {
-      return {
-        x: $obj.offset().left,
-        y: $obj.offset().top
-      };
     },
 
     getEventPosition: function (e) {
