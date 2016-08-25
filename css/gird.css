@@ -106,6 +106,7 @@ input, textarea, a {
 .s-grid-wrapper .s-table-wrapper table {
   table-layout: fixed;
   border-collapse: separate;
+  border-spacing: 0;
 }
 .s-grid-wrapper .s-table-wrapper td {
   padding: 0 5px;
