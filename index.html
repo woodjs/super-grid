@@ -16,6 +16,8 @@
 </head>
 <body>
 <div class="demo-grid" id="test1"></div>
+<div class="demo-grid" id="test2"></div>
+<div class="demo-grid" id="test3"></div>
 
 <script type="text/template" id="template1">
 
@@ -23,7 +25,7 @@
     <div class="s-grid-wrapper" style="width:670px;">
       <div class="s-grid-table" data-frozen="true"  style="width:370px;">
         <div class="s-table-header-wrapper" style="overflow: hidden">
-          <div class="s-table-header" style="width: 370px;">
+          <div class="s-table-header">
             <div class="s-table-column s-grid-checkbox s-grid-disable-drag" data-col-index="0" style="width: 26px"><span
                 class="s-grid-check-wrapper"><span class="s-grid-check"></span></span></div>
             <div class="s-table-column s-grid-rownumber  s-grid-disable-drag" data-col-index="1" style="width: 44px"><span
@@ -37,7 +39,7 @@
           </div>
         </div>
         <div class="s-table-wrapper" style="height:103px;overflow:hidden;">
-          <table>
+          <table style="width: 370px;" cellspacing="0">
             <colgroup>
               <col style="width: 26px;"/>
             </colgroup>
@@ -133,7 +135,7 @@
           </div>
         </div>
         <div class="s-table-wrapper" id="a1" style="height:120px;overflow: auto;">
-          <table style="width: 600px;">
+          <table style="width: 600px;" cellspacing="0">
             <colgroup>
               <col style="width: 100px;"/>
             </colgroup>
@@ -229,7 +231,14 @@
 <script type="text/javascript" src="js/grid.js"></script>
 <script type="text/javascript">
   $(function () {
-    $('.demo-grid').grid();
+
+    $('#test1').grid({
+      template: '#template1'
+    });
+//
+//    $('#test2').grid({
+//      template: '#template2'
+//    });
   });
 </script>
 </body>

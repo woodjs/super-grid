@@ -45,11 +45,6 @@ input, textarea, a {
   overflow: hidden;
   position: relative;
 }
-.s-grid-wrapper .s-grid-rownumber {
-  background: #eee;
-  text-align: center;
-  border-right: 1px solid #d9d9d9;
-}
 .s-grid-wrapper .s-grid-table {
   float: left;
   overflow: hidden;
@@ -65,6 +60,19 @@ input, textarea, a {
   content: '';
   display: block;
   clear: both;
+}
+.s-grid-wrapper .s-table-header .s-grid-rownumber {
+  background: #eee;
+  text-align: center;
+  border-right: 1px solid #d9d9d9;
+}
+.s-grid-wrapper .s-table-header .s-grid-sort-asc .s-grid-text {
+  padding-right: 12px;
+  background: url(images/sort_asc.gif) right center no-repeat;
+}
+.s-grid-wrapper .s-table-header .s-grid-sort-desc .s-grid-text {
+  padding-right: 12px;
+  background: url(images/sort_desc.gif) right center no-repeat;
 }
 .s-grid-wrapper .s-table-header .s-grid-check-wrapper {
   display: inline-block;
@@ -97,22 +105,24 @@ input, textarea, a {
 }
 .s-grid-wrapper .s-table-wrapper table {
   table-layout: fixed;
-  border-collapse: collapse;
-  padding: 0;
-  border: 0;
-  margin: 0;
+  border-collapse: separate;
 }
 .s-grid-wrapper .s-table-wrapper td {
   padding: 0 5px;
-  border-bottom: 1px solid #d9d9d9;
-  border-right: 1px solid #d9d9d9;
   height: 24px;
   line-height: 23px;
+  border: 0;
+  border-right: 1px solid #d9d9d9;
+  border-bottom: 1px solid #d9d9d9;
+}
+.s-grid-wrapper .s-table-wrapper .s-grid-rownumber {
+  background: #eee;
+  text-align: center;
 }
 .s-grid-wrapper .s-table-wrapper .s-grid-checkbox {
   background: #eee;
   text-align: center;
-  border-right: 1px solid #d9d9d9;
+  width: 26px;
   padding: 0;
 }
 .s-grid-wrapper .s-table-wrapper .s-grid-check-wrapper {

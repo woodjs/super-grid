@@ -22,11 +22,6 @@
  width:100%;
  overflow: hidden;
  position:relative;
- .s-grid-rownumber{
-  background: $bgColor;
-  text-align: center;
-  border-right:1px solid $bdColor;
- }
  .s-grid-table{
   float:left;
   overflow:hidden;
@@ -41,6 +36,23 @@
    content: '';
    display:block;
    clear:both;
+  }
+  .s-grid-rownumber{
+   background: $bgColor;
+   text-align: center;
+   border-right:1px solid $bdColor;
+  }
+  .s-grid-sort-asc{
+   .s-grid-text{
+    padding-right:12px;
+    background: url(images/sort_asc.gif) right center no-repeat;
+   }
+  }
+  .s-grid-sort-desc{
+   .s-grid-text{
+    padding-right:12px;
+    background: url(images/sort_desc.gif) right center no-repeat;
+   }
   }
   .s-grid-check-wrapper{
    display: inline-block;
@@ -76,23 +88,25 @@
  .s-table-wrapper{
   table{
    table-layout: fixed;
-   border-collapse: collapse;
-   padding: 0;
-   border:0;
-   margin:0;
+   border-collapse: separate;
   }
   td{
    @extend %textOverflowEllipsis;
    padding:0 5px;
-   border-bottom:1px solid $bdColor;
-   border-right:1px solid $bdColor;
    height:24px;
    line-height:23px;
+   border:0;
+   border-right: 1px solid $bdColor;
+   border-bottom: 1px solid $bdColor;
+  }
+  .s-grid-rownumber{
+   background: $bgColor;
+   text-align: center;
   }
   .s-grid-checkbox{
    background: $bgColor;
    text-align: center;
-   border-right:1px solid $bdColor;
+   width:26px;
    padding:0;
   }
   .s-grid-check-wrapper{

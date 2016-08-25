@@ -46,6 +46,7 @@
       $target.jq.$curDragTarget = null;
       $target.jq.$cols = $target.find('colgroup');
       $target.jq.$rows = $target.find('tr');
+      $target.jq.$headerCols = $target.find('.s-table-column');
       $target.jq.$btnSelectAll = $target.find('.s-table-header .s-grid-check-wrapper');
     },
 
@@ -175,6 +176,29 @@
           }
         }
       });
+
+      $target.jq.$headerCols.on({
+        'click': function () {
+          var $this = $(this);
+          var $temp = null;
+
+          for (var i = 0; i < $target.jq.$headerCols.length; i++) {
+
+            if ($target.jq.$headerCols[i] !== this) {
+              $temp = $($target.jq.$headerCols[i]);
+              $temp.removeClass('s-grid-sort-asc').removeClass('s-grid-sort-desc');
+            }
+          }
+
+          if ($this.hasClass('s-grid-sort-asc')) {
+            $this.removeClass('s-grid-sort-asc').addClass('s-grid-sort-desc');
+          } else if ($this.hasClass('s-grid-sort-desc')) {
+            $this.removeClass('s-grid-sort-desc');
+          } else {
+            $this.addClass('s-grid-sort-asc');
+          }
+        }
+      });
     },
 
     createTableDragMask: function ($target, e) {
@@ -292,7 +316,6 @@
       }
     }
   };
-
 
   $.fn.grid = function () {
 
