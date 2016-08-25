@@ -25,7 +25,7 @@
 
     render: function ($target) {
       var self = this;
-
+      var templateId = $target.data('');
       return $target.html($('#template1').html());
     },
 
@@ -34,6 +34,7 @@
 
       $target.ns = {};
 
+      $target.ns.divDragMask = null;
       $target.ns.divDragLine = null;
       $target.ns.originPointX = 0;
     },
@@ -203,8 +204,17 @@
 
     createTableDragMask: function ($target, e) {
       var self = this;
+      var maskW = '300';
+      var maskH = '300';
       var mousePosition = util.getEventPosition(e);
+      var maskLeft = mousePosition.x - maskW / 2;
+      var maskTop = mousePosition.y - maskH / 2;
       var gridWrapperH = $target.jq.$curDragTarget.closest('.s-grid-wrapper').outerHeight();
+
+      $target.ns.divDragMask = document.createElement('div');
+      $target.ns.divDragMask.style.cssText = 'width:' + maskW + 'px;height:' + maskH + 'px;left:' + maskLeft + 'px;top:' + maskTop + 'px;position:absolute;background:red;z-index:999999;';
+
+      document.body.appendChild($target.ns.divDragMask);
 
       $target.ns.divDragLine = document.createElement('div');
       $target.ns.divDragLine.className = 's-grid-drag-line';
@@ -229,6 +239,8 @@
 
         util.clearDocumentSelection();
 
+        $target.ns.divDragMask.style.left = mousePosition.x - maskW / 2 + 'px';
+
         if (curDragTargetW + mousePosition.x - $target.ns.originPointX >= minColumnW
           && (mousePosition.x - $target.ns.originPointX) <= (gridWrapperW - curGridTableW - minTableW)
           && mousePosition.x < $gridWrapper.offset().left + gridWrapperW - self.scrollbarWidth) {
@@ -236,7 +248,7 @@
         }
       }
 
-      function finishResizeColumn() {
+      function finishResizeColumn(e) {
 
         resizeColumn();
 
@@ -245,6 +257,7 @@
           'mouseup': finishResizeColumn
         });
 
+        $target.ns.divDragMask && document.body.removeChild($target.ns.divDragMask);
         $target.ns.divDragLine && document.body.removeChild($target.ns.divDragLine);
         $target.jq.$curDragTarget = null;
       }
@@ -317,18 +330,28 @@
     }
   };
 
-  $.fn.grid = function () {
+  $.fn.grid = function (options, param) {
+    if (typeof options == 'string') {
+      return $.fn.grid.methods[options](this, param);
+    }
+
+    options = options || {};
 
     return this.each(function () {
+
+      $.data(this, 'grid', {
+        options: $.extend({}, $.fn.grid.defaults, options)
+      });
+
       grid.init($(this));
     });
   };
 
-  $.fn.grid.methods = function () {
+  $.fn.grid.methods = {
 
   };
 
-  $.fn.grid.defaults = function () {
+  $.fn.grid.defaults = {
 
   };
 });
