@@ -1,12 +1,12 @@
-!(function (wrapper) {
+!(function (fn) {
   "use strict";
 
   if (typeof define === 'function' && typeof define.amd === 'object' && define.amd) {
-    define(wrapper);
+    define(fn);
   } else if (typeof module !== 'undefined' && module.exports) {
-    module.exports = wrapper();
+    module.exports = fn();
   } else {
-    wrapper();
+    fn();
   }
 })(function () {
   "use strict";
@@ -45,6 +45,7 @@
 
       $target.jq.$curDragTarget = null;
       $target.jq.$cols = $target.find('colgroup');
+      $target.jq.$rows = $target.find('tr');
     },
 
     initEvents: function ($target) {
@@ -90,7 +91,7 @@
         }
       });
 
-      $target.find('.s-table-column').on({
+      $target.find('.s-table-column:not(.s-grid-disable-drag)').on({
         'mousedown': function (e) {
           var $this = $(this);
           var offsetLeft = $this.offset().left;
@@ -116,6 +117,62 @@
           }
         }
       });
+
+      $target.jq.$rows.on({
+        'mouseenter': function (e) {
+          var $this = $(this);
+          var rowIndex = $this.data('row-index');
+
+          for (var i = 0; i < $target.jq.$rows.length; i++) {
+            var $temp = $($target.jq.$rows[i]);
+
+            $temp.is('tr[data-row-index="' + rowIndex + '"]') ? $temp.addClass('s-grid-row-hover') : $temp.removeClass('s-grid-row-hover');
+          }
+        },
+        'click': function (e) {
+          var $this = $(this);
+          var rowIndex = $this.data('row-index');
+          var $temp;
+
+          if ($this.is('.s-grid-row-selected')) {
+            for (var i = 0; i < $target.jq.$rows.length; i++) {
+              $temp = $($target.jq.$rows[i]);
+              if ($temp.is('tr[data-row-index="' + rowIndex + '"]')) $temp.removeClass('s-grid-row-selected');
+            }
+            return;
+          }
+
+          for (var j = 0; j < $target.jq.$rows.length; j++) {
+            $temp = $($target.jq.$rows[j]);
+
+            $temp.is('tr[data-row-index="' + rowIndex + '"]') ? $temp.addClass('s-grid-row-selected') : $temp.removeClass('s-grid-row-selected');
+          }
+        }
+      });
+
+      $target.find('.s-table-header .s-grid-check-wrapper').on({
+        'click': function (e) {
+          var $this = $(this);
+
+          if ($this.is('.s-grid-row-selected')) {
+            $this.removeClass('s-grid-row-selected');
+            $target.jq.$rows.removeClass('s-grid-row-selected');
+          } else {
+            $this.addClass('s-grid-row-selected');
+            $target.jq.$rows.addClass('s-grid-row-selected');
+          }
+        }
+      });
+
+      $target.find('table').on({
+        'mouseleave': function () {
+          for (var i = 0; i < $target.jq.$rows.length; i++) {
+            var $temp = $($target.jq.$rows[i]);
+
+            $temp.removeClass('s-grid-row-hover');
+          }
+        }
+      });
     },
 
     createTableDragMask: function ($target, e) {
@@ -135,7 +192,7 @@
       });
 
       function dragAndCalculate(e) {
-        var minColumnW = 20;
+        var minColumnW = 30;
         var minTableW = 40;
         var curDragTargetW = $target.jq.$curDragTarget.outerWidth();
         var mousePosition = util.getEventPosition(e);
@@ -147,7 +204,8 @@
         util.clearDocumentSelection();
 
         if (curDragTargetW + mousePosition.x - $target.ns.originPointX >= minColumnW
-          && (mousePosition.x - $target.ns.originPointX) <= (gridWrapperW - curGridTableW - minTableW)) {
+          && (mousePosition.x - $target.ns.originPointX) <= (gridWrapperW - curGridTableW - minTableW)
+          && mousePosition.x < $gridWrapper.offset().left + gridWrapperW - self.scrollbarWidth) {
           $target.ns.divDragLine.style.left = mousePosition.x + 'px';
         }
       }

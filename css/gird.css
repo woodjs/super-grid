@@ -79,7 +79,7 @@ input, textarea, a {
   float: left;
   background: url(images/checkbox.gif) 0 0 no-repeat;
 }
-.s-grid-wrapper .s-table-header .s-grid-row-selected .s-grid-check-wrapper .s-grid-check {
+.s-grid-wrapper .s-table-header .s-grid-check-wrapper.s-grid-row-selected .s-grid-check {
   background: url(images/checkbox.gif) 0 -13px no-repeat;
 }
 .s-grid-wrapper .s-table-header .s-table-column {

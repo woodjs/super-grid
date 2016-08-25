@@ -55,13 +55,8 @@
     background: url(images/checkbox.gif) 0 0 no-repeat;
    }
   }
-
-  .s-grid-row-selected{
-   .s-grid-check-wrapper{
-    .s-grid-check{
-     background: url(images/checkbox.gif) 0 -13px no-repeat;
-    }
-   }
+  .s-grid-check-wrapper.s-grid-row-selected .s-grid-check{
+   background: url(images/checkbox.gif) 0 -13px no-repeat;
   }
   .s-table-column{
    position: relative;
