@@ -17,8 +17,6 @@
     init: function ($target) {
       var self = this;
 
-      _id++;
-
       self.initGlobalScope($target);
       self.render($target);
       self.initJqueryObject($target);
@@ -46,7 +44,6 @@
       if (opts.withRowNumber) deltaColIndex++;
 
       self.assignColumns($target, opts);
-
 
       html += self.templateMap.wrapper.begin.replace('{width}', opts.width);
 
@@ -94,6 +91,7 @@
       var originalColIndex = beginColIndex;
       var cols;
       var colsW;
+      var deltaW = 0;
       var len;
       var temp;
 
@@ -109,7 +107,15 @@
 
       if (!len) return '';
 
-      htmlGridTable += self.templateMap.gridTable.begin.replace('{isFrozen}', isFrozen).replace('{width}', colsW + 'px');
+      if (originalColIndex) {
+        if (opts.withCheckbox) deltaW -= parseInt(opts.checkboxWidth);
+        if (opts.withRowNumber) deltaW -= parseInt(opts.rowNumberWidth);
+      } else {
+        if (opts.withCheckbox) deltaW += parseInt(opts.checkboxWidth);
+        if (opts.withRowNumber) deltaW += parseInt(opts.rowNumberWidth);
+      }
+
+      htmlGridTable += self.templateMap.gridTable.begin.replace('{isFrozen}', isFrozen).replace('{width}', (colsW + deltaW) + 'px');
       htmlGridTable += self.templateMap.tableHeader.begin;
 
       if (!originalColIndex && opts.withCheckbox) {
@@ -136,12 +142,12 @@
         }
         htmlGridTable += self.templateMap.tableColumn.end;
       }
-      htmlGridTable += self.templateMap.tableWrapper.begin.replace('{width}', '').replace('{height}', '');
+      htmlGridTable += self.templateMap.tableHeader.end;
+      htmlGridTable += self.templateMap.tableWrapper.begin.replace(/\{width\}/g, '').replace(/\{height\}/g, '');
       htmlGridTable += htmlColgroup;
       htmlGridTable += self.templateMap.tbody.begin.replace('{id}', $target.ns.id + '-' + (originalColIndex === 0 ? 0 : 1));
       htmlGridTable += self.templateMap.tbody.end;
       htmlGridTable += self.templateMap.tableWrapper.end;
-      htmlGridTable += self.templateMap.tableHeader.end;
       htmlGridTable += self.templateMap.gridTable.end;
 
       return htmlGridTable;
@@ -163,7 +169,7 @@
 
       $target.ns = {};
 
-      $target.ns.id = _id;
+      $target.ns.id = _id++;
       $target.ns.divDragLine = null;
       $target.ns.originPointX = 0;
       $target.ns.frozenCols = [];
