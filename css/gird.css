@@ -82,12 +82,18 @@ input, textarea, a {
   padding-right: 12px;
   background: url(images/sort_asc.gif) right center no-repeat;
 }
+.s-grid-wrapper .s-table-header .s-grid-sort-asc:hover {
+  background: #f2f2f2 !important;
+}
 .s-grid-wrapper .s-table-header .s-grid-sort-desc {
   background: #f2f2f2;
 }
 .s-grid-wrapper .s-table-header .s-grid-sort-desc .s-grid-text {
   padding-right: 12px;
   background: url(images/sort_desc.gif) right center no-repeat;
+}
+.s-grid-wrapper .s-table-header .s-grid-sort-desc:hover {
+  background: #f2f2f2 !important;
 }
 .s-grid-wrapper .s-table-header .s-grid-check-wrapper {
   display: inline-block;
@@ -124,7 +130,7 @@ input, textarea, a {
   line-height: 23px;
 }
 .s-grid-wrapper .s-table-header .s-table-column:hover {
-  background: #ebebeb;
+  background: #ededed;
 }
 .s-grid-wrapper .s-table-wrapper table {
   table-layout: fixed;

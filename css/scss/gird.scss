@@ -57,12 +57,18 @@
     padding-right:12px;
     background: url(images/sort_asc.gif) right center no-repeat;
    }
+   &:hover{
+    background: lighten($bgColor, 6%) !important;
+   }
   }
   .s-grid-sort-desc{
    background: lighten($bgColor, 6%);
    .s-grid-text{
     padding-right:12px;
     background: url(images/sort_desc.gif) right center no-repeat;
+   }
+   &:hover{
+    background: lighten($bgColor, 6%) !important;
    }
   }
   .s-grid-check-wrapper{
@@ -100,7 +106,7 @@
     @extend %textOverflowEllipsis;
    }
    &:hover{
-    background: lighten($bgColor, 3%);
+    background: lighten($bgColor, 4%);
    }
   }
  }
