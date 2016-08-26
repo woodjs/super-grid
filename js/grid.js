@@ -11,12 +11,16 @@
 })(function () {
   "use strict";
 
+  var _id = 0;
+
   var grid = {
     init: function ($target) {
       var self = this;
 
-      self.render($target);
+      _id++;
+
       self.initGlobalScope($target);
+      self.render($target);
       self.initJqueryObject($target);
       self.initEvents($target);
 
@@ -25,8 +29,82 @@
 
     render: function ($target) {
       var self = this;
-      var templateId = $target.data('');
-      return $target.html($('#template1').html());
+      var data = $target.data('grid');
+      var html = self.createShellHtml($target, data.options);
+
+      return $target.html(html);
+    },
+
+    createShellHtml: function ($target, opts) {
+      var self = this;
+      var html = '';
+      var htmlFrozenPart = '';
+      var htmlUnfrozenPart = '';
+      var htmlFrozenColgroup = '';
+      var htmlUnFrozenColgroup = '';
+      var cols = opts.columns;
+      var len = opts.columns.length;
+      var frozenCols = [];
+      var unFrozenCols = [];
+      var frozenColsW = 0;
+      var unFrozenColsW = 0;
+      var temp;
+
+      html += self.templateMap.wrapper.begin.replace('{width}', opts.width);
+
+      for (var i = 0; i < len; i++) {
+        temp = opts.columns[i];
+        if (temp.frozen) {
+          frozenColsW += parseInt(temp.width);
+          frozenCols.push(temp);
+        } else {
+          unFrozenCols.push(temp);
+        }
+      }
+      unFrozenColsW = parseInt(opts.width) - frozenColsW;
+
+      var unFrozenColsLen = unFrozenCols.length;
+      var frozenColsLen = frozenCols.length;
+
+      htmlUnfrozenPart += self.templateMap.gridTable.begin.replace('{isFrozen}', 'false').replace('{width}', unFrozenColsW + 'px');
+      htmlUnfrozenPart += self.templateMap.tableHeader.begin;
+      for (var j = 0; j < unFrozenColsLen; j++) {
+        temp = unFrozenCols[j];
+        htmlUnFrozenColgroup += self.templateMap.colgroup.replace('{width}', temp.width);
+        htmlUnfrozenPart += self.templateMap.tableColumn.begin.replace('{classList}', self.createColumnClass(temp)).replace('{colIndex}', j).replace('{index}', temp.index).replace('{width}', temp.width);
+        htmlUnfrozenPart += self.templateMap.gridText.replace('{title}', temp.title);
+        if (temp.resizeable) {
+          htmlUnfrozenPart += self.templateMap.dragQuarantine;
+        }
+        htmlUnfrozenPart += self.templateMap.tableColumn.end;
+      }
+      htmlUnfrozenPart += self.templateMap.tableWrapper.begin;
+      htmlUnfrozenPart += htmlUnFrozenColgroup;
+      htmlUnfrozenPart += self.templateMap.tbody.begin.replace('{id}', $target.ns.id);
+      htmlUnfrozenPart += self.templateMap.tbody.end;
+      htmlUnfrozenPart += self.templateMap.tableWrapper.end;
+      htmlUnfrozenPart += self.templateMap.tableHeader.end;
+      htmlUnfrozenPart += self.templateMap.gridTable.end;
+
+      if (frozenColsLen) {
+        for (var k = 0; k < frozenColsLen; k++) {
+
+        }
+      }
+      html = htmlFrozenPart + htmlUnfrozenPart;
+
+      return html;
+    },
+
+    createColumnClass: function (opt) {
+      var classList = ['s-table-column'];
+
+      if (opt.isCheckbox) classList.push('s-grid-checkbox');
+      if (opt.isRowNumber) classList.push('s-grid-rownumber');
+      if (!opt.resizeable) classList.push('s-grid-disable-resize');
+      if (!opt.sortable) classList.push('s-grid-disable-sort');
+
+      return classList.join(' ');
     },
 
     initGlobalScope: function ($target) {
@@ -34,6 +112,7 @@
 
       $target.ns = {};
 
+      $target.ns.id = _id;
       $target.ns.divDragLine = null;
       $target.ns.originPointX = 0;
     },
@@ -92,7 +171,7 @@
         }
       });
 
-      $target.find('.s-table-column:not(.s-grid-disable-drag)').on({
+      $target.find('.s-table-column:not(.s-grid-disable-resize)').on({
         'mousedown': function (e) {
           var $this = $(this);
           var offsetLeft = $this.offset().left;
@@ -123,8 +202,9 @@
         'mouseenter': function (e) {
           var $this = $(this);
           var rowIndex = $this.data('row-index');
+          var len = $target.jq.$rows.length;
 
-          for (var i = 0; i < $target.jq.$rows.length; i++) {
+          for (var i = 0; i < len; i++) {
             var $temp = $($target.jq.$rows[i]);
 
             $temp.is('tr[data-row-index="' + rowIndex + '"]') ? $temp.addClass('s-grid-row-hover') : $temp.removeClass('s-grid-row-hover');
@@ -133,18 +213,20 @@
         'click': function (e) {
           var $this = $(this);
           var rowIndex = $this.data('row-index');
+          var len = $target.jq.$rows.length;
           var $temp;
 
           if ($this.is('.s-grid-row-selected')) {
             $target.jq.$btnSelectAll.removeClass('s-grid-row-selected');
-            for (var i = 0; i < $target.jq.$rows.length; i++) {
+
+            for (var i = 0; i < len; i++) {
               $temp = $($target.jq.$rows[i]);
               if ($temp.is('tr[data-row-index="' + rowIndex + '"]')) $temp.removeClass('s-grid-row-selected');
             }
             return;
           }
 
-          for (var j = 0; j < $target.jq.$rows.length; j++) {
+          for (var j = 0; j < len; j++) {
             $temp = $($target.jq.$rows[j]);
 
             $temp.is('tr[data-row-index="' + rowIndex + '"]') ? $temp.addClass('s-grid-row-selected') : $temp.removeClass('s-grid-row-selected');
@@ -168,7 +250,9 @@
 
       $target.find('table').on({
         'mouseleave': function () {
-          for (var i = 0; i < $target.jq.$rows.length; i++) {
+          var len = $target.jq.$rows.length;
+
+          for (var i = 0; i < len; i++) {
             var $temp = $($target.jq.$rows[i]);
 
             $temp.removeClass('s-grid-row-hover');
@@ -179,9 +263,10 @@
       $target.jq.$headerCols.on({
         'click': function () {
           var $this = $(this);
+          var len = $target.jq.$headerCols.length;
           var $temp = null;
 
-          for (var i = 0; i < $target.jq.$headerCols.length; i++) {
+          for (var i = 0; i < len; i++) {
 
             if ($target.jq.$headerCols[i] !== this) {
               $temp = $($target.jq.$headerCols[i]);
@@ -194,7 +279,7 @@
           } else if ($this.hasClass('s-grid-sort-desc')) {
             $this.removeClass('s-grid-sort-desc');
           } else {
-            if ($this.is(':not(.s-grid-disable-drag)')) {
+            if ($this.is(':not(.s-grid-disable-sort)')) {
               $this.addClass('s-grid-sort-asc');
             }
           }
@@ -276,6 +361,85 @@
           $curTable[0].style.width = $curTableHeader.outerWidth() - self.scrollbarWidth + 'px';
         }
       }
+    },
+    templateMap: {
+      wrapper: {
+        begin: '<div class="s-grid-wrapper-outer"><div class="s-grid-wrapper" style="{width}">',
+        end: '</div></div>'
+      },
+      gridTable: {
+        begin: '<div class="s-grid-table" data-frozen="{isFrozen}"  style="{width}">',
+        end: '</div>'
+      },
+      tableHeader: {
+        begin: '<div class="s-table-header-wrapper" style="overflow: hidden"><div class="s-table-header">',
+        end: '</div></div>'
+      },
+      tableColumn: {
+        begin: '<div class="{classList}" data-col-index="{colIndex}" data-index="{index}" style="{width}"><div class="s-grid-text-wrapper">',
+        end: '</div></div>'
+      },
+      checkbox: '<span class="s-grid-check-wrapper"><span class="s-grid-check"></span></span>',
+      gridText: '<span class="s-grid-text">{title}</span>',
+      dragQuarantine: '<span class="sc-grid-drag-quarantine"></span>',
+      tableWrapper: {
+        begin: '<div class="s-table-wrapper" style="height:{height};overflow:hidden;"><div style="width: {width};height: {height};"><table style="width: {width};" cellspacing="0" cellpadding="0" border="0">',
+        end: '</table></div></div>'
+      },
+      colgroup: '<colgroup><col style="{width}"/></colgroup>',
+      tbody: {
+        begin: '<tbody id="s-grid-tbody-{id}">',
+        end: '</tbody>'
+      },
+      total: '\
+      <div class="s-grid-wrapper-outer">\
+        <div class="s-grid-wrapper" style="width:670px;">\
+          <div class="s-grid-table" data-frozen="true"  style="width:370px;">\
+            <div class="s-table-header-wrapper" style="overflow: hidden">\
+              <div class="s-table-header">\
+                <div class="s-table-column s-grid-checkbox s-grid-disable-resize" data-col-index="0" style="width: 26px">\
+                  <span class="s-grid-check-wrapper"><span class="s-grid-check"></span></span>\
+                </div>\
+                <div class="s-table-column s-grid-rownumber  s-grid-disable-resize" data-col-index="1" style="width: 44px">\
+                  <span class="">序号</span>\
+                </div>\
+                <div class="s-table-column" data-col-index="2" style="width: 100px">\
+                  <div class="s-grid-text-wrapper"><span class="s-grid-text">测试1</span></div><span class="sc-grid-drag-quarantine"></span>\
+                </div>\
+                <div class="s-table-column" data-col-index="3" style="width: 100px">\
+                  <div class="s-grid-text-wrapper"><span class="s-grid-text">测试2</span></div><span class="sc-grid-drag-quarantine"></span>\
+                </div>\
+                <div class="s-table-column" data-col-index="4" style="width: 100px">\
+                  <div class="s-grid-text-wrapper"><span class="s-grid-text">测试3</span></div><span class="sc-grid-drag-quarantine"></span>\
+                </div>\
+              </div>\
+            </div>\
+          <div class="s-table-wrapper" style="height:103px;overflow:hidden;">\
+            <div style="width: 370px;height: 103px;">\
+              <table style="width: 370px;" cellspacing="0" cellpadding="0" border="0">\
+                <colgroup>\
+                <col style="width: 26px;"/>\
+                </colgroup>\
+                <colgroup>\
+                <col style="width: 44px;"/>\
+                </colgroup>\
+                <colgroup>\
+                <col style="width: 100px;"/>\
+                </colgroup>\
+                <colgroup>\
+                <col style="width: 100px;"/>\
+                </colgroup>\
+                <colgroup>\
+                <col style="width: 100px;"/>\
+                </colgroup>\
+                <tbody>\
+                </tbody>\
+            </table>\
+            </div>\
+          </div>\
+        </div>\
+      </div>\
+    </div>'
     }
   };
 
@@ -336,11 +500,7 @@
     });
   };
 
-  $.fn.grid.methods = {
+  $.fn.grid.methods = {};
 
-  };
-
-  $.fn.grid.defaults = {
-
-  };
+  $.fn.grid.defaults = {};
 });

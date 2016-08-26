@@ -19,225 +19,150 @@
 <div class="demo-grid" id="test2"></div>
 <div class="demo-grid" id="test3"></div>
 
-<script type="text/template" id="template1">
-
-  <div class="s-grid-wrapper-outer">
-    <div class="s-grid-wrapper" style="width:670px;">
-      <div class="s-grid-table" data-frozen="true"  style="width:370px;">
-        <div class="s-table-header-wrapper" style="overflow: hidden">
-          <div class="s-table-header">
-            <div class="s-table-column s-grid-checkbox s-grid-disable-drag" data-col-index="0" style="width: 26px"><span
-                class="s-grid-check-wrapper"><span class="s-grid-check"></span></span></div>
-            <div class="s-table-column s-grid-rownumber  s-grid-disable-drag" data-col-index="1" style="width: 44px"><span
-                class="">序号</span></div>
-            <div class="s-table-column" data-col-index="2" style="width: 100px">
-              <div class="s-grid-text-wrapper"><span class="s-grid-text">测试1</span></div><span class="sc-grid-drag-quarantine"></span></div>
-            <div class="s-table-column" data-col-index="3" style="width: 100px">
-              <div class="s-grid-text-wrapper"><span class="s-grid-text">测试2</span></div><span class="sc-grid-drag-quarantine"></span></div>
-            <div class="s-table-column" data-col-index="4" style="width: 100px">
-              <div class="s-grid-text-wrapper"><span class="s-grid-text">测试3</span></div><span class="sc-grid-drag-quarantine"></span></div>
-          </div>
-        </div>
-        <div class="s-table-wrapper" style="height:103px;overflow:hidden;">
-          <table style="width: 370px;" cellspacing="0" cellpadding="0" border="0">
-            <colgroup>
-              <col style="width: 26px;"/>
-            </colgroup>
-            <colgroup>
-              <col style="width: 44px;"/>
-            </colgroup>
-            <colgroup>
-              <col style="width: 100px;"/>
-            </colgroup>
-            <colgroup>
-              <col style="width: 100px;"/>
-            </colgroup>
-            <colgroup>
-              <col style="width: 100px;"/>
-            </colgroup>
-            <tbody>
-            <tr data-row-index="0">
-              <td class="s-grid-checkbox"><span class="s-grid-check-wrapper"><span class="s-grid-check"></span></span></td>
-              <td class="s-grid-rownumber"><span>1</span></td>
-              <td>test</td>
-              <td>abc</td>
-              <td>ddd1</td>
-            </tr>
-            <tr data-row-index="1">
-              <td class="s-grid-checkbox"><span class="s-grid-check-wrapper"><span class="s-grid-check"></span></span></td>
-              <td class="s-grid-rownumber"><span>2</span></td>
-              <td>test</td>
-              <td>abc</td>
-              <td>ddd2</td>
-            </tr>
-            <tr data-row-index="2">
-              <td class="s-grid-checkbox"><span class="s-grid-check-wrapper"><span class="s-grid-check"></span></span></td>
-              <td class="s-grid-rownumber"><span>3</span></td>
-              <td>test</td>
-              <td>abc</td>
-              <td>ddd3</td>
-            </tr>
-            <tr data-row-index="3">
-              <td class="s-grid-checkbox"><span class="s-grid-check-wrapper"><span class="s-grid-check"></span></span></td>
-              <td class="s-grid-rownumber"><span>4</span></td>
-              <td>test</td>
-              <td>abc</td>
-              <td>ddd4</td>
-            </tr>
-            <tr data-row-index="4">
-              <td class="s-grid-checkbox"><span class="s-grid-check-wrapper"><span class="s-grid-check"></span></span></td>
-              <td class="s-grid-rownumber"><span>5</span></td>
-              <td>test</td>
-              <td>abc</td>
-              <td>ddd5</td>
-            </tr>
-            <tr data-row-index="5">
-              <td class="s-grid-checkbox"><span class="s-grid-check-wrapper"><span class="s-grid-check"></span></span></td>
-              <td class="s-grid-rownumber"><span>6</span></td>
-              <td>test</td>
-              <td>abc</td>
-              <td>ddd6</td>
-            </tr>
-            <tr data-row-index="6">
-              <td class="s-grid-checkbox"><span class="s-grid-check-wrapper"><span class="s-grid-check"></span></span></td>
-              <td class="s-grid-rownumber"><span>7</span></td>
-              <td>test</td>
-              <td>abc</td>
-              <td>ddd7</td>
-            </tr>
-            <tr data-row-index="7">
-              <td class="s-grid-checkbox"><span class="s-grid-check-wrapper"><span class="s-grid-check"></span></span></td>
-              <td class="s-grid-rownumber"><span>8</span></td>
-              <td>test</td>
-              <td>abc</td>
-              <td>ddd8</td>
-            </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <div class="s-grid-table" style="width:300px;">
-        <div class="s-table-header-wrapper" style="overflow: hidden">
-          <div class="s-table-header" style="width:617px;">
-            <div class="s-table-column" data-col-index="5" style="width: 100px"><div class="s-grid-text-wrapper"><span class="s-grid-text">测试4</span></div><span class="sc-grid-drag-quarantine"></span>
-            </div>
-            <div class="s-table-column" data-col-index="6" style="width: 100px"><div class="s-grid-text-wrapper"><span class="s-grid-text">测试5</span></div><span class="sc-grid-drag-quarantine"></span>
-            </div>
-            <div class="s-table-column" data-col-index="7" style="width: 100px"><div class="s-grid-text-wrapper"><span class="s-grid-text">测试6</span></div><span class="sc-grid-drag-quarantine"></span>
-            </div>
-            <div class="s-table-column" data-col-index="8" style="width: 100px"><div class="s-grid-text-wrapper"><span class="s-grid-text">测试7</span></div><span class="sc-grid-drag-quarantine"></span>
-            </div>
-            <div class="s-table-column" data-col-index="9" style="width: 100px"><div class="s-grid-text-wrapper"><span class="s-grid-text">测试8</span></div><span class="sc-grid-drag-quarantine"></span>
-            </div>
-            <div class="s-table-column" data-col-index="10" style="width: 100px"><div class="s-grid-text-wrapper"><span class="s-grid-text">测试9</span></div>span class="sc-grid-drag-quarantine"></span>
-            </div>
-          </div>
-        </div>
-        <div class="s-table-wrapper" style="height:120px;overflow: auto;">
-          <table style="width: 600px;" cellspacing="0" cellpadding="0" border="0">
-            <colgroup>
-              <col style="width: 100px;"/>
-            </colgroup>
-            <colgroup>
-              <col style="width: 100px;"/>
-            </colgroup>
-            <colgroup>
-              <col style="width: 100px;"/>
-            </colgroup>
-            <colgroup>
-              <col style="width: 100px;"/>
-            </colgroup>
-            <colgroup>
-              <col style="width: 100px;"/>
-            </colgroup>
-            <colgroup>
-              <col style="width: 100px;"/>
-            </colgroup>
-            <tbody>
-            <tr data-row-index="0">
-              <td>111</td>
-              <td>abc</td>
-              <td>dd2d</td>
-              <td>test</td>
-              <td>abc</td>
-              <td>ddd</td>
-            </tr>
-            <tr data-row-index="1">
-              <td>tes2t</td>
-              <td>abc</td>
-              <td>ddd</td>
-              <td>test</td>
-              <td>a2bc</td>
-              <td>ddd</td>
-            </tr>
-            <tr data-row-index="2">
-              <td>test</td>
-              <td>abc</td>
-              <td>d2dd</td>
-              <td>test</td>
-              <td>abc</td>
-              <td>ddd</td>
-            </tr>
-            <tr data-row-index="3">
-              <td>test</td>
-              <td>ab2c</td>
-              <td>ddd</td>
-              <td>test</td>
-              <td>abc</td>
-              <td>ddd</td>
-            </tr>
-            <tr data-row-index="4">
-              <td>test</td>
-              <td>abc</td>
-              <td>ddd</td>
-              <td>test</td>
-              <td>ab2c</td>
-              <td>d3dd</td>
-            </tr>
-            <tr data-row-index="5">
-              <td>tes4t</td>
-              <td>abc</td>
-              <td>ddd</td>
-              <td>test</td>
-              <td>abc</td>
-              <td>d5dd</td>
-            </tr>
-            <tr data-row-index="6">
-              <td>test</td>
-              <td>a6bc</td>
-              <td>ddd</td>
-              <td>test</td>
-              <td>abc</td>
-              <td>ddd</td>
-            </tr>
-            <tr data-row-index="7">
-              <td>ooo</td>
-              <td>abc</td>
-              <td>dd6d</td>
-              <td>test</td>
-              <td>ab6c</td>
-              <td>ddd</td>
-            </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</script>
-
-<script type="text/template" id="template2">
-
-</script>
 <script type="text/javascript" src="js/lib/jquery-1.11.3.min.js"></script>
 <script type="text/javascript" src="js/grid.js"></script>
 <script type="text/javascript">
   $(function () {
 
     $('#test1').grid({
-      template: '#template1'
+      width: '670px',
+      height: '144px',
+      withRowNumber: true,
+      withCheckbox: true,
+      multiSelect: false,
+      leftFrozen: true,
+      columns: [{
+        title: '测试1',
+        index: 'a1',
+        width: '100px',
+        frozen: true,
+        sortable: true,
+        resizeable: true,
+        renderer: function() {
+          return '';
+        }
+      }, {
+        title: '测试2',
+        index: 'b1',
+        width: '100px',
+        frozen: true,
+        sortable: true,
+        resizeable: true,
+        renderer: function() {
+          return '';
+        }
+      }, {
+        title: '测试3',
+        index: 'c1',
+        width: '100px',
+        frozen: true,
+        sortable: true,
+        resizeable: true,
+        renderer: function() {
+          return '';
+        }
+      }, {
+        title: '测试4',
+        index: 'd1',
+        width: '100px',
+        sortable: true,
+        renderer: function() {
+          return '';
+        }
+      }, {
+        title: '测试5',
+        index: 'e1',
+        width: '100px',
+        sortable: true,
+        resizeable: true,
+        renderer: function() {
+          return '';
+        }
+      }, {
+        title: '测试6',
+        index: 'f1',
+        width: '100px',
+        renderer: function() {
+          return '';
+        }
+      }, {
+        title: '测试7',
+        index: 'g1',
+        width: '100px',
+        renderer: function() {
+          return '';
+        }
+      }, {
+        title: '测试8',
+        index: 'h1',
+        width: '100px',
+        frozen: true,
+        renderer: function() {
+          return '';
+        }
+      }],
+      localData: {
+        start: 0,
+        size: 20,
+        page: 3,
+        total: 2090,
+        totalPages: 105,
+        list: [{
+          "a1": 1,
+          "b1": 1,
+          "c1": 1,
+          "d1": 'defgf',
+          "e1": "B40LFFU5W001",
+          "f1": "4驱 硬顶",
+          "g1": "B40L",
+          "h1": "B40LU5W"
+        }, {
+          "a1": 1,
+          "b1": 1,
+          "c1": 1,
+          "d1": 'defgf',
+          "e1": "B40LFFU5W001",
+          "f1": "4驱 硬顶",
+          "g1": "B40L",
+          "h1": "B40LU5W"
+        }, {
+          "a1": 1,
+          "b1": 1,
+          "c1": 1,
+          "d1": 'defgf',
+          "e1": "B40LFFU5W001",
+          "f1": "4驱 硬顶",
+          "g1": "B40L",
+          "h1": "B40LU5W"
+        }, {
+          "a1": 1,
+          "b1": 1,
+          "c1": 1,
+          "d1": 'defgf',
+          "e1": "B40LFFU5W001",
+          "f1": "4驱 硬顶",
+          "g1": "B40L",
+          "h1": "B40LU5W"
+        }, {
+          "a1": 1,
+          "b1": 1,
+          "c1": 1,
+          "d1": 'defgf',
+          "e1": "B40LFFU5W001",
+          "f1": "4驱 硬顶",
+          "g1": "B40L",
+          "h1": "B40LU5W"
+        }, {
+          "a1": 1,
+          "b1": 1,
+          "c1": 1,
+          "d1": 'defgf',
+          "e1": "B40LFFU5W001",
+          "f1": "4驱 硬顶",
+          "g1": "B40L",
+          "h1": "B40LU5W"
+        }]
+      }
     });
   });
 </script>
