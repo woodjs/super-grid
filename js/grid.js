@@ -3,12 +3,12 @@
 
   if (typeof define === 'function' && typeof define.amd === 'object' && define.amd) {
     define(function () {
-      jQuery && fn(jQuery);
+      fn(jQuery);
     });
   } else if (typeof module !== 'undefined' && module.exports) {
-    module.exports = jQuery && fn(jQuery);
+    module.exports = fn(jQuery);
   } else {
-    jQuery && fn(jQuery);
+    fn(jQuery);
   }
 })(function ($) {
   "use strict";
