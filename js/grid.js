@@ -194,7 +194,9 @@
           } else if ($this.hasClass('s-grid-sort-desc')) {
             $this.removeClass('s-grid-sort-desc');
           } else {
-            $this.addClass('s-grid-sort-asc');
+            if ($this.is(':not(.s-grid-disable-drag)')) {
+              $this.addClass('s-grid-sort-asc');
+            }
           }
         }
       });
@@ -233,6 +235,7 @@
           && mousePosition.x < $gridWrapper.offset().left + gridWrapperW - self.scrollbarWidth) {
           $target.ns.divDragLine.style.left = mousePosition.x + 'px';
         }
+
       }
 
       function finishResizeColumn(e) {

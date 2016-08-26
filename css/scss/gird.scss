@@ -37,18 +37,29 @@
    display:block;
    clear:both;
   }
+  .sc-grid-drag-quarantine{
+   position: absolute;
+   right:-2px;
+   top:0;
+   width:5px;
+   height:100%;
+   background: transparent;
+   z-index: 5px;
+  }
   .s-grid-rownumber{
    background: $bgColor;
    text-align: center;
    border-right:1px solid $bdColor;
   }
   .s-grid-sort-asc{
+   background: lighten($bgColor, 6%);
    .s-grid-text{
     padding-right:12px;
     background: url(images/sort_asc.gif) right center no-repeat;
    }
   }
   .s-grid-sort-desc{
+   background: lighten($bgColor, 6%);
    .s-grid-text{
     padding-right:12px;
     background: url(images/sort_desc.gif) right center no-repeat;
@@ -73,15 +84,23 @@
   .s-table-column{
    position: relative;
    float:left;
-   @extend %textOverflowEllipsis;
-   padding:0 5px;
    border:1px solid $bdColor;
    border-top: 0;
    border-left:0;
    height:24px;
    line-height: 23px;
+   @extend %textOverflowEllipsis;
    &.s-grid-checkbox{
     padding:0;
+   }
+   .s-grid-text-wrapper{
+    padding:0 5px;
+    width: 100%;
+    @include setHeightGroup(23px);
+    @extend %textOverflowEllipsis;
+   }
+   &:hover{
+    background: lighten($bgColor, 3%);
    }
   }
  }

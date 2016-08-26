@@ -1,4 +1,4 @@
-.s-grid-wrapper .s-table-header .s-table-column, .s-grid-wrapper .s-table-wrapper td {
+.s-grid-wrapper .s-table-header .s-table-column, .s-grid-wrapper .s-table-header .s-table-column .s-grid-text-wrapper, .s-grid-wrapper .s-table-wrapper td {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -33,7 +33,7 @@ input, textarea, a {
 }
 .s-grid-wrapper-outer:before {
   content: '';
-  background: #eee;
+  background: #e3e3e3;
   position: absolute;
   width: 100%;
   height: 24px;
@@ -54,21 +54,36 @@ input, textarea, a {
   overflow: hidden;
   height: 24px;
   line-height: 24px;
-  background: #eee;
+  background: #e3e3e3;
 }
 .s-grid-wrapper .s-table-header:after {
   content: '';
   display: block;
   clear: both;
 }
+.s-grid-wrapper .s-table-header .sc-grid-drag-quarantine {
+  position: absolute;
+  right: -2px;
+  top: 0;
+  width: 5px;
+  height: 100%;
+  background: transparent;
+  z-index: 5px;
+}
 .s-grid-wrapper .s-table-header .s-grid-rownumber {
-  background: #eee;
+  background: #e3e3e3;
   text-align: center;
   border-right: 1px solid #d9d9d9;
+}
+.s-grid-wrapper .s-table-header .s-grid-sort-asc {
+  background: #f2f2f2;
 }
 .s-grid-wrapper .s-table-header .s-grid-sort-asc .s-grid-text {
   padding-right: 12px;
   background: url(images/sort_asc.gif) right center no-repeat;
+}
+.s-grid-wrapper .s-table-header .s-grid-sort-desc {
+  background: #f2f2f2;
 }
 .s-grid-wrapper .s-table-header .s-grid-sort-desc .s-grid-text {
   padding-right: 12px;
@@ -93,7 +108,6 @@ input, textarea, a {
 .s-grid-wrapper .s-table-header .s-table-column {
   position: relative;
   float: left;
-  padding: 0 5px;
   border: 1px solid #d9d9d9;
   border-top: 0;
   border-left: 0;
@@ -102,6 +116,15 @@ input, textarea, a {
 }
 .s-grid-wrapper .s-table-header .s-table-column.s-grid-checkbox {
   padding: 0;
+}
+.s-grid-wrapper .s-table-header .s-table-column .s-grid-text-wrapper {
+  padding: 0 5px;
+  width: 100%;
+  height: 23px;
+  line-height: 23px;
+}
+.s-grid-wrapper .s-table-header .s-table-column:hover {
+  background: #ebebeb;
 }
 .s-grid-wrapper .s-table-wrapper table {
   table-layout: fixed;
@@ -117,11 +140,11 @@ input, textarea, a {
   border-bottom: 1px solid #d9d9d9;
 }
 .s-grid-wrapper .s-table-wrapper .s-grid-rownumber {
-  background: #eee;
+  background: #e3e3e3;
   text-align: center;
 }
 .s-grid-wrapper .s-table-wrapper .s-grid-checkbox {
-  background: #eee;
+  background: #e3e3e3;
   text-align: center;
   width: 26px;
   padding: 0;
