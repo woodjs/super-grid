@@ -2,13 +2,15 @@
   "use strict";
 
   if (typeof define === 'function' && typeof define.amd === 'object' && define.amd) {
-    define(fn);
+    define(function () {
+      jQuery && fn(jQuery);
+    });
   } else if (typeof module !== 'undefined' && module.exports) {
-    module.exports = fn();
+    module.exports = jQuery && fn(jQuery);
   } else {
-    fn();
+    jQuery && fn(jQuery);
   }
-})(function () {
+})(function ($) {
   "use strict";
 
   var _id = 0;
