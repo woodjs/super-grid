@@ -514,5 +514,16 @@
 
   $.fn.grid.methods = {};
 
-  $.fn.grid.defaults = {};
+  $.fn.grid.defaults = {
+    width: '800px',
+    height: '200px',
+    withCheckbox: true,
+    checkboxWidth: '26px',
+    withRowNumber: true,
+    rowNumberWidth: '44px',
+    multiSelect: false,
+    frozenColsAlign: 'left',
+    columns: [],
+    localData: null
+  };
 });
