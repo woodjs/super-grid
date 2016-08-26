@@ -40,60 +40,111 @@
       var html = '';
       var htmlFrozenPart = '';
       var htmlUnfrozenPart = '';
-      var htmlFrozenColgroup = '';
-      var htmlUnFrozenColgroup = '';
-      var cols = opts.columns;
-      var len = opts.columns.length;
-      var frozenCols = [];
-      var unFrozenCols = [];
-      var frozenColsW = 0;
-      var unFrozenColsW = 0;
-      var temp;
+      var deltaColIndex = 0;
+
+      if (opts.withCheckbox) deltaColIndex++;
+      if (opts.withRowNumber) deltaColIndex++;
+
+      self.assignColumns($target, opts);
+
 
       html += self.templateMap.wrapper.begin.replace('{width}', opts.width);
+
+      if (opts.frozenColsAlign === 'left') {
+        htmlFrozenPart = self.createGridTableHtml($target, opts, true, 0);
+        htmlUnfrozenPart = self.createGridTableHtml($target, opts, false, $target.ns.frozenCols.length + deltaColIndex);
+
+        html += htmlFrozenPart + htmlUnfrozenPart;
+
+      } else {
+        htmlUnfrozenPart = self.createGridTableHtml($target, opts, false, 0);
+        htmlFrozenPart = self.createGridTableHtml($target, opts, true, $target.ns.unFrozenCols.length + deltaColIndex);
+
+        html += htmlUnfrozenPart + htmlFrozenPart;
+      }
+
+      html += self.templateMap.wrapper.end;
+
+      return html;
+    },
+
+    assignColumns: function ($target, opts) {
+      var self = this;
+      var cols = opts.columns;
+      var len = cols.length;
+      var temp;
 
       for (var i = 0; i < len; i++) {
         temp = opts.columns[i];
         if (temp.frozen) {
-          frozenColsW += parseInt(temp.width);
-          frozenCols.push(temp);
+          $target.ns.frozenColsW += parseInt(temp.width);
+          $target.ns.frozenCols.push(temp);
         } else {
-          unFrozenCols.push(temp);
+          $target.ns.unFrozenCols.push(temp);
         }
       }
-      unFrozenColsW = parseInt(opts.width) - frozenColsW;
 
-      var unFrozenColsLen = unFrozenCols.length;
-      var frozenColsLen = frozenCols.length;
+      $target.ns.unFrozenColsW = parseInt(opts.width) - $target.ns.frozenColsW;
+    },
 
-      htmlUnfrozenPart += self.templateMap.gridTable.begin.replace('{isFrozen}', 'false').replace('{width}', unFrozenColsW + 'px');
-      htmlUnfrozenPart += self.templateMap.tableHeader.begin;
-      for (var j = 0; j < unFrozenColsLen; j++) {
-        temp = unFrozenCols[j];
-        htmlUnFrozenColgroup += self.templateMap.colgroup.replace('{width}', temp.width);
-        htmlUnfrozenPart += self.templateMap.tableColumn.begin.replace('{classList}', self.createColumnClass(temp)).replace('{colIndex}', j).replace('{index}', temp.index).replace('{width}', temp.width);
-        htmlUnfrozenPart += self.templateMap.gridText.replace('{title}', temp.title);
+    createGridTableHtml: function ($target, opts, isFrozen, beginColIndex) {
+      var self = this;
+      var htmlGridTable = '';
+      var htmlColgroup = '';
+      var originalColIndex = beginColIndex;
+      var cols;
+      var colsW;
+      var len;
+      var temp;
+
+      if (isFrozen) {
+        cols = $target.ns.frozenCols;
+        colsW = $target.ns.frozenColsW;
+      } else {
+        cols = $target.ns.unFrozenCols;
+        colsW = $target.ns.unFrozenColsW;
+      }
+
+      len = cols.length;
+
+      if (!len) return '';
+
+      htmlGridTable += self.templateMap.gridTable.begin.replace('{isFrozen}', isFrozen).replace('{width}', colsW + 'px');
+      htmlGridTable += self.templateMap.tableHeader.begin;
+
+      if (!originalColIndex && opts.withCheckbox) {
+        htmlColgroup += self.templateMap.colgroup.replace('{width}', opts.checkboxWidth);
+        htmlGridTable += self.templateMap.tableColumn.begin.replace('{classList}', self.createColumnClass({isCheckbox: true})).replace('{colIndex}', beginColIndex++).replace('{index}', 'checkbox').replace('{width}', opts.checkboxWidth);
+        htmlGridTable += self.templateMap.checkbox;
+        htmlGridTable += self.templateMap.tableColumn.end;
+      }
+
+      if (!originalColIndex && opts.withRowNumber) {
+        htmlColgroup += self.templateMap.colgroup.replace('{width}', opts.rowNumberWidth);
+        htmlGridTable += self.templateMap.tableColumn.begin.replace('{classList}', self.createColumnClass({isRowNumber: true})).replace('{colIndex}', beginColIndex++).replace('{index}', 'checkbox').replace('{width}', opts.rowNumberWidth);
+        htmlGridTable += self.templateMap.gridText.replace('{title}', '序号');
+        htmlGridTable += self.templateMap.tableColumn.end;
+      }
+
+      for (var i = 0; i < len; i++) {
+        temp = cols[i];
+        htmlColgroup += self.templateMap.colgroup.replace('{width}', temp.width);
+        htmlGridTable += self.templateMap.tableColumn.begin.replace('{classList}', self.createColumnClass(temp)).replace('{colIndex}', beginColIndex++).replace('{index}', temp.index).replace('{width}', temp.width);
+        htmlGridTable += self.templateMap.gridText.replace('{title}', temp.title);
         if (temp.resizeable) {
-          htmlUnfrozenPart += self.templateMap.dragQuarantine;
+          htmlGridTable += self.templateMap.dragQuarantine;
         }
-        htmlUnfrozenPart += self.templateMap.tableColumn.end;
+        htmlGridTable += self.templateMap.tableColumn.end;
       }
-      htmlUnfrozenPart += self.templateMap.tableWrapper.begin;
-      htmlUnfrozenPart += htmlUnFrozenColgroup;
-      htmlUnfrozenPart += self.templateMap.tbody.begin.replace('{id}', $target.ns.id);
-      htmlUnfrozenPart += self.templateMap.tbody.end;
-      htmlUnfrozenPart += self.templateMap.tableWrapper.end;
-      htmlUnfrozenPart += self.templateMap.tableHeader.end;
-      htmlUnfrozenPart += self.templateMap.gridTable.end;
+      htmlGridTable += self.templateMap.tableWrapper.begin.replace('{width}', '').replace('{height}', '');
+      htmlGridTable += htmlColgroup;
+      htmlGridTable += self.templateMap.tbody.begin.replace('{id}', $target.ns.id + '-' + (originalColIndex === 0 ? 0 : 1));
+      htmlGridTable += self.templateMap.tbody.end;
+      htmlGridTable += self.templateMap.tableWrapper.end;
+      htmlGridTable += self.templateMap.tableHeader.end;
+      htmlGridTable += self.templateMap.gridTable.end;
 
-      if (frozenColsLen) {
-        for (var k = 0; k < frozenColsLen; k++) {
-
-        }
-      }
-      html = htmlFrozenPart + htmlUnfrozenPart;
-
-      return html;
+      return htmlGridTable;
     },
 
     createColumnClass: function (opt) {
@@ -115,6 +166,10 @@
       $target.ns.id = _id;
       $target.ns.divDragLine = null;
       $target.ns.originPointX = 0;
+      $target.ns.frozenCols = [];
+      $target.ns.unFrozenCols = [];
+      $target.ns.frozenColsW = 0;
+      $target.ns.unFrozenColsW = 0;
     },
 
     initJqueryObject: function ($target) {
@@ -364,11 +419,11 @@
     },
     templateMap: {
       wrapper: {
-        begin: '<div class="s-grid-wrapper-outer"><div class="s-grid-wrapper" style="{width}">',
+        begin: '<div class="s-grid-wrapper-outer"><div class="s-grid-wrapper" style="width: {width};">',
         end: '</div></div>'
       },
       gridTable: {
-        begin: '<div class="s-grid-table" data-frozen="{isFrozen}"  style="{width}">',
+        begin: '<div class="s-grid-table" data-frozen="{isFrozen}" style="width: {width};">',
         end: '</div>'
       },
       tableHeader: {
@@ -376,70 +431,21 @@
         end: '</div></div>'
       },
       tableColumn: {
-        begin: '<div class="{classList}" data-col-index="{colIndex}" data-index="{index}" style="{width}"><div class="s-grid-text-wrapper">',
+        begin: '<div class="{classList}" data-col-index="{colIndex}" data-index="{index}" style="width: {width};"><div class="s-grid-text-wrapper">',
         end: '</div></div>'
       },
       checkbox: '<span class="s-grid-check-wrapper"><span class="s-grid-check"></span></span>',
       gridText: '<span class="s-grid-text">{title}</span>',
       dragQuarantine: '<span class="sc-grid-drag-quarantine"></span>',
       tableWrapper: {
-        begin: '<div class="s-table-wrapper" style="height:{height};overflow:hidden;"><div style="width: {width};height: {height};"><table style="width: {width};" cellspacing="0" cellpadding="0" border="0">',
+        begin: '<div class="s-table-wrapper" style="height: {height};overflow:hidden;"><div style="width: {width};height: {height};"><table style="width: {width};" cellspacing="0" cellpadding="0" border="0">',
         end: '</table></div></div>'
       },
-      colgroup: '<colgroup><col style="{width}"/></colgroup>',
+      colgroup: '<colgroup><col style="width: {width};"/></colgroup>',
       tbody: {
         begin: '<tbody id="s-grid-tbody-{id}">',
         end: '</tbody>'
-      },
-      total: '\
-      <div class="s-grid-wrapper-outer">\
-        <div class="s-grid-wrapper" style="width:670px;">\
-          <div class="s-grid-table" data-frozen="true"  style="width:370px;">\
-            <div class="s-table-header-wrapper" style="overflow: hidden">\
-              <div class="s-table-header">\
-                <div class="s-table-column s-grid-checkbox s-grid-disable-resize" data-col-index="0" style="width: 26px">\
-                  <span class="s-grid-check-wrapper"><span class="s-grid-check"></span></span>\
-                </div>\
-                <div class="s-table-column s-grid-rownumber  s-grid-disable-resize" data-col-index="1" style="width: 44px">\
-                  <span class="">序号</span>\
-                </div>\
-                <div class="s-table-column" data-col-index="2" style="width: 100px">\
-                  <div class="s-grid-text-wrapper"><span class="s-grid-text">测试1</span></div><span class="sc-grid-drag-quarantine"></span>\
-                </div>\
-                <div class="s-table-column" data-col-index="3" style="width: 100px">\
-                  <div class="s-grid-text-wrapper"><span class="s-grid-text">测试2</span></div><span class="sc-grid-drag-quarantine"></span>\
-                </div>\
-                <div class="s-table-column" data-col-index="4" style="width: 100px">\
-                  <div class="s-grid-text-wrapper"><span class="s-grid-text">测试3</span></div><span class="sc-grid-drag-quarantine"></span>\
-                </div>\
-              </div>\
-            </div>\
-          <div class="s-table-wrapper" style="height:103px;overflow:hidden;">\
-            <div style="width: 370px;height: 103px;">\
-              <table style="width: 370px;" cellspacing="0" cellpadding="0" border="0">\
-                <colgroup>\
-                <col style="width: 26px;"/>\
-                </colgroup>\
-                <colgroup>\
-                <col style="width: 44px;"/>\
-                </colgroup>\
-                <colgroup>\
-                <col style="width: 100px;"/>\
-                </colgroup>\
-                <colgroup>\
-                <col style="width: 100px;"/>\
-                </colgroup>\
-                <colgroup>\
-                <col style="width: 100px;"/>\
-                </colgroup>\
-                <tbody>\
-                </tbody>\
-            </table>\
-            </div>\
-          </div>\
-        </div>\
-      </div>\
-    </div>'
+      }
     }
   };
 

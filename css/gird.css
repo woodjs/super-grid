@@ -123,6 +123,9 @@ input, textarea, a {
 .s-grid-wrapper .s-table-header .s-table-column.s-grid-checkbox {
   padding: 0;
 }
+.s-grid-wrapper .s-table-header .s-table-column.s-grid-checkbox .s-grid-text-wrapper {
+  padding: 0;
+}
 .s-grid-wrapper .s-table-header .s-table-column .s-grid-text-wrapper {
   padding: 0 5px;
   width: 100%;

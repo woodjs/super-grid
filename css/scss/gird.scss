@@ -98,6 +98,9 @@
    @extend %textOverflowEllipsis;
    &.s-grid-checkbox{
     padding:0;
+    .s-grid-text-wrapper{
+     padding:0;
+    }
    }
    .s-grid-text-wrapper{
     padding:0 5px;
