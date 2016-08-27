@@ -42,8 +42,11 @@ input, textarea, a {
 
 .s-grid-wrapper {
   width: 100%;
-  overflow: hidden;
+  overflow: auto;
   position: relative;
+}
+.s-grid-wrapper .s-grid-wrapper-inner {
+  overflow: hidden;
 }
 .s-grid-wrapper .s-grid-table {
   float: left;

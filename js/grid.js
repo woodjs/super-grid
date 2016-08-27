@@ -16,6 +16,7 @@
   var _id = 0;
 
   var grid = {
+
     init: function ($target) {
       var self = this;
 
@@ -65,7 +66,7 @@
 
       self.assignColumns($target, opts);
 
-      html += self.templateMap.wrapper.begin.replace('{width}', opts.width);
+      html += self.templateMap.wrapper.begin.replace(/\{width\}/g, opts.width);
 
       switch (opts.frozenColsAlign) {
         case 'right':
@@ -512,13 +513,10 @@
 
       function dragAndCalculate(e) {
         var minColumnW = 30;
-        var minTableW = 40;
         var curDragTargetW = $target.jq.$curDragTarget.outerWidth();
         var mousePosition = util.getEventPosition(e);
-        var $curGridTable = $target.jq.$curDragTarget.closest('.s-grid-table');
         var $gridWrapper = $target.jq.$curDragTarget.closest('.s-grid-wrapper');
         var gridWrapperW = $gridWrapper.outerWidth();
-        var curGridTableW = $curGridTable.outerWidth();
 
         util.clearDocumentSelection();
 
@@ -553,6 +551,7 @@
         var $curTableHeader = $target.jq.$curDragTarget.closest('.s-table-header');
         var $curGridTable = $target.jq.$curDragTarget.closest('.s-grid-table');
         var $gridWrapper = $target.jq.$curDragTarget.closest('.s-grid-wrapper');
+        var $gridWrapperInner = $target.jq.$curDragTarget.closest('.s-grid-wrapper-inner');
         var gridWrapperW = $gridWrapper.outerWidth();
         var curColumnW = $curCol.outerWidth() + deltaX;
 
@@ -561,20 +560,20 @@
         $curTableHeader[0].style.width = $curTableHeader.outerWidth() + deltaX + 'px';
 
         if ($curGridTable.data('frozen') === 'left' || $curGridTable.data('frozen') === 'right') {
+          $gridWrapperInner[0].style.width = $gridWrapperInner.outerWidth() + deltaX + 'px';
+
           $curTable[0].style.width = $curTableHeader.outerWidth() + 'px';
-          $curGridTable
-            .css({width: $curGridTable.outerWidth() + deltaX + 'px'})
-            .siblings('.s-grid-table')
-            .css({width: gridWrapperW - $curGridTable.outerWidth() + 'px'});
+          $curGridTable[0].style.width = $curGridTable.outerWidth() + deltaX + 'px';
         } else {
           $curTable[0].style.width = $curTableHeader.outerWidth() - self.scrollbarWidth + 'px';
         }
       }
     },
+
     templateMap: {
       wrapper: {
-        begin: '<div class="s-grid-wrapper-outer"><div class="s-grid-wrapper" style="width: {width};">',
-        end: '</div></div>'
+        begin: '<div class="s-grid-wrapper-outer"><div class="s-grid-wrapper" style="width: {width};"><div class="s-grid-wrapper-inner" style="width: {width};">',
+        end: '</div></div></div>'
       },
       gridTable: {
         begin: '<div class="s-grid-table" data-frozen="{frozenAlign}" style="width: {width};">',

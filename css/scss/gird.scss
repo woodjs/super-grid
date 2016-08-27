@@ -20,8 +20,11 @@
 }
 .s-grid-wrapper {
  width:100%;
- overflow: hidden;
+ overflow: auto;
  position:relative;
+ .s-grid-wrapper-inner{
+  overflow: hidden;
+ }
  .s-grid-table{
   float:left;
   overflow:hidden;
