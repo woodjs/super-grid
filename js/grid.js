@@ -15,16 +15,16 @@
 
   var _id = 0;
 
+
   var grid = {
     init: function ($target) {
       var self = this;
 
+      self.scrollbarWidth = util.getScrollbarWidth();
       self.initGlobalScope($target);
       self.render($target);
       self.initJqueryObject($target);
       self.initEvents($target);
-
-      self.scrollbarWidth = util.getScrollbarWidth();
     },
 
     initGlobalScope: function ($target) {
@@ -171,7 +171,7 @@
       }
 
       htmlGridTable += self.templateMap.gridTable.begin.replace('{frozenAlign}', frozenAlign).replace('{width}', (colsW + deltaW) + 'px');
-      htmlGridTable += self.templateMap.tableHeader.begin;
+      htmlGridTable += self.templateMap.tableHeader.begin.replace('{width}', self.getFixedTableHeaderW($target, opts, frozenAlign));
 
       if (!originalColIndex && opts.withCheckbox) {
         htmlColgroup += self.templateMap.colgroup.replace('{width}', opts.checkboxWidth);
@@ -220,27 +220,45 @@
       return classList.join(' ');
     },
 
+    getFixedTableHeaderW: function ($target, opts, frozenAlign) {
+      var self = this;
+
+      if (frozenAlign) return '';
+      if ($target.ns.unFrozenColsW > $target.ns.unFrozenColsWrapperW) {
+
+        return ($target.ns.unFrozenColsW + self.scrollbarWidth) + 'px';
+      }
+
+      return '';
+    },
+
     getTableWrapperBeginHtml: function ($target, opts, frozenAlign) {
       var self = this;
       var width;
       var height;
+      var tbodyHeight;
       var overflowMode;
+      var temp;
 
       if (frozenAlign === 'left') {
-        width = $target.ns.leftFrozenColsW + 'px';
+        width = $target.ns.leftFrozenColsW;
         overflowMode = 'hidden';
+        tbodyHeight = parseInt(opts.size) * parseInt(opts.trHeight);
+        temp = parseInt(opts.height) - parseInt(opts.theadHeight);
+        height = tbodyHeight > temp ? temp - self.scrollbarWidth : temp;
       } else if (frozenAlign === 'right') {
-        width = $target.ns.rightFrozenColsW + 'px';
+        width = $target.ns.rightFrozenColsW;
         overflowMode = 'hidden';
+        tbodyHeight = parseInt(opts.size) * parseInt(opts.trHeight);
+        temp = parseInt(opts.height) - parseInt(opts.theadHeight);
+        height = tbodyHeight > temp ? temp - self.scrollbarWidth : temp;
       } else {
-        width = $target.ns.unFrozenColsW + 'px';
+        width = $target.ns.unFrozenColsW;
         overflowMode = 'auto';
+        height = parseInt(opts.height) - parseInt(opts.theadHeight);
       }
 
-      height = (parseInt(opts.height) - parseInt(opts.theadHeight)) + 'px';
-
-      return self.templateMap.tableWrapper.begin.replace(/\{width\}/g, width).replace(/\{height\}/g, height).replace('{overflowMode}', overflowMode);
-
+      return self.templateMap.tableWrapper.begin.replace(/\{width\}/g, width + 'px').replace(/\{height\}/g, height + 'px').replace('{overflowMode}', overflowMode);
     },
 
     createTbodyHtml: function ($target, opts, frozenAlign, beginColIndex) {
@@ -549,7 +567,7 @@
         end: '</div>'
       },
       tableHeader: {
-        begin: '<div class="s-table-header-wrapper" style="overflow: hidden"><div class="s-table-header">',
+        begin: '<div class="s-table-header-wrapper" style="overflow: hidden"><div class="s-table-header" style="width: {width};">',
         end: '</div></div>'
       },
       tableColumn: {
@@ -560,7 +578,7 @@
       gridText: '<span class="s-grid-text">{title}</span>',
       dragQuarantine: '<span class="sc-grid-drag-quarantine"></span>',
       tableWrapper: {
-        begin: '<div class="s-table-wrapper" style="height: {height};overflow:{overflowMode};"><div style="width: {width};height: {height};"><table style="width: {width};" cellspacing="0" cellpadding="0" border="0">',
+        begin: '<div class="s-table-wrapper" style="height: {height};overflow:{overflowMode};"><div style="height: {height};"><table style="width: {width};" cellspacing="0" cellpadding="0" border="0">',
         end: '</table></div></div>'
       },
       colgroup: '<colgroup><col style="width: {width};"/></colgroup>',
@@ -640,6 +658,7 @@
   $.fn.grid.defaults = {
     width: '800px',
     height: '200px',
+    size: 20,
     withCheckbox: true,
     checkboxWidth: '26px',
     withRowNumber: true,
@@ -647,7 +666,7 @@
     multiSelect: false,
     frozenColsAlign: 'left',  // right | left-right
     theadHeight: '24px',
-    tdHeight: '24px',
+    trHeight: '24px',
     columns: [],
     localData: null
   };
