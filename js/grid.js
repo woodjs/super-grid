@@ -27,6 +27,24 @@
       self.scrollbarWidth = util.getScrollbarWidth();
     },
 
+    initGlobalScope: function ($target) {
+      var self = this;
+
+      $target.ns = {};
+
+      $target.ns.id = _id++;
+      $target.ns.tbodyIdList = [];
+      $target.ns.divDragLine = null;
+      $target.ns.originPointX = 0;
+      $target.ns.leftFrozenCols = [];
+      $target.ns.rightFrozenCols = [];
+      $target.ns.unFrozenCols = [];
+      $target.ns.leftFrozenColsW = 0;
+      $target.ns.rightFrozenColsW = 0;
+      $target.ns.unFrozenColsW = 0;
+      $target.ns.unFrozenColsWrapperW = 0;
+    },
+
     render: function ($target) {
       var self = this;
       var data = $target.data('grid');
@@ -106,11 +124,12 @@
               $target.ns.leftFrozenCols.push(temp);
           }
         } else {
+          $target.ns.unFrozenColsW += parseInt(temp.width);
           $target.ns.unFrozenCols.push(temp);
         }
       }
 
-      $target.ns.unFrozenColsW = parseInt(opts.width) - $target.ns.leftFrozenColsW - $target.ns.rightFrozenColsW;
+      $target.ns.unFrozenColsWrapperW = parseInt(opts.width) - $target.ns.leftFrozenColsW - $target.ns.rightFrozenColsW;
     },
 
     createGridTableHtml: function ($target, opts, frozenAlign, beginColIndex) {
@@ -133,7 +152,7 @@
         colsW = $target.ns.rightFrozenColsW;
       } else {
         cols = $target.ns.unFrozenCols;
-        colsW = $target.ns.unFrozenColsW;
+        colsW = $target.ns.unFrozenColsWrapperW;
       }
 
       len = cols.length;
@@ -179,9 +198,10 @@
         htmlGridTable += self.templateMap.tableColumn.end;
       }
       htmlGridTable += self.templateMap.tableHeader.end;
-      htmlGridTable += self.templateMap.tableWrapper.begin.replace(/\{width\}/g, '').replace(/\{height\}/g, '');
+      htmlGridTable += self.getTableWrapperBeginHtml($target, opts, frozenAlign);
       htmlGridTable += htmlColgroup;
       htmlGridTable += self.templateMap.tbody.begin.replace('{id}', tbodyId);
+      htmlGridTable += self.createTbodyHtml($target, opts, frozenAlign, beginColIndex);
       htmlGridTable += self.templateMap.tbody.end;
       htmlGridTable += self.templateMap.tableWrapper.end;
       htmlGridTable += self.templateMap.gridTable.end;
@@ -200,21 +220,78 @@
       return classList.join(' ');
     },
 
-    initGlobalScope: function ($target) {
+    getTableWrapperBeginHtml: function ($target, opts, frozenAlign) {
       var self = this;
+      var width;
+      var height;
+      var overflowMode;
 
-      $target.ns = {};
+      if (frozenAlign === 'left') {
+        width = $target.ns.leftFrozenColsW + 'px';
+        overflowMode = 'hidden';
+      } else if (frozenAlign === 'right') {
+        width = $target.ns.rightFrozenColsW + 'px';
+        overflowMode = 'hidden';
+      } else {
+        width = $target.ns.unFrozenColsW + 'px';
+        overflowMode = 'auto';
+      }
 
-      $target.ns.id = _id++;
-      $target.ns.tbodyIdList = [];
-      $target.ns.divDragLine = null;
-      $target.ns.originPointX = 0;
-      $target.ns.leftFrozenCols = [];
-      $target.ns.rightFrozenCols = [];
-      $target.ns.unFrozenCols = [];
-      $target.ns.leftFrozenColsW = 0;
-      $target.ns.rightFrozenColsW = 0;
-      $target.ns.unFrozenColsW = 0;
+      height = (parseInt(opts.height) - parseInt(opts.theadHeight)) + 'px';
+
+      return self.templateMap.tableWrapper.begin.replace(/\{width\}/g, width).replace(/\{height\}/g, height).replace('{overflowMode}', overflowMode);
+
+    },
+
+    createTbodyHtml: function ($target, opts, frozenAlign, beginColIndex) {
+      var self = this;
+      var htmlTbody = '';
+      var originalColIndex = beginColIndex;
+      var list = opts.localData.list;
+      var listLen = list.length;
+      var cols;
+      var colsLen;
+      var temp;
+      var index;
+
+      if (frozenAlign === 'left') {
+        cols = $target.ns.leftFrozenCols;
+      } else if (frozenAlign === 'right') {
+        cols = $target.ns.rightFrozenCols;
+      } else {
+        cols = $target.ns.unFrozenCols;
+      }
+
+      colsLen = cols.length;
+
+      if (!colsLen) return '';
+
+      for (var i = 0; i < listLen; i++) {
+        htmlTbody += self.templateMap.tr.begin.replace('{rowIndex}', i);
+
+        if (self.isGridTableNeed($target, opts, frozenAlign)) {
+          if (opts.withCheckbox) htmlTbody += self.templateMap.tdCheckbox;
+          if (opts.withRowNumber) htmlTbody += self.templateMap.tdRowNumber.replace('{number}', i + 1);
+        }
+
+        for (var j = 0; j < colsLen; j++) {
+          index = cols[j]['index'];
+          temp = list[i][index];
+
+          htmlTbody += self.templateMap.td.replace('{content}', temp);
+        }
+        htmlTbody += self.templateMap.tr.end;
+      }
+
+      return htmlTbody;
+    },
+
+    isGridTableNeed: function ($target, opts, frozenAlign) {
+      if (!frozenAlign && !$target.ns.leftFrozenCols.length) return true;
+      if (frozenAlign === 'left') return true;
+      if (frozenAlign === 'right' && !$target.ns.leftFrozenCols.length && !$target.ns.unFrozenCols.length) return true;
+
+      return false;
     },
 
     initJqueryObject: function ($target) {
@@ -483,14 +560,21 @@
       gridText: '<span class="s-grid-text">{title}</span>',
       dragQuarantine: '<span class="sc-grid-drag-quarantine"></span>',
       tableWrapper: {
-        begin: '<div class="s-table-wrapper" style="height: {height};overflow:hidden;"><div style="width: {width};height: {height};"><table style="width: {width};" cellspacing="0" cellpadding="0" border="0">',
+        begin: '<div class="s-table-wrapper" style="height: {height};overflow:{overflowMode};"><div style="width: {width};height: {height};"><table style="width: {width};" cellspacing="0" cellpadding="0" border="0">',
         end: '</table></div></div>'
       },
       colgroup: '<colgroup><col style="width: {width};"/></colgroup>',
       tbody: {
         begin: '<tbody id="s-grid-tbody-{id}">',
         end: '</tbody>'
-      }
+      },
+      tr: {
+        begin: '<tr data-row-index="{rowIndex}">',
+        end: '</tr>'
+      },
+      td: '<td>{content}</td>',
+      tdCheckbox: '<td class="s-grid-checkbox"><span class="s-grid-check-wrapper"><span class="s-grid-check"></span></span></td>',
+      tdRowNumber: '<td class="s-grid-rownumber">{number}</td>'
     }
   };
 
@@ -562,6 +646,8 @@
     rowNumberWidth: '44px',
     multiSelect: false,
     frozenColsAlign: 'left',  // right | left-right
+    theadHeight: '24px',
+    tdHeight: '24px',
     columns: [],
     localData: null
   };
