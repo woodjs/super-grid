@@ -38,7 +38,8 @@
     createShellHtml: function ($target, opts) {
       var self = this;
       var html = '';
-      var htmlFrozenPart = '';
+      var htmlLeftFrozenPart = '';
+      var htmlRightFrozenPart = '';
       var htmlUnfrozenPart = '';
       var deltaColIndex = 0;
 
@@ -49,17 +50,26 @@
 
       html += self.templateMap.wrapper.begin.replace('{width}', opts.width);
 
-      if (opts.frozenColsAlign === 'left') {
-        htmlFrozenPart = self.createGridTableHtml($target, opts, true, 0);
-        htmlUnfrozenPart = self.createGridTableHtml($target, opts, false, $target.ns.frozenCols.length + deltaColIndex);
-
-        html += htmlFrozenPart + htmlUnfrozenPart;
-
-      } else {
-        htmlUnfrozenPart = self.createGridTableHtml($target, opts, false, 0);
-        htmlFrozenPart = self.createGridTableHtml($target, opts, true, $target.ns.unFrozenCols.length + deltaColIndex);
-
-        html += htmlUnfrozenPart + htmlFrozenPart;
+      switch (opts.frozenColsAlign) {
+        case 'right':
+          htmlUnfrozenPart = self.createGridTableHtml($target, opts, '', 0);
+          htmlRightFrozenPart = self.createGridTableHtml($target, opts, 'right', $target.ns.unFrozenCols.length + deltaColIndex);
+          html += htmlUnfrozenPart + htmlRightFrozenPart;
+          break;
+        case 'left-right':
+          htmlLeftFrozenPart = self.createGridTableHtml($target, opts, 'left', 0);
+          htmlUnfrozenPart = self.createGridTableHtml($target, opts, '', $target.ns.leftFrozenCols.length + deltaColIndex);
+          htmlRightFrozenPart = self.createGridTableHtml($target, opts, 'right', $target.ns.leftFrozenCols.length + $target.ns.unFrozenCols.length + deltaColIndex);
+          html += htmlLeftFrozenPart + htmlUnfrozenPart + htmlRightFrozenPart;
+          break;
+        case 'left':
+          htmlLeftFrozenPart = self.createGridTableHtml($target, opts, 'left', 0);
+          htmlUnfrozenPart = self.createGridTableHtml($target, opts, '', $target.ns.leftFrozenCols.length + deltaColIndex);
+          html += htmlLeftFrozenPart + htmlUnfrozenPart;
+          break;
+        default:
+          htmlUnfrozenPart = self.createGridTableHtml($target, opts, '', 0);
+          html += htmlUnfrozenPart;
       }
 
       html += self.templateMap.wrapper.end;
@@ -76,17 +86,34 @@
       for (var i = 0; i < len; i++) {
         temp = opts.columns[i];
         if (temp.frozen) {
-          $target.ns.frozenColsW += parseInt(temp.width);
-          $target.ns.frozenCols.push(temp);
+          switch (opts.frozenColsAlign) {
+            case 'right':
+              $target.ns.rightFrozenColsW += parseInt(temp.width);
+              $target.ns.rightFrozenCols.push(temp);
+              break;
+            case 'left-right':
+              if (temp.frozenAlign === 'right') {
+                $target.ns.rightFrozenColsW += parseInt(temp.width);
+                $target.ns.rightFrozenCols.push(temp);
+              } else {
+                $target.ns.leftFrozenColsW += parseInt(temp.width);
+                $target.ns.leftFrozenCols.push(temp);
+              }
+              break;
+            case 'left':
+            default:
+              $target.ns.leftFrozenColsW += parseInt(temp.width);
+              $target.ns.leftFrozenCols.push(temp);
+          }
         } else {
           $target.ns.unFrozenCols.push(temp);
         }
       }
 
-      $target.ns.unFrozenColsW = parseInt(opts.width) - $target.ns.frozenColsW;
+      $target.ns.unFrozenColsW = parseInt(opts.width) - $target.ns.leftFrozenColsW - $target.ns.rightFrozenColsW;
     },
 
-    createGridTableHtml: function ($target, opts, isFrozen, beginColIndex) {
+    createGridTableHtml: function ($target, opts, frozenAlign, beginColIndex) {
       var self = this;
       var htmlGridTable = '';
       var htmlColgroup = '';
@@ -94,12 +121,16 @@
       var cols;
       var colsW;
       var deltaW = 0;
+      var tbodyId;
       var len;
       var temp;
 
-      if (isFrozen) {
-        cols = $target.ns.frozenCols;
-        colsW = $target.ns.frozenColsW;
+      if (frozenAlign === 'left') {
+        cols = $target.ns.leftFrozenCols;
+        colsW = $target.ns.leftFrozenColsW;
+      } else if (frozenAlign === 'right') {
+        cols = $target.ns.rightFrozenCols;
+        colsW = $target.ns.rightFrozenColsW;
       } else {
         cols = $target.ns.unFrozenCols;
         colsW = $target.ns.unFrozenColsW;
@@ -109,6 +140,9 @@
 
       if (!len) return '';
 
+      tbodyId = $target.ns.id + '-' + $target.ns.tbodyIdList.length;
+      $target.ns.tbodyIdList.push(tbodyId);
+
       if (originalColIndex) {
         if (opts.withCheckbox) deltaW -= parseInt(opts.checkboxWidth);
         if (opts.withRowNumber) deltaW -= parseInt(opts.rowNumberWidth);
@@ -117,7 +151,7 @@
         if (opts.withRowNumber) deltaW += parseInt(opts.rowNumberWidth);
       }
 
-      htmlGridTable += self.templateMap.gridTable.begin.replace('{isFrozen}', isFrozen).replace('{width}', (colsW + deltaW) + 'px');
+      htmlGridTable += self.templateMap.gridTable.begin.replace('{frozenAlign}', frozenAlign).replace('{width}', (colsW + deltaW) + 'px');
       htmlGridTable += self.templateMap.tableHeader.begin;
 
       if (!originalColIndex && opts.withCheckbox) {
@@ -147,7 +181,7 @@
       htmlGridTable += self.templateMap.tableHeader.end;
       htmlGridTable += self.templateMap.tableWrapper.begin.replace(/\{width\}/g, '').replace(/\{height\}/g, '');
       htmlGridTable += htmlColgroup;
-      htmlGridTable += self.templateMap.tbody.begin.replace('{id}', $target.ns.id + '-' + (originalColIndex === 0 ? 0 : 1));
+      htmlGridTable += self.templateMap.tbody.begin.replace('{id}', tbodyId);
       htmlGridTable += self.templateMap.tbody.end;
       htmlGridTable += self.templateMap.tableWrapper.end;
       htmlGridTable += self.templateMap.gridTable.end;
@@ -172,11 +206,14 @@
       $target.ns = {};
 
       $target.ns.id = _id++;
+      $target.ns.tbodyIdList = [];
       $target.ns.divDragLine = null;
       $target.ns.originPointX = 0;
-      $target.ns.frozenCols = [];
+      $target.ns.leftFrozenCols = [];
+      $target.ns.rightFrozenCols = [];
       $target.ns.unFrozenCols = [];
-      $target.ns.frozenColsW = 0;
+      $target.ns.leftFrozenColsW = 0;
+      $target.ns.rightFrozenColsW = 0;
       $target.ns.unFrozenColsW = 0;
     },
 
@@ -414,7 +451,7 @@
 
         $curTableHeader[0].style.width = $curTableHeader.outerWidth() + deltaX + 'px';
 
-        if ($curGridTable.data('frozen') === true) {  // 移动冻结列
+        if ($curGridTable.data('frozen') === 'left' || $curGridTable.data('frozen') === 'right') {
           $curTable[0].style.width = $curTableHeader.outerWidth() + 'px';
           $curGridTable
             .css({width: $curGridTable.outerWidth() + deltaX + 'px'})
@@ -431,7 +468,7 @@
         end: '</div></div>'
       },
       gridTable: {
-        begin: '<div class="s-grid-table" data-frozen="{isFrozen}" style="width: {width};">',
+        begin: '<div class="s-grid-table" data-frozen="{frozenAlign}" style="width: {width};">',
         end: '</div>'
       },
       tableHeader: {
@@ -524,7 +561,7 @@
     withRowNumber: true,
     rowNumberWidth: '44px',
     multiSelect: false,
-    frozenColsAlign: 'left',
+    frozenColsAlign: 'left',  // right | left-right
     columns: [],
     localData: null
   };
