@@ -522,12 +522,14 @@
 
         util.clearDocumentSelection();
 
-        if (curDragTargetW + mousePosition.x - $target.ns.originPointX >= minColumnW
-          && (mousePosition.x - $target.ns.originPointX) <= (gridWrapperW - curGridTableW - minTableW)
-          && mousePosition.x < $gridWrapper.offset().left + gridWrapperW - self.scrollbarWidth) {
+        if (curDragTargetW + mousePosition.x - $target.ns.originPointX >= minColumnW) {
+          if (mousePosition.x < $gridWrapper.offset().left + gridWrapperW - self.scrollbarWidth) {
+            $target.ns.divDragLine.style.opacity = 1;
+          } else {
+            $target.ns.divDragLine.style.opacity = 0;
+          }
           $target.ns.divDragLine.style.left = mousePosition.x + 'px';
         }
-
       }
 
       function finishResizeColumn(e) {
@@ -676,7 +678,7 @@
     withRowNumber: true,
     rowNumberWidth: '44px',
     multiSelect: false,
-    frozenColsAlign: '',  // left | right | left-right
+    frozenColsAlign: '',  // 'left' | 'right' | 'left-right'
     theadHeight: '24px',
     trHeight: '24px',
     columns: [],
