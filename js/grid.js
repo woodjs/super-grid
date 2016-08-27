@@ -561,7 +561,6 @@
 
         if ($curGridTable.data('frozen') === 'left' || $curGridTable.data('frozen') === 'right') {
           $gridWrapperInner[0].style.width = $gridWrapperInner.outerWidth() + deltaX + 'px';
-
           $curTable[0].style.width = $curTableHeader.outerWidth() + 'px';
           $curGridTable[0].style.width = $curGridTable.outerWidth() + deltaX + 'px';
         } else {
