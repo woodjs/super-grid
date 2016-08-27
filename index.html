@@ -18,21 +18,271 @@
 <div class="demo-grid" id="test1"></div>
 <div class="demo-grid" id="test2"></div>
 <div class="demo-grid" id="test3"></div>
+<div class="demo-grid" id="test4"></div>
 
 <script type="text/javascript" src="js/lib/jquery-1.11.3.min.js"></script>
 <script type="text/javascript" src="js/grid.js"></script>
 <script type="text/javascript">
-  $(function () {
+  var data = {
+    start: 0,
+    size: 20,
+    page: 3,
+    total: 2090,
+    totalPages: 105,
+    list: [{
+      "a1": 1,
+      "b1": 1,
+      "c1": 1,
+      "d1": 'defgf',
+      "e1": "B40LFFU5W001",
+      "f1": "4驱 硬顶",
+      "g1": "B40L",
+      "h1": "B40LU5W"
+    }, {
+      "a1": 1,
+      "b1": 1,
+      "c1": 1,
+      "d1": 'defgf',
+      "e1": "B40LFFU5W001",
+      "f1": "4驱 硬顶",
+      "g1": "B40L",
+      "h1": "B40LU5W"
+    }, {
+      "a1": 1,
+      "b1": 1,
+      "c1": 1,
+      "d1": 'defgf',
+      "e1": "B40LFFU5W001",
+      "f1": "4驱 硬顶",
+      "g1": "B40L",
+      "h1": "B40LU5W"
+    }, {
+      "a1": 1,
+      "b1": 1,
+      "c1": 1,
+      "d1": 'defgf',
+      "e1": "B40LFFU5W001",
+      "f1": "4驱 硬顶",
+      "g1": "B40L",
+      "h1": "B40LU5W"
+    }, {
+      "a1": 1,
+      "b1": 1,
+      "c1": 1,
+      "d1": 'defgf',
+      "e1": "B40LFFU5W001",
+      "f1": "4驱 硬顶",
+      "g1": "B40L",
+      "h1": "B40LU5W"
+    }, {
+      "a1": 1,
+      "b1": 1,
+      "c1": 1,
+      "d1": 'defgf',
+      "e1": "B40LFFU5W001",
+      "f1": "4驱 硬顶",
+      "g1": "B40L",
+      "h1": "B40LU5W"
+    }, {
+      "a1": 1,
+      "b1": 1,
+      "c1": 1,
+      "d1": 'defgf',
+      "e1": "B40LFFU5W001",
+      "f1": "4驱 硬顶",
+      "g1": "B40L",
+      "h1": "B40LU5W"
+    }, {
+      "a1": 1,
+      "b1": 1,
+      "c1": 1,
+      "d1": 'defgf',
+      "e1": "B40LFFU5W001",
+      "f1": "4驱 硬顶",
+      "g1": "B40L",
+      "h1": "B40LU5W"
+    }, {
+      "a1": 1,
+      "b1": 1,
+      "c1": 1,
+      "d1": 'defgf',
+      "e1": "B40LFFU5W001",
+      "f1": "4驱 硬顶",
+      "g1": "B40L",
+      "h1": "B40LU5W"
+    }, {
+      "a1": 1,
+      "b1": 1,
+      "c1": 1,
+      "d1": 'defgf',
+      "e1": "B40LFFU5W001",
+      "f1": "4驱 硬顶",
+      "g1": "B40L",
+      "h1": "B40LU5W"
+    }, {
+      "a1": 1,
+      "b1": 1,
+      "c1": 1,
+      "d1": 'defgf',
+      "e1": "B40LFFU5W001",
+      "f1": "4驱 硬顶",
+      "g1": "B40L",
+      "h1": "B40LU5W"
+    }, {
+      "a1": 1,
+      "b1": 1,
+      "c1": 1,
+      "d1": 'defgf',
+      "e1": "B40LFFU5W001",
+      "f1": "4驱 硬顶",
+      "g1": "B40L",
+      "h1": "B40LU5W"
+    }, {
+      "a1": 1,
+      "b1": 1,
+      "c1": 1,
+      "d1": 'defgf',
+      "e1": "B40LFFU5W001",
+      "f1": "4驱 硬顶",
+      "g1": "B40L",
+      "h1": "B40LU5W"
+    }, {
+      "a1": 1,
+      "b1": 1,
+      "c1": 1,
+      "d1": 'defgf',
+      "e1": "B40LFFU5W001",
+      "f1": "4驱 硬顶",
+      "g1": "B40L",
+      "h1": "B40LU5W"
+    }, {
+      "a1": 1,
+      "b1": 1,
+      "c1": 1,
+      "d1": 'defgf',
+      "e1": "B40LFFU5W001",
+      "f1": "4驱 硬顶",
+      "g1": "B40L",
+      "h1": "B40LU5W"
+    }, {
+      "a1": 1,
+      "b1": 1,
+      "c1": 1,
+      "d1": 'defgf',
+      "e1": "B40LFFU5W001",
+      "f1": "4驱 硬顶",
+      "g1": "B40L",
+      "h1": "B40LU5W"
+    }, {
+      "a1": 1,
+      "b1": 1,
+      "c1": 1,
+      "d1": 'defgf',
+      "e1": "B40LFFU5W001",
+      "f1": "4驱 硬顶",
+      "g1": "B40L",
+      "h1": "B40LU5W"
+    }, {
+      "a1": 1,
+      "b1": 1,
+      "c1": 1,
+      "d1": 'defgf',
+      "e1": "B40LFFU5W001",
+      "f1": "4驱 硬顶",
+      "g1": "B40L",
+      "h1": "B40LU5W"
+    }]
+  };
 
+
+  $(function () {
     $('#test1').grid({
       width: '670px',
-      height: '144px',
+      height: '244px',
+      columns: [{
+        title: '测试1',
+        index: 'a1',
+        width: '100px',
+        sortable: true,
+        resizeable: true,
+        renderer: function() {
+          return '';
+        }
+      }, {
+        title: '测试2',
+        index: 'b1',
+        width: '100px',
+        sortable: true,
+        resizeable: true,
+        renderer: function() {
+          return '';
+        }
+      }, {
+        title: '测试3',
+        index: 'c1',
+        width: '100px',
+        sortable: true,
+        resizeable: true,
+        renderer: function() {
+          return '';
+        }
+      }, {
+        title: '测试4',
+        index: 'd1',
+        width: '100px',
+        sortable: true,
+        resizeable: true,
+        renderer: function() {
+          return '';
+        }
+      }, {
+        title: '测试5',
+        index: 'e1',
+        width: '100px',
+        sortable: true,
+        resizeable: true,
+        renderer: function() {
+          return '';
+        }
+      }, {
+        title: '测试6',
+        index: 'f1',
+        width: '100px',
+        resizeable: true,
+        renderer: function() {
+          return '';
+        }
+      }, {
+        title: '测试7',
+        index: 'g1',
+        width: '100px',
+        resizeable: true,
+        renderer: function() {
+          return '';
+        }
+      }, {
+        title: '测试8',
+        index: 'h1',
+        width: '100px',
+        resizeable: true,
+        renderer: function() {
+          return '';
+        }
+      }],
+      localData: data
+    });
+
+    $('#test2').grid({
+      width: '670px',
+      height: '244px',
+      frozenColsAlign: 'left',
       columns: [{
         title: '测试1',
         index: 'a1',
         width: '100px',
         frozen: true,
         sortable: true,
+        frozenAlign: 'right',
         resizeable: true,
         renderer: function() {
           return '';
@@ -51,7 +301,6 @@
         title: '测试3',
         index: 'c1',
         width: '100px',
-        frozen: true,
         sortable: true,
         resizeable: true,
         renderer: function() {
@@ -62,6 +311,7 @@
         index: 'd1',
         width: '100px',
         sortable: true,
+        resizeable: true,
         renderer: function() {
           return '';
         }
@@ -78,6 +328,7 @@
         title: '测试6',
         index: 'f1',
         width: '100px',
+        resizeable: true,
         renderer: function() {
           return '';
         }
@@ -85,6 +336,7 @@
         title: '测试7',
         index: 'g1',
         width: '100px',
+        resizeable: true,
         renderer: function() {
           return '';
         }
@@ -93,72 +345,177 @@
         index: 'h1',
         width: '100px',
         frozen: true,
+        resizeable: true,
         renderer: function() {
           return '';
         }
       }],
-      localData: {
-        start: 0,
-        size: 20,
-        page: 3,
-        total: 2090,
-        totalPages: 105,
-        list: [{
-          "a1": 1,
-          "b1": 1,
-          "c1": 1,
-          "d1": 'defgf',
-          "e1": "B40LFFU5W001",
-          "f1": "4驱 硬顶",
-          "g1": "B40L",
-          "h1": "B40LU5W"
-        }, {
-          "a1": 1,
-          "b1": 1,
-          "c1": 1,
-          "d1": 'defgf',
-          "e1": "B40LFFU5W001",
-          "f1": "4驱 硬顶",
-          "g1": "B40L",
-          "h1": "B40LU5W"
-        }, {
-          "a1": 1,
-          "b1": 1,
-          "c1": 1,
-          "d1": 'defgf',
-          "e1": "B40LFFU5W001",
-          "f1": "4驱 硬顶",
-          "g1": "B40L",
-          "h1": "B40LU5W"
-        }, {
-          "a1": 1,
-          "b1": 1,
-          "c1": 1,
-          "d1": 'defgf',
-          "e1": "B40LFFU5W001",
-          "f1": "4驱 硬顶",
-          "g1": "B40L",
-          "h1": "B40LU5W"
-        }, {
-          "a1": 1,
-          "b1": 1,
-          "c1": 1,
-          "d1": 'defgf',
-          "e1": "B40LFFU5W001",
-          "f1": "4驱 硬顶",
-          "g1": "B40L",
-          "h1": "B40LU5W"
-        }, {
-          "a1": 1,
-          "b1": 1,
-          "c1": 1,
-          "d1": 'defgf',
-          "e1": "B40LFFU5W001",
-          "f1": "4驱 硬顶",
-          "g1": "B40L",
-          "h1": "B40LU5W"
-        }]
-      }
+      localData: data
+    });
+
+    $('#test3').grid({
+      width: '670px',
+      height: '244px',
+      frozenColsAlign: 'right',
+      columns: [{
+        title: '测试1',
+        index: 'a1',
+        width: '100px',
+        frozen: true,
+        sortable: true,
+        frozenAlign: 'right',
+        resizeable: true,
+        renderer: function() {
+          return '';
+        }
+      }, {
+        title: '测试2',
+        index: 'b1',
+        width: '100px',
+        frozen: true,
+        sortable: true,
+        resizeable: true,
+        renderer: function() {
+          return '';
+        }
+      }, {
+        title: '测试3',
+        index: 'c1',
+        width: '100px',
+        sortable: true,
+        resizeable: true,
+        renderer: function() {
+          return '';
+        }
+      }, {
+        title: '测试4',
+        index: 'd1',
+        width: '100px',
+        sortable: true,
+        resizeable: true,
+        renderer: function() {
+          return '';
+        }
+      }, {
+        title: '测试5',
+        index: 'e1',
+        width: '100px',
+        sortable: true,
+        resizeable: true,
+        renderer: function() {
+          return '';
+        }
+      }, {
+        title: '测试6',
+        index: 'f1',
+        width: '100px',
+        resizeable: true,
+        renderer: function() {
+          return '';
+        }
+      }, {
+        title: '测试7',
+        index: 'g1',
+        width: '100px',
+        resizeable: true,
+        renderer: function() {
+          return '';
+        }
+      }, {
+        title: '测试8',
+        index: 'h1',
+        width: '100px',
+        frozen: true,
+        resizeable: true,
+        renderer: function() {
+          return '';
+        }
+      }],
+      localData: data
+    });
+
+    $('#test4').grid({
+      width: '670px',
+      height: '244px',
+      frozenColsAlign: 'left-right',
+      columns: [{
+        title: '测试1',
+        index: 'a1',
+        width: '100px',
+        frozen: true,
+        sortable: true,
+        frozenAlign: 'right',
+        resizeable: true,
+        renderer: function() {
+          return '';
+        }
+      }, {
+        title: '测试2',
+        index: 'b1',
+        width: '100px',
+        frozen: true,
+        sortable: true,
+        resizeable: true,
+        renderer: function() {
+          return '';
+        }
+      }, {
+        title: '测试3',
+        index: 'c1',
+        width: '100px',
+        sortable: true,
+        resizeable: true,
+        renderer: function() {
+          return '';
+        }
+      }, {
+        title: '测试4',
+        index: 'd1',
+        width: '100px',
+        sortable: true,
+        resizeable: true,
+        renderer: function() {
+          return '';
+        }
+      }, {
+        title: '测试5',
+        index: 'e1',
+        width: '100px',
+        sortable: true,
+        resizeable: true,
+        renderer: function() {
+          return '';
+        }
+      }, {
+        title: '测试6',
+        index: 'f1',
+        width: '100px',
+        resizeable: true,
+        frozen: true,
+        frozenAlign: 'right',
+        renderer: function() {
+          return '';
+        }
+      }, {
+        title: '测试7',
+        index: 'g1',
+        width: '100px',
+        resizeable: true,
+        renderer: function() {
+          return '';
+        }
+      }, {
+        title: '测试8',
+        index: 'h1',
+        width: '100px',
+        frozen: true,
+        frozenRight: 'right',
+        resizeable: true,
+        renderer: function() {
+          return '';
+        }
+      }],
+      localData: data
     });
   });
 </script>

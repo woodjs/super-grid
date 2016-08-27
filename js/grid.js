@@ -15,7 +15,6 @@
 
   var _id = 0;
 
-
   var grid = {
     init: function ($target) {
       var self = this;
@@ -170,8 +169,8 @@
         if (opts.withRowNumber) deltaW += parseInt(opts.rowNumberWidth);
       }
 
-      htmlGridTable += self.templateMap.gridTable.begin.replace('{frozenAlign}', frozenAlign).replace('{width}', (colsW + deltaW) + 'px');
-      htmlGridTable += self.templateMap.tableHeader.begin.replace('{width}', self.getFixedTableHeaderW($target, opts, frozenAlign));
+      htmlGridTable += self.templateMap.gridTable.begin.replace('{frozenAlign}', frozenAlign).replace('{width}', self.getGridTableW($target, opts, frozenAlign, beginColIndex, colsW, deltaW) + 'px');
+      htmlGridTable += self.templateMap.tableHeader.begin.replace('{width}', self.getFixedTableHeaderW($target, opts, frozenAlign, beginColIndex, deltaW));
 
       if (!originalColIndex && opts.withCheckbox) {
         htmlColgroup += self.templateMap.colgroup.replace('{width}', opts.checkboxWidth);
@@ -209,6 +208,18 @@
       return htmlGridTable;
     },
 
+    getGridTableW: function ($target, opts, frozenAlign, beginColIndex, colsW, deltaW) {
+      var self = this;
+
+      if (!$target.ns.leftFrozenCols.length && frozenAlign === '') {
+        return colsW;
+      } else if (frozenAlign === 'right') {
+        return colsW
+      } else {
+        return colsW + deltaW;
+      }
+    },
+
     createColumnClass: function (opt) {
       var classList = ['s-table-column'];
 
@@ -220,13 +231,14 @@
       return classList.join(' ');
     },
 
-    getFixedTableHeaderW: function ($target, opts, frozenAlign) {
+    getFixedTableHeaderW: function ($target, opts, frozenAlign, beginColIndex, deltaW) {
       var self = this;
 
       if (frozenAlign) return '';
       if ($target.ns.unFrozenColsW > $target.ns.unFrozenColsWrapperW) {
+        if ($target.ns.leftFrozenCols.length && beginColIndex) deltaW = 0;
 
-        return ($target.ns.unFrozenColsW + self.scrollbarWidth) + 'px';
+        return ($target.ns.unFrozenColsW + deltaW + self.scrollbarWidth) + 'px';
       }
 
       return '';
@@ -664,7 +676,7 @@
     withRowNumber: true,
     rowNumberWidth: '44px',
     multiSelect: false,
-    frozenColsAlign: 'left',  // right | left-right
+    frozenColsAlign: '',  // left | right | left-right
     theadHeight: '24px',
     trHeight: '24px',
     columns: [],
