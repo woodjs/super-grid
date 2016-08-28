@@ -171,18 +171,18 @@
       }
 
       htmlGridTable += self.templateMap.gridTable.begin.replace('{frozenAlign}', frozenAlign).replace('{width}', self.getGridTableW($target, opts, frozenAlign, beginColIndex, colsW, deltaW) + 'px');
-      htmlGridTable += self.templateMap.tableHeader.begin.replace('{width}', self.getFixedTableHeaderW($target, opts, frozenAlign, beginColIndex, deltaW));
+      htmlGridTable += self.templateMap.tableHeader.begin.replace('{width}', self.getFixedTableHeaderW($target, opts, frozenAlign, beginColIndex, deltaW)).replace('{theadHeight}', opts.theadHeight).replace('{theadLineHeight}', opts.theadHeight);
 
       if (!originalColIndex && opts.withCheckbox) {
         htmlColgroup += self.templateMap.colgroup.replace('{width}', opts.checkboxWidth);
-        htmlGridTable += self.templateMap.tableColumn.begin.replace('{classList}', self.createColumnClass({isCheckbox: true})).replace('{colIndex}', beginColIndex++).replace('{index}', 'checkbox').replace('{width}', opts.checkboxWidth);
+        htmlGridTable += self.templateMap.tableColumn.begin.replace('{classList}', self.createColumnClass({isCheckbox: true})).replace('{colIndex}', beginColIndex++).replace('{index}', 'checkbox').replace('{width}', opts.checkboxWidth).replace('{theadHeight}', opts.theadHeight).replace('{theadLineHeight}', parseInt(opts.theadHeight) - 1 + 'px');
         htmlGridTable += self.templateMap.checkbox;
         htmlGridTable += self.templateMap.tableColumn.end;
       }
 
       if (!originalColIndex && opts.withRowNumber) {
         htmlColgroup += self.templateMap.colgroup.replace('{width}', opts.rowNumberWidth);
-        htmlGridTable += self.templateMap.tableColumn.begin.replace('{classList}', self.createColumnClass({isRowNumber: true})).replace('{colIndex}', beginColIndex++).replace('{index}', 'checkbox').replace('{width}', opts.rowNumberWidth);
+        htmlGridTable += self.templateMap.tableColumn.begin.replace('{classList}', self.createColumnClass({isRowNumber: true})).replace('{colIndex}', beginColIndex++).replace('{index}', 'checkbox').replace('{width}', opts.rowNumberWidth).replace('{theadHeight}', opts.theadHeight).replace('{theadLineHeight}', parseInt(opts.theadHeight) - 1 + 'px');
         htmlGridTable += self.templateMap.gridText.replace('{title}', '序号');
         htmlGridTable += self.templateMap.tableColumn.end;
       }
@@ -190,7 +190,7 @@
       for (var i = 0; i < len; i++) {
         temp = cols[i];
         htmlColgroup += self.templateMap.colgroup.replace('{width}', temp.width);
-        htmlGridTable += self.templateMap.tableColumn.begin.replace('{classList}', self.createColumnClass(temp)).replace('{colIndex}', beginColIndex++).replace('{index}', temp.index).replace('{width}', temp.width);
+        htmlGridTable += self.templateMap.tableColumn.begin.replace('{classList}', self.createColumnClass(temp)).replace('{colIndex}', beginColIndex++).replace('{index}', temp.index).replace('{width}', temp.width).replace('{theadHeight}', opts.theadHeight).replace('{theadLineHeight}', parseInt(opts.theadHeight) - 1 + 'px');
         htmlGridTable += self.templateMap.gridText.replace('{title}', temp.title);
         if (temp.resizeable) {
           htmlGridTable += self.templateMap.dragQuarantine;
@@ -301,15 +301,15 @@
         htmlTbody += self.templateMap.tr.begin.replace('{rowIndex}', i);
 
         if (self.isGridTableNeed($target, opts, frozenAlign)) {
-          if (opts.withCheckbox) htmlTbody += self.templateMap.tdCheckbox;
-          if (opts.withRowNumber) htmlTbody += self.templateMap.tdRowNumber.replace('{number}', i + 1);
+          if (opts.withCheckbox) htmlTbody += self.templateMap.tdCheckbox.replace('{trHeight}', opts.trHeight).replace('{trLineHeight}', parseInt(opts.trHeight) - 1 + 'px');
+          if (opts.withRowNumber) htmlTbody += self.templateMap.tdRowNumber.replace('{trHeight}', opts.trHeight).replace('{trLineHeight}', parseInt(opts.trHeight) - 1 + 'px').replace('{number}', i + 1);
         }
 
         for (var j = 0; j < colsLen; j++) {
           index = cols[j]['index'];
           temp = list[i][index];
 
-          htmlTbody += self.templateMap.td.replace('{content}', temp);
+          htmlTbody += self.templateMap.td.replace('{trHeight}', opts.trHeight).replace('{trLineHeight}', parseInt(opts.trHeight) - 1 + 'px').replace('{content}', temp);
         }
         htmlTbody += self.templateMap.tr.end;
       }
@@ -571,29 +571,29 @@
 
     templateMap: {
       wrapper: {
-        begin: '<div class="s-grid-wrapper-outer"><div class="s-grid-wrapper" style="width: {width};"><div class="s-grid-wrapper-inner" style="width: {width};">',
+        begin: '<div class="s-grid-wrapper-outer"><div class="s-grid-wrapper" style="width:{width};"><div class="s-grid-wrapper-inner" style="width:{width};">',
         end: '</div></div></div>'
       },
       gridTable: {
-        begin: '<div class="s-grid-table" data-frozen="{frozenAlign}" style="width: {width};">',
+        begin: '<div class="s-grid-table" data-frozen="{frozenAlign}" style="width:{width};">',
         end: '</div>'
       },
       tableHeader: {
-        begin: '<div class="s-table-header-wrapper" style="overflow: hidden"><div class="s-table-header" style="width: {width};">',
+        begin: '<div class="s-table-header-wrapper" style="overflow:hidden;"><div class="s-table-header" style="width:{width};height:{theadHeight};line-height:{theadLineHeight};">',
         end: '</div></div>'
       },
       tableColumn: {
-        begin: '<div class="{classList}" data-col-index="{colIndex}" data-index="{index}" style="width: {width};"><div class="s-grid-text-wrapper">',
+        begin: '<div class="{classList}" data-col-index="{colIndex}" data-index="{index}" style="width:{width};height:{theadHeight};line-height:{theadLineHeight};"><div class="s-grid-text-wrapper">',
         end: '</div></div>'
       },
       checkbox: '<span class="s-grid-check-wrapper"><span class="s-grid-check"></span></span>',
       gridText: '<span class="s-grid-text">{title}</span>',
       dragQuarantine: '<span class="sc-grid-drag-quarantine"></span>',
       tableWrapper: {
-        begin: '<div class="s-table-wrapper" style="height: {height};overflow:{overflowMode};"><div style="height: {height};"><table style="width: {width};" cellspacing="0" cellpadding="0" border="0">',
+        begin: '<div class="s-table-wrapper" style="height:{height};overflow:{overflowMode};"><div style="height:{height};"><table style="width:{width};" cellspacing="0" cellpadding="0" border="0">',
         end: '</table></div></div>'
       },
-      colgroup: '<colgroup><col style="width: {width};"/></colgroup>',
+      colgroup: '<colgroup><col style="width:{width};"/></colgroup>',
       tbody: {
         begin: '<tbody id="s-grid-tbody-{id}">',
         end: '</tbody>'
@@ -602,9 +602,9 @@
         begin: '<tr data-row-index="{rowIndex}">',
         end: '</tr>'
       },
-      td: '<td>{content}</td>',
-      tdCheckbox: '<td class="s-grid-checkbox"><span class="s-grid-check-wrapper"><span class="s-grid-check"></span></span></td>',
-      tdRowNumber: '<td class="s-grid-rownumber">{number}</td>'
+      td: '<td style="height:{trHeight};line-height:{trLineHeight};">{content}</td>',
+      tdCheckbox: '<td class="s-grid-checkbox" style="height:{trHeight};line-height:{trLineHeight};"><span class="s-grid-check-wrapper"><span class="s-grid-check"></span></span></td>',
+      tdRowNumber: '<td class="s-grid-rownumber" style="height:{trHeight};line-height:{trLineHeight};">{number}</td>'
     }
   };
 
@@ -680,6 +680,16 @@
     theadHeight: '24px',
     trHeight: '24px',
     columns: [],
-    localData: null
+    localData: null,
+    proxy: {
+      url: '',
+      cache: false,
+      timeout: 3000,
+      data: null
+    },
+    onAjaxBeforeSend: null,
+    onAjaxComplete: null,
+    onAjaxError: null,
+    onAfterRender: null
   };
 });

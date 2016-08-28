@@ -9,14 +9,6 @@
  font-size:14px;
  @include boxSizing(border-box);
  border:1px solid $bdColor;
- &:before{
-  content: '';
-  background: $bgColor;
-  position: absolute;
-  width:100%;
-  height:24px;
-  z-index:-1;
- }
 }
 .s-grid-wrapper {
  width:100%;
@@ -47,7 +39,7 @@
    width:5px;
    height:100%;
    background: transparent;
-   z-index: 5px;
+   z-index: 5;
   }
   .s-grid-rownumber{
    background: $bgColor;
@@ -76,10 +68,16 @@
   }
   .s-grid-check-wrapper{
    display: inline-block;
-   padding: 5px 6px;
-   height: 23px;
+   width: 100%;
+   height: 100%;
+   position: relative;
    float:left;
    .s-grid-check{
+    position: absolute;
+    top:50%;
+    left:50%;
+    margin-top:-7px;
+    margin-left:-7px;
     display: inline-block;
     width:13px;
     height:13px;
@@ -108,7 +106,7 @@
    .s-grid-text-wrapper{
     padding:0 5px;
     width: 100%;
-    @include setHeightGroup(23px);
+    height: 100%;
     @extend %textOverflowEllipsis;
    }
    &:hover{
@@ -144,7 +142,6 @@
   .s-grid-check-wrapper{
    display: inline-block;
    padding: 5px 6px;
-   height: 23px;
    float:left;
    .s-grid-check{
     display: inline-block;
