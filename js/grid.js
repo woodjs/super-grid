@@ -43,6 +43,7 @@
       $target.ns.rightFrozenColsW = 0;
       $target.ns.unFrozenColsW = 0;
       $target.ns.unFrozenColsWrapperW = 0;
+      $target.ns.store = null;
     },
 
     render: function ($target) {
@@ -201,7 +202,14 @@
       htmlGridTable += self.getTableWrapperBeginHtml($target, opts, frozenAlign);
       htmlGridTable += htmlColgroup;
       htmlGridTable += self.templateMap.tbody.begin.replace('{id}', tbodyId);
-      htmlGridTable += self.createTbodyHtml($target, opts, frozenAlign, beginColIndex);
+
+      if (opts.localData) {
+        $target.ns.store = opts.localData;
+        htmlGridTable += self.createTbodyHtml($target, opts, frozenAlign, beginColIndex);
+      } else {
+        self.loadData($target, opts, frozenAlign, beginColIndex, tbodyId);
+      }
+
       htmlGridTable += self.templateMap.tbody.end;
       htmlGridTable += self.templateMap.tableWrapper.end;
       htmlGridTable += self.templateMap.gridTable.end;
@@ -274,11 +282,38 @@
       return self.templateMap.tableWrapper.begin.replace(/\{width\}/g, width + 'px').replace(/\{height\}/g, height + 'px').replace('{overflowMode}', overflowMode);
     },
 
+    loadData: function ($target, opts, frozenAlign, beginColIndex, tbodyId) {
+      var self = this;
+
+      if (opts.proxy && opts.proxy.url) {
+        $.ajax({
+          url: opts.proxy.url,
+          type: opts.proxy.method,
+          cache: opts.proxy.cache,
+          timeout: opts.proxy.timeout,
+          beforeSend: opts.onAjaxBeforeSend,
+          complete: opts.onAjaxComplete,
+          error: opts.onAjaxError,
+          success: function (result) {
+            self.renderTbody($target, opts, frozenAlign, beginColIndex, tbodyId, result);
+          }
+        });
+      }
+    },
+
+    renderTbody: function ($target, opts, frozenAlign, beginColIndex, tbodyId, result) {
+      var self = this;
+
+      $target.ns.store = result;
+
+      $target.find('#s-grid-tbody-' + tbodyId).html(self.createTbodyHtml($target, opts, frozenAlign, beginColIndex));
+    },
+
     createTbodyHtml: function ($target, opts, frozenAlign, beginColIndex) {
       var self = this;
       var htmlTbody = '';
       var originalColIndex = beginColIndex;
-      var list = opts.localData.list;
+      var list = $target.ns.store.list;
       var listLen = list.length;
       var cols;
       var colsLen;
@@ -689,9 +724,10 @@
     localData: null,
     proxy: {
       url: '',
+      method: 'GET',
       cache: false,
       timeout: 3000,
-      data: null
+      params: null
     },
     onAjaxBeforeSend: null,
     onAjaxComplete: null,
