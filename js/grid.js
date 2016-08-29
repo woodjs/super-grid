@@ -282,6 +282,7 @@
       var listLen = list.length;
       var cols;
       var colsLen;
+      var tempCol;
       var temp;
       var index;
 
@@ -306,8 +307,13 @@
         }
 
         for (var j = 0; j < colsLen; j++) {
-          index = cols[j]['index'];
-          temp = list[i][index];
+          tempCol = cols[j];
+          index = tempCol['index'];
+          if (tempCol['renderer'] && typeof tempCol['renderer'] === 'function') {
+            temp  = tempCol['renderer'].apply(null, [list[i][index], list[i], list]);
+          } else {
+            temp = list[i][index];
+          }
 
           htmlTbody += self.templateMap.td.replace('{trHeight}', opts.trHeight).replace('{trLineHeight}', parseInt(opts.trHeight) - 1 + 'px').replace('{content}', temp);
         }
