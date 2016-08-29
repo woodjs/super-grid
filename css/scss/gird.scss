@@ -50,7 +50,7 @@
    background: lighten($bgColor, 6%);
    .s-grid-text{
     padding-right:12px;
-    background: url(images/sort_asc.gif) right center no-repeat;
+    background: url(../images/grid/sort_asc.gif) right center no-repeat;
    }
    &:hover{
     background: lighten($bgColor, 6%) !important;
@@ -60,7 +60,7 @@
    background: lighten($bgColor, 6%);
    .s-grid-text{
     padding-right:12px;
-    background: url(images/sort_desc.gif) right center no-repeat;
+    background: url(../images/grid/sort_desc.gif) right center no-repeat;
    }
    &:hover{
     background: lighten($bgColor, 6%) !important;
@@ -82,11 +82,11 @@
     width:13px;
     height:13px;
     float:left;
-    background: url(images/checkbox.gif) 0 0 no-repeat;
+    background: url(../images/grid/checkbox.gif) 0 0 no-repeat;
    }
   }
   .s-grid-check-wrapper.s-grid-row-selected .s-grid-check{
-   background: url(images/checkbox.gif) 0 -13px no-repeat;
+   background: url(../images/grid/checkbox.gif) 0 -13px no-repeat;
   }
   .s-table-column{
    position: relative;
@@ -154,7 +154,7 @@
     left:50%;
     margin-top:-7px;
     margin-left:-7px;
-    background: url(images/checkbox.gif) 0 0 no-repeat;
+    background: url(../images/grid/checkbox.gif) 0 0 no-repeat;
    }
   }
   .s-grid-row-hover{
@@ -164,7 +164,7 @@
    background: lighten($themeColor, 30%);
    .s-grid-check-wrapper{
     .s-grid-check{
-     background: url(images/checkbox.gif) 0 -13px no-repeat;
+     background: url(../images/grid/checkbox.gif) 0 -13px no-repeat;
     }
    }
   }
