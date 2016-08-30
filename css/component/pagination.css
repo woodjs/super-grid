@@ -1,0 +1,148 @@
+body, div, ul, dl, ol, dt, dd, li, p, a, label, span, i, img, input, textarea, header, footer, article, section, nav, aside, figure, h1, h2, h3, h4, h5, h6, table, thead, tbody, tr, td, th {
+  padding: 0;
+  margin: 0;
+  border: 0;
+  -webkit-box-sizing: inherit;
+  -moz-box-sizing: inherit;
+  box-sizing: inherit;
+}
+
+ul, dl, ol {
+  list-style: none;
+}
+
+input, textarea, select, a {
+  outline: none;
+}
+
+.s-pagination-wrapper {
+  width: 100%;
+  font-family: 'Microsoft Yahei', Arial, STHeiti, sans-serif;
+  font-size: 12px;
+  color: #333;
+  height: 26px;
+  line-height: 26px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+.s-pagination-wrapper a {
+  color: inherit;
+  text-decoration: none;
+}
+.s-pagination-wrapper .s-pagination-info {
+  float: left;
+}
+.s-pagination-wrapper .s-pagination-info .s-pagination-record-total {
+  color: #d1291a;
+  margin: 0 2px;
+  font-weight: bold;
+}
+.s-pagination-wrapper .s-pagination-info .s-pagination-slash {
+  margin: 0 4px;
+}
+.s-pagination-wrapper .s-pagination-info .s-pagination-page-total {
+  margin: 0 2px;
+}
+.s-pagination-wrapper .s-pagination-info .s-pagination-page-cur {
+  margin: 0 2px;
+}
+.s-pagination-wrapper .s-pagination-func {
+  float: right;
+  height: 26px;
+  font-size: 0;
+}
+.s-pagination-wrapper .s-pagination-func .s-pagination-btn {
+  display: inline-block;
+  cursor: pointer;
+  vertical-align: top;
+  font-size: 12px;
+}
+.s-pagination-wrapper .s-pagination-func .s-pagination-ellipsis {
+  display: inline-block;
+  font-size: 12px;
+  width: 26px;
+  height: 26px;
+  font-weight: bold;
+  text-align: center;
+  vertical-align: top;
+}
+.s-pagination-wrapper .s-pagination-func .s-pagination-next {
+  display: inline-block;
+}
+.s-pagination-wrapper .s-pagination-func .s-pagination-btn-list .s-pagination-btn {
+  padding: 0 10px;
+}
+.s-pagination-wrapper .s-pagination-func .s-pagination-select {
+  padding: 0 5px;
+  height: 26px;
+}
+.s-pagination-wrapper .s-pagination-func .s-pagination-input {
+  margin: 0 5px;
+  vertical-align: top;
+  letter-spacing: normal;
+  word-spacing: normal;
+  border: 1px solid #e7e7e7;
+  width: 60px;
+  text-align: center;
+  height: 26px;
+  line-height: 24px;
+  -webkit-transition: all 0.3s ease-in-out;
+  -moz-transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
+}
+.s-pagination-wrapper .s-pagination-func .s-pagination-input:focus {
+  -webkit-box-shadow: 0 0 3px #d1291a;
+  -moz-box-shadow: 0 0 3px #d1291a;
+  box-shadow: 0 0 3px #d1291a;
+  border-color: #d1291a;
+}
+.s-pagination-wrapper .s-pagination-func .s-pagination-jump {
+  background: #d1291a;
+  color: #fff;
+  padding: 0 10px;
+  height: 26px;
+  line-height: 26px;
+}
+.s-pagination-wrapper .s-pagination-func .s-pagination-first {
+  width: 26px;
+  height: 26px;
+  background: url(../images/pagination/page_first.gif) center center no-repeat;
+}
+.s-pagination-wrapper .s-pagination-func .s-pagination-first.disabled {
+  background: url(../images/pagination/page_first_disabled.gif) center center no-repeat;
+}
+.s-pagination-wrapper .s-pagination-func .s-pagination-prev {
+  width: 26px;
+  height: 26px;
+  background: url(../images/pagination/page_prev.gif) center center no-repeat;
+}
+.s-pagination-wrapper .s-pagination-func .s-pagination-prev.disabled {
+  background: url(../images/pagination/page_prev_disabled.gif) center center no-repeat;
+}
+.s-pagination-wrapper .s-pagination-func .s-pagination-last {
+  width: 26px;
+  height: 26px;
+  background: url(../images/pagination/page_last.gif) center center no-repeat;
+}
+.s-pagination-wrapper .s-pagination-func .s-pagination-last.disabled {
+  background: url(../images/pagination/page_last_disabled.gif) center center no-repeat;
+}
+.s-pagination-wrapper .s-pagination-func .s-pagination-next {
+  width: 26px;
+  height: 26px;
+  background: url(../images/pagination/page_next.gif) center center no-repeat;
+}
+.s-pagination-wrapper .s-pagination-func .s-pagination-next.disabled {
+  background: url(../images/pagination/page_next_disabled.gif) center center no-repeat;
+}
+.s-pagination-wrapper .s-pagination-func .s-pagination-refresh {
+  width: 26px;
+  height: 26px;
+  background: url(../images/pagination/refresh.gif) center center no-repeat;
+}
+.s-pagination-wrapper .s-pagination-func .s-pagination-refresh.disabled {
+  background: url(../images/pagination/refresh_disabled.gif) center center no-repeat;
+}
+
+/*# sourceMappingURL=pagination.css.map */
