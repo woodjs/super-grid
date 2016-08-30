@@ -24,7 +24,7 @@
       self.initGlobalScope($target);
       self.render($target);
       self.initJqueryObject($target);
-      self.initEvents($target);
+      self.initEvent($target);
     },
 
     initGlobalScope: function ($target) {
@@ -378,7 +378,7 @@
       $target.jq.$btnSelectAll = $target.find('.s-table-header .s-grid-check-wrapper');
     },
 
-    initEvents: function ($target) {
+    initEvent: function ($target) {
       var self = this;
 
       $target.find('.s-table-wrapper').on({
