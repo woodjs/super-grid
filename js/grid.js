@@ -699,7 +699,7 @@
     return this.each(function () {
 
       $.data(this, 'grid', {
-        options: $.extend({}, $.fn.grid.defaults, options)
+        options: $.extend(true, {}, $.fn.grid.defaults, options)
       });
 
       grid.init($(this));

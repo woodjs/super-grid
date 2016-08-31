@@ -14,7 +14,7 @@
       margin: 50px auto 0;
     }
     .demo-pagination{
-      width: 770px;
+      width: 670px;
       margin: 10px auto 0;
     }
   </style>
@@ -234,17 +234,19 @@
 </div>
 
 
-<div class="demo-pagination">
+<div class="demo-pagination"></div>
+
+<script type="text/template" id="pagination-test">
   <div class="s-pagination-wrapper">
     <div class="s-pagination-info">
       <span class="s-pagination-record">共<span class="s-pagination-record-total">6210</span>条记录</span>
       <span class="s-pagination-slash">/</span>
       <span class="s-pagination-page">共<span class="s-pagination-page-total">621</span>页</span>
-      <span class="s-pagination-current">（当前第<span class="s-pagination-page-cur">9</span>页）</span>
+      <span class="s-pagination-current">（当前第<span class="s-pagination-page-current">9</span>页）</span>
     </div>
-    <div class="s-pagination-func">
-      <a class="s-pagination-btn s-pagination-first"  href="javascript:;"></a>
-      <a class="s-pagination-btn s-pagination-prev"  href="javascript:;"></a>
+    <div class="s-pagination-function">
+      <a class="s-pagination-btn s-pagination-btn-first"  href="javascript:;"></a>
+      <a class="s-pagination-btn s-pagination-btn-prev"  href="javascript:;"></a>
       <span class="s-pagination-ellipsis">&hellip;</span>
       <span class="s-pagination-btn-list">
         <a class="s-pagination-btn"  href="javascript:;">2</a>
@@ -252,9 +254,9 @@
         <a class="s-pagination-btn"  href="javascript:;">4</a>
       </span>
       <span class="s-pagination-ellipsis">&hellip;</span>
-      <a class="s-pagination-btn s-pagination-next"></a>
-      <a class="s-pagination-btn s-pagination-last"></a>
-      <a class="s-pagination-btn s-pagination-refresh"></a>
+      <a class="s-pagination-btn s-pagination-btn-next"></a>
+      <a class="s-pagination-btn s-pagination-btn-last"></a>
+      <a class="s-pagination-refresh"></a>
       <select class="s-pagination-select">
         <option value="5">5</option>
         <option value="10" selected="">10</option>
@@ -262,17 +264,23 @@
         <option value="20">20</option>
       </select>
       <input class="s-pagination-input" type="text" />
-      <a class="s-pagination-btn s-pagination-jump" href="javascript:;">跳转</a>
+      <a class="s-pagination-jump" href="javascript:;">跳转</a>
     </div>
   </div>
-</div>
+</script>
 
 <script type="text/template" id="template2"></script>
 <script type="text/javascript" src="js/lib/jquery-1.11.3.min.js"></script>
-<script type="text/javascript" src="js/grid.js"></script>
+<script type="text/javascript" src="js/pagination.js"></script>
 <script type="text/javascript">
   $(function () {
-
+    $('.demo-pagination').pagination({
+      pageSize: 10,
+      pageBtnCount: 3,
+      total: 304,
+      curPageIndex: 1,
+      pageSizeList: [5, 10, 15, 20]
+    });
   });
 </script>
 </body>
