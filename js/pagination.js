@@ -25,7 +25,6 @@
     initGlobalScope: function ($target) {
       var self = this;
       var opts = $target.data('pagination').options;
-      var basePageCount = Math.floor(opts.total / opts.pageSize);
 
       $target.ns = {};
 
@@ -33,7 +32,7 @@
       $target.ns.pageBtnCount = opts.pageBtnCount;
       $target.ns.totalRecord = opts.total;
       $target.ns.curPageIndex = opts.curPageIndex;
-      $target.ns.totalPage = basePageCount + (opts.total % basePageCount > 0 ? 1 : 0);
+      $target.ns.totalPage = Math.floor(opts.total / opts.pageSize) + (opts.total % opts.pageSize > 0 ? 1 : 0);
       $target.ns.pageSizeList = opts.pageSizeList;
     },
 
@@ -61,21 +60,28 @@
       html += self.templateMap.paginationInfo.end;
 
       html += self.templateMap.paginationFunction.begin;
-      html += self.templateMap.btnFirst.replace('{pageIndex}', 1);
-      html += self.templateMap.btnPrev.replace('{pageIndex}', 1);
-      html += self.templateMap.ellipsis;
+      html += self.templateMap.btnFirst.replace('{pageIndex}', 1).replace('{disabled}', self.isFirstBtnDisabled($target) ? 'disabled' : '');
+      html += self.templateMap.btnPrev.replace('{pageIndex}', 1).replace('{disabled}', self.isPrevBtnDisabled($target) ? 'disabled' : '');
+
+      if (self.isShowPrevEllipsis($target)) {
+        html += self.templateMap.ellipsis;
+      }
+
       html += self.templateMap.btnList.begin;
 
       for (var i = 0; i < $target.ns.pageBtnCount; i++) {
-        html += self.templateMap.btn.replace(/\{pageIndex\}/g, i + 1);
+        html += self.templateMap.btn.replace(/\{pageIndex\}/g, i + 1).replace('{active}', self.isBtnActive($target, i + 1) ? 'active' : '');
       }
 
       html += self.templateMap.btnList.end;
-      html += self.templateMap.ellipsis;
-      html += self.templateMap.btnNext.replace('{pageIndex}', 2);
-      html += self.templateMap.btnLast.replace('{pageIndex}', $target.ns.totalPage);
-      html += self.templateMap.ellipsis;
-      html += self.templateMap.refresh;
+
+      if (self.isShowNextEllipsis($target)) {
+        html += self.templateMap.ellipsis;
+      }
+
+      html += self.templateMap.btnNext.replace('{pageIndex}', 2).replace('{disabled}', self.isNextBtnDisabled($target) ? 'disabled' : '');
+      html += self.templateMap.btnLast.replace('{pageIndex}', $target.ns.totalPage).replace('{disabled}', self.isLastBtnDisabled($target) ? 'disabled' : '');
+      html += self.templateMap.refresh.replace('{disabled}', self.isRefreshBtnDisabled($target) ? 'disabled' : '');
 
       html += self.templateMap.select.begin;
       for (var j = 0; j < $target.ns.pageSizeList.length; j++) {
@@ -91,6 +97,52 @@
       html += self.templateMap.wrapper.end;
 
       return html;
+    },
+
+    isShowPrevEllipsis: function ($target) {
+      var self = this;
+
+      return $target.ns.curPageIndex <= $target.ns.pageBtnCount ? false : true;
+    },
+
+    isShowNextEllipsis: function ($target) {
+      var self = this;
+
+      return $target.ns.curPageIndex > ($target.ns.totalPage - $target.ns.pageBtnCount) ? false : true;
+    },
+
+    isPrevBtnDisabled: function ($target) {
+      var self = this;
+
+      return $target.ns.curPageIndex > 1 ? false : true;
+    },
+
+    isNextBtnDisabled: function ($target) {
+      var self = this;
+
+      return $target.ns.curPageIndex < $target.ns.totalPage ? false : true;
+    },
+
+    isFirstBtnDisabled: function ($target) {
+      var self = this;
+
+      return $target.ns.curPageIndex > 1 ? false : true;
+    },
+
+    isLastBtnDisabled: function ($target) {
+      var self = this;
+
+      return $target.ns.curPageIndex < $target.ns.totalPage ? false : true;
+    },
+
+    isRefreshBtnDisabled: function ($target) {
+      var self = this;
+    },
+
+    isBtnActive: function ($target, pageIndex) {
+      var self = this;
+
+      return $target.ns.curPageIndex == pageIndex ? true : false;
     },
 
     initJqueryObject: function ($target) {
@@ -148,10 +200,9 @@
       $target.jq.$select.on({
         'change': function () {
           var $this = $(this);
-          var basePageCount = Math.floor($target.ns.totalRecord / $target.ns.pageSize);
 
           $target.ns.pageSize = parseInt($this.val());
-          $target.ns.totalPage = basePageCount + ($target.ns.totalRecord % basePageCount > 0 ? 1 : 0);
+          $target.ns.totalPage = Math.floor($target.ns.totalRecord / $target.ns.pageSize) + ($target.ns.totalRecord % $target.ns.pageSize > 0 ? 1 : 0);
 
           self.render($target);
         }
@@ -228,12 +279,12 @@
         begin: '<div class="s-pagination-function">',
         end: '</div>'
       },
-      btnFirst: '<a class="s-pagination-btn s-pagination-btn-first" data-page-index="{pageIndex}" href="javascript:;"></a>',
-      btnLast: '<a class="s-pagination-btn s-pagination-btn-last" data-page-index="{pageIndex}" href="javascript:;"></a>',
-      btnPrev: '<a class="s-pagination-btn s-pagination-btn-prev" data-page-index="{pageIndex}" href="javascript:;"></a>',
-      btnNext: '<a class="s-pagination-btn s-pagination-btn-next" data-page-index="{pageIndex}" href="javascript:;"></a>',
+      btnFirst: '<a class="s-pagination-btn s-pagination-btn-first {disabled}" data-page-index="{pageIndex}" href="javascript:;"></a>',
+      btnLast: '<a class="s-pagination-btn s-pagination-btn-last {disabled}" data-page-index="{pageIndex}" href="javascript:;"></a>',
+      btnPrev: '<a class="s-pagination-btn s-pagination-btn-prev {disabled}" data-page-index="{pageIndex}" href="javascript:;"></a>',
+      btnNext: '<a class="s-pagination-btn s-pagination-btn-next {disabled}" data-page-index="{pageIndex}" href="javascript:;"></a>',
       ellipsis: '<span class="s-pagination-ellipsis">&hellip;</span>',
-      refresh: '<a class="s-pagination-refresh" data-page-index="{pageIndex}"></a>',
+      refresh: '<a class="s-pagination-refresh {disabled}" data-page-index="{pageIndex}"></a>',
       input: '<input class="s-pagination-input" type="text" />',
       jump: '<a class="s-pagination-jump" href="javascript:;">跳转</a>',
       select: {
@@ -245,7 +296,7 @@
         begin: '<span class="s-pagination-btn-list">',
         end: '</span>'
       },
-      btn: '<a class="s-pagination-btn" data-page-index="{pageIndex}" href="javascript:;">{pageIndex}</a>'
+      btn: '<a class="s-pagination-btn {active}" data-page-index="{pageIndex}" href="javascript:;">{pageIndex}</a>'
     }
   };
 
