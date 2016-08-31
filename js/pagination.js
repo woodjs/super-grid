@@ -169,9 +169,9 @@
     },
 
     btnClickHandler: function ($target) {
+      var self = this;
 
       return function (e) {
-        var self = this;
         var $this = $(this);
 
         if ($this.is('.disabled')) return;
