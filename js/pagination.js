@@ -28,11 +28,11 @@
 
       $target.ns = {};
 
-      $target.ns.pageSize = opts.pageSize;
-      $target.ns.pageBtnCount = opts.pageBtnCount;
-      $target.ns.totalRecord = opts.total;
-      $target.ns.curPageIndex = opts.curPageIndex;
-      $target.ns.totalPage = Math.floor(opts.total / opts.pageSize) + (opts.total % opts.pageSize > 0 ? 1 : 0);
+      $target.ns.pageSize = parseInt(opts.pageSize);
+      $target.ns.pageBtnCount = parseInt(opts.pageBtnCount);
+      $target.ns.totalRecord = parseInt(opts.total);
+      $target.ns.curPageIndex = parseInt(opts.curPageIndex);
+      $target.ns.totalPage = Math.floor($target.ns.totalRecord / $target.ns.pageSize) + ($target.ns.totalRecord % $target.ns.pageSize > 0 ? 1 : 0);
       $target.ns.pageSizeList = opts.pageSizeList;
     },
 
@@ -67,13 +67,7 @@
         html += self.templateMap.ellipsis;
       }
 
-      html += self.templateMap.btnList.begin;
-
-      for (var i = 0; i < $target.ns.pageBtnCount; i++) {
-        html += self.templateMap.btn.replace(/\{pageIndex\}/g, i + 1).replace('{active}', self.isBtnActive($target, i + 1) ? 'active' : '');
-      }
-
-      html += self.templateMap.btnList.end;
+      html += self.createBtnListHtml($target);
 
       if (self.isShowNextEllipsis($target)) {
         html += self.templateMap.ellipsis;
@@ -93,22 +87,61 @@
       html += self.templateMap.jump;
 
       html += self.templateMap.paginationFunction.end;
-
       html += self.templateMap.wrapper.end;
 
       return html;
     },
 
+    createBtnListHtml: function ($target) {
+      var self = this;
+      var btnListHtml = '';
+      var pageNum;
+      var temp;
+      var isShowNextEllipsis;
+
+      if ($target.ns.curPageIndex <= 0) $target.ns.curPageIndex = 1;
+      if ($target.ns.curPageIndex > $target.ns.totalPage) $target.ns.curPageIndex = $target.ns.totalPage;
+
+      btnListHtml += self.templateMap.btnList.begin;
+
+      temp = $target.ns.pageBtnCount / 2;
+
+      isShowNextEllipsis = self.isShowNextEllipsis($target);
+
+      if (!self.isShowPrevEllipsis($target)) {
+        pageNum = 1;
+      } else if ($target.ns.curPageIndex > temp && isShowNextEllipsis) {
+        pageNum = $target.ns.curPageIndex - (Math.floor(temp) + ($target.ns.pageBtnCount % 2 === 0 ? -1 : 0));
+      } else if ($target.ns.curPageIndex > temp && !isShowNextEllipsis) {
+        pageNum = $target.ns.totalPage - $target.ns.pageBtnCount + 1;
+      } else {
+        pageNum = $target.ns.curPageIndex;
+      }
+
+      for (var i = 0; i < $target.ns.pageBtnCount; i++) {
+
+        if (pageNum > 0 && pageNum <= $target.ns.totalPage) {
+          btnListHtml += self.templateMap.btn.replace(/\{pageIndex\}/g, pageNum).replace('{active}', self.isBtnActive($target, pageNum) ? 'active' : '');
+
+          pageNum++;
+        }
+      }
+
+      btnListHtml += self.templateMap.btnList.end;
+
+      return btnListHtml;
+    },
+
     isShowPrevEllipsis: function ($target) {
       var self = this;
 
-      return $target.ns.curPageIndex <= $target.ns.pageBtnCount ? false : true;
+      return $target.ns.curPageIndex < $target.ns.pageBtnCount ? false : true;
     },
 
     isShowNextEllipsis: function ($target) {
       var self = this;
 
-      return $target.ns.curPageIndex > ($target.ns.totalPage - $target.ns.pageBtnCount) ? false : true;
+      return $target.ns.curPageIndex > ($target.ns.totalPage - $target.ns.pageBtnCount + 1) ? false : true;
     },
 
     isPrevBtnDisabled: function ($target) {
@@ -163,7 +196,6 @@
 
     initEvent: function ($target) {
       var self = this;
-
 
       $target.jq.$btnFirst.on({
         'click': self.btnClickHandler($target)

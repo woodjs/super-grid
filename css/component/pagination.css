@@ -60,14 +60,17 @@ input, textarea, select, a {
   font-weight: bold;
   text-align: center;
   vertical-align: top;
+  margin: 0 3px;
 }
 .s-pagination-wrapper .s-pagination-function .s-pagination-btn-list .s-pagination-btn {
   padding: 0 10px;
 }
 .s-pagination-wrapper .s-pagination-function .s-pagination-btn-list .s-pagination-btn.active {
-  color: #d1291a;
+  background: #d1291a;
+  color: #fff;
 }
 .s-pagination-wrapper .s-pagination-function .s-pagination-select {
+  margin: 0 5px;
   padding: 0 5px;
   height: 26px;
 }
@@ -100,40 +103,61 @@ input, textarea, select, a {
   background: #d1291a;
   color: #fff;
   padding: 0 10px;
+  margin-left: 5px;
   height: 26px;
   line-height: 26px;
 }
 .s-pagination-wrapper .s-pagination-function .s-pagination-btn-first {
   width: 26px;
   height: 26px;
-  background: url(../images/pagination/page_first.gif) center center no-repeat;
+  border: 1px solid #e7e7e7;
+  margin: 0 5px;
+  background: url(../images/pagination/paginition_icons.png) 7px 6px no-repeat;
+}
+.s-pagination-wrapper .s-pagination-function .s-pagination-btn-first:hover {
+  background: #d1291a url(../images/pagination/paginition_icons.png) 7px -15px no-repeat;
 }
 .s-pagination-wrapper .s-pagination-function .s-pagination-btn-first.disabled {
-  background: url(../images/pagination/page_first_disabled.gif) center center no-repeat;
-}
-.s-pagination-wrapper .s-pagination-function .s-pagination-btn-prev {
-  width: 26px;
-  height: 26px;
-  background: url(../images/pagination/page_prev.gif) center center no-repeat;
-}
-.s-pagination-wrapper .s-pagination-function .s-pagination-btn-prev.disabled {
-  background: url(../images/pagination/page_prev_disabled.gif) center center no-repeat;
+  background: #eff0f1 url(../images/pagination/paginition_icons.png) 7px 6px no-repeat;
 }
 .s-pagination-wrapper .s-pagination-function .s-pagination-btn-last {
   width: 26px;
   height: 26px;
-  background: url(../images/pagination/page_last.gif) center center no-repeat;
+  border: 1px solid #e7e7e7;
+  margin: 0 5px;
+  background: url(../images/pagination/paginition_icons.png) -53px 6px no-repeat;
+}
+.s-pagination-wrapper .s-pagination-function .s-pagination-btn-last:hover {
+  background: #d1291a url(../images/pagination/paginition_icons.png) -53px -15px no-repeat;
 }
 .s-pagination-wrapper .s-pagination-function .s-pagination-btn-last.disabled {
-  background: url(../images/pagination/page_last_disabled.gif) center center no-repeat;
+  background: #eff0f1 url(../images/pagination/paginition_icons.png) -53px 6px no-repeat;
+}
+.s-pagination-wrapper .s-pagination-function .s-pagination-btn-prev {
+  width: 26px;
+  height: 26px;
+  border: 1px solid #e7e7e7;
+  margin: 0 5px;
+  background: url(../images/pagination/paginition_icons.png) -13px 6px no-repeat;
+}
+.s-pagination-wrapper .s-pagination-function .s-pagination-btn-prev:hover {
+  background: #d1291a url(../images/pagination/paginition_icons.png) -13px -15px no-repeat;
+}
+.s-pagination-wrapper .s-pagination-function .s-pagination-btn-prev.disabled {
+  background: #eff0f1 url(../images/pagination/paginition_icons.png) -13px 6px no-repeat;
 }
 .s-pagination-wrapper .s-pagination-function .s-pagination-btn-next {
   width: 26px;
   height: 26px;
-  background: url(../images/pagination/page_next.gif) center center no-repeat;
+  border: 1px solid #e7e7e7;
+  margin: 0 5px;
+  background: url(../images/pagination/paginition_icons.png) -33px 6px no-repeat;
+}
+.s-pagination-wrapper .s-pagination-function .s-pagination-btn-next:hover {
+  background: #d1291a url(../images/pagination/paginition_icons.png) -33px -15px no-repeat;
 }
 .s-pagination-wrapper .s-pagination-function .s-pagination-btn-next.disabled {
-  background: url(../images/pagination/page_next_disabled.gif) center center no-repeat;
+  background: #eff0f1 url(../images/pagination/paginition_icons.png) -33px 6px no-repeat;
 }
 .s-pagination-wrapper .s-pagination-function .s-pagination-refresh {
   width: 26px;
@@ -141,11 +165,11 @@ input, textarea, select, a {
   display: inline-block;
   cursor: pointer;
   vertical-align: top;
-  font-size: 12px;
+  margin: 0 5px;
   background: url(../images/pagination/refresh.gif) center center no-repeat;
 }
 .s-pagination-wrapper .s-pagination-function .s-pagination-refresh.disabled {
-  background: url(../images/pagination/refresh_disabled.gif) center center no-repeat;
+  background: #eff0f1 url(../images/pagination/refresh_disabled.gif) center center no-repeat;
 }
 
 /*# sourceMappingURL=pagination.css.map */
