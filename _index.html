@@ -247,13 +247,13 @@
     <div class="s-pagination-function">
       <a class="s-pagination-btn s-pagination-btn-first"  href="javascript:;"></a>
       <a class="s-pagination-btn s-pagination-btn-prev"  href="javascript:;"></a>
-      <span class="s-pagination-ellipsis">&hellip;</span>
       <span class="s-pagination-btn-list">
+        <span class="s-pagination-ellipsis">&hellip;</span>
         <a class="s-pagination-btn"  href="javascript:;">2</a>
         <a class="s-pagination-btn"  href="javascript:;">3</a>
         <a class="s-pagination-btn"  href="javascript:;">4</a>
+        <span class="s-pagination-ellipsis">&hellip;</span>
       </span>
-      <span class="s-pagination-ellipsis">&hellip;</span>
       <a class="s-pagination-btn s-pagination-btn-next"></a>
       <a class="s-pagination-btn s-pagination-btn-last"></a>
       <a class="s-pagination-refresh"></a>
@@ -276,9 +276,9 @@
   $(function () {
     $('.demo-pagination').pagination({
       pageSize: 10,
-      pageBtnCount: 4,
+      pageBtnCount: 3,
       total: 304,
-      curPageIndex: 31,
+      curPageIndex: 1,
       pageSizeList: [5, 10, 15, 20]
     });
   });

@@ -92,6 +92,21 @@
       return html;
     },
 
+    changePageIndex: function ($target) {
+      var self = this;
+      var pageIndex = $target.ns.curPageIndex;
+      var prevIndex = pageIndex - 1;
+      var prevIndex = pageIndex - 1;
+
+      if (pageIndex - 1 > 0) {
+        $target.jq.$btnPrev.data('page-index', pageIndex - 1 > 0 ? pageIndex - 1 : 1);
+        $target.jq.$btnNext.data('page-index', pageIndex + 1 <=  $target.ns.total ? pageIndex + 1 : 1);
+      } else {
+
+      }
+    },
+
+
     createBtnListHtml: function ($target) {
       var self = this;
       var btnListHtml = '';
@@ -135,11 +150,15 @@
     isShowPrevEllipsis: function ($target) {
       var self = this;
 
+      if ($target.ns.curPageIndex === 1) return false;
+
       return $target.ns.curPageIndex < $target.ns.pageBtnCount ? false : true;
     },
 
     isShowNextEllipsis: function ($target) {
       var self = this;
+
+      if ($target.ns.curPageIndex === $target.ns.totalPage) return false;
 
       return $target.ns.curPageIndex > ($target.ns.totalPage - $target.ns.pageBtnCount + 1) ? false : true;
     },
@@ -217,8 +236,15 @@
         'click': self.btnClickHandler($target)
       });
 
-      $target.jq.$boxBtnList.find('.s-pagination-btn').on({
-        'click': self.btnClickHandler($target)
+      $target.jq.$boxBtnList.on({
+        'click': function (e) {
+          var $elem = $(e.target);
+          var index = $elem.data('page-index');
+
+          $target.ns.curPageIndex = index;
+
+          self.goto($target, index);
+        }
       });
 
       $target.jq.$btnJump.on({
@@ -274,7 +300,7 @@
         size: $target.ns.pageSize
       };
 
-      self.render($target, params);
+      $target.jq.$boxBtnList.html(self.createBtnListHtml($target));
     },
 
     getParams: function ($target) {
