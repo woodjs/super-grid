@@ -61,7 +61,7 @@
 
       html += self.templateMap.paginationFunction.begin;
       html += self.templateMap.btnFirst.replace('{pageIndex}', 1).replace('{disabled}', self.isFirstBtnDisabled($target) ? 'disabled' : '');
-      html += self.templateMap.btnPrev.replace('{pageIndex}', 1).replace('{disabled}', self.isPrevBtnDisabled($target) ? 'disabled' : '');
+      html += self.templateMap.btnPrev.replace('{pageIndex}', ($target.ns.curPageIndex - 1) > 0 ? ($target.ns.curPageIndex - 1) : 1).replace('{disabled}', self.isPrevBtnDisabled($target) ? 'disabled' : '');
 
       html += self.templateMap.btnList.begin;
 
@@ -69,7 +69,7 @@
 
       html += self.templateMap.btnList.end;
 
-      html += self.templateMap.btnNext.replace('{pageIndex}', 2).replace('{disabled}', self.isNextBtnDisabled($target) ? 'disabled' : '');
+      html += self.templateMap.btnNext.replace('{pageIndex}', ($target.ns.curPageIndex + 1) <= $target.ns.totalPage ? ($target.ns.curPageIndex + 1) : $target.ns.totalPage).replace('{disabled}', self.isNextBtnDisabled($target) ? 'disabled' : '');
       html += self.templateMap.btnLast.replace('{pageIndex}', $target.ns.totalPage).replace('{disabled}', self.isLastBtnDisabled($target) ? 'disabled' : '');
       html += self.templateMap.refresh.replace('{disabled}', self.isRefreshBtnDisabled($target) ? 'disabled' : '');
 
