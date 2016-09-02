@@ -63,15 +63,11 @@
       html += self.templateMap.btnFirst.replace('{pageIndex}', 1).replace('{disabled}', self.isFirstBtnDisabled($target) ? 'disabled' : '');
       html += self.templateMap.btnPrev.replace('{pageIndex}', 1).replace('{disabled}', self.isPrevBtnDisabled($target) ? 'disabled' : '');
 
-      if (self.isShowPrevEllipsis($target)) {
-        html += self.templateMap.ellipsis;
-      }
+      html += self.templateMap.btnList.begin;
 
       html += self.createBtnListHtml($target);
 
-      if (self.isShowNextEllipsis($target)) {
-        html += self.templateMap.ellipsis;
-      }
+      html += self.templateMap.btnList.end;
 
       html += self.templateMap.btnNext.replace('{pageIndex}', 2).replace('{disabled}', self.isNextBtnDisabled($target) ? 'disabled' : '');
       html += self.templateMap.btnLast.replace('{pageIndex}', $target.ns.totalPage).replace('{disabled}', self.isLastBtnDisabled($target) ? 'disabled' : '');
@@ -92,38 +88,24 @@
       return html;
     },
 
-    changePageIndex: function ($target) {
-      var self = this;
-      var pageIndex = $target.ns.curPageIndex;
-      var prevIndex = pageIndex - 1;
-      var prevIndex = pageIndex - 1;
-
-      if (pageIndex - 1 > 0) {
-        $target.jq.$btnPrev.data('page-index', pageIndex - 1 > 0 ? pageIndex - 1 : 1);
-        $target.jq.$btnNext.data('page-index', pageIndex + 1 <=  $target.ns.total ? pageIndex + 1 : 1);
-      } else {
-
-      }
-    },
-
-
     createBtnListHtml: function ($target) {
       var self = this;
       var btnListHtml = '';
       var pageNum;
       var temp;
+      var isShowPrevEllipsis;
       var isShowNextEllipsis;
 
       if ($target.ns.curPageIndex <= 0) $target.ns.curPageIndex = 1;
       if ($target.ns.curPageIndex > $target.ns.totalPage) $target.ns.curPageIndex = $target.ns.totalPage;
 
-      btnListHtml += self.templateMap.btnList.begin;
 
       temp = $target.ns.pageBtnCount / 2;
 
+      isShowPrevEllipsis = self.isShowPrevEllipsis($target);
       isShowNextEllipsis = self.isShowNextEllipsis($target);
 
-      if (!self.isShowPrevEllipsis($target)) {
+      if (!isShowPrevEllipsis) {
         pageNum = 1;
       } else if ($target.ns.curPageIndex > temp && isShowNextEllipsis) {
         pageNum = $target.ns.curPageIndex - (Math.floor(temp) + ($target.ns.pageBtnCount % 2 === 0 ? -1 : 0));
@@ -131,6 +113,10 @@
         pageNum = $target.ns.totalPage - $target.ns.pageBtnCount + 1;
       } else {
         pageNum = $target.ns.curPageIndex;
+      }
+
+      if (isShowPrevEllipsis) {
+        btnListHtml += self.templateMap.ellipsis;
       }
 
       for (var i = 0; i < $target.ns.pageBtnCount; i++) {
@@ -142,9 +128,27 @@
         }
       }
 
-      btnListHtml += self.templateMap.btnList.end;
+      if (isShowNextEllipsis) {
+        btnListHtml += self.templateMap.ellipsis;
+      }
 
       return btnListHtml;
+    },
+
+    updatePagination: function ($target) {
+      var self = this;
+      var pageIndex = $target.ns.curPageIndex;
+      var prevPageIndex = pageIndex - 1;
+      var nextPageIndex = pageIndex + 1;
+
+      $target.jq.$currentPage.html(pageIndex);
+      $target.jq.$btnPrev.data('page-index', prevPageIndex > 0 ? prevPageIndex : 1);
+      $target.jq.$btnNext.data('page-index', nextPageIndex <= $target.ns.totalPage ? nextPageIndex : $target.ns.totalPage);
+
+      self.isFirstBtnDisabled($target) ? $target.jq.$btnFirst.addClass('disabled') : $target.jq.$btnFirst.removeClass('disabled');
+      self.isLastBtnDisabled($target) ? $target.jq.$btnLast.addClass('disabled') : $target.jq.$btnLast.removeClass('disabled');
+      self.isPrevBtnDisabled($target) ? $target.jq.$btnPrev.addClass('disabled') : $target.jq.$btnPrev.removeClass('disabled');
+      self.isNextBtnDisabled($target) ? $target.jq.$btnNext.addClass('disabled') : $target.jq.$btnNext.removeClass('disabled');
     },
 
     isShowPrevEllipsis: function ($target) {
@@ -194,7 +198,7 @@
     isBtnActive: function ($target, pageIndex) {
       var self = this;
 
-      return $target.ns.curPageIndex == pageIndex ? true : false;
+      return $target.ns.curPageIndex === pageIndex ? true : false;
     },
 
     initJqueryObject: function ($target) {
@@ -202,6 +206,7 @@
 
       $target.jq = {};
 
+      $target.jq.$currentPage = $target.find('.s-pagination-page-current');
       $target.jq.$boxBtnList = $target.find('.s-pagination-btn-list');
       $target.jq.$btnFirst = $target.find('.s-pagination-btn-first');
       $target.jq.$btnPrev = $target.find('.s-pagination-btn-prev');
@@ -233,7 +238,13 @@
       });
 
       $target.jq.$btnRefresh.on({
-        'click': self.btnClickHandler($target)
+        'click': function () {
+          var $this = $(this);
+
+          if ($this.is('.disabled')) return;
+
+          self.goto($target, $target.ns.curPageIndex);
+        }
       });
 
       $target.jq.$boxBtnList.on({
@@ -259,6 +270,7 @@
         'change': function () {
           var $this = $(this);
 
+          $target.ns.curPageIndex = 1;
           $target.ns.pageSize = parseInt($this.val());
           $target.ns.totalPage = Math.floor($target.ns.totalRecord / $target.ns.pageSize) + ($target.ns.totalRecord % $target.ns.pageSize > 0 ? 1 : 0);
 
@@ -268,7 +280,7 @@
 
       $target.jq.$input.on({
         'keypress': function (e) {
-          if (e.keyCode === '13') {
+          if (e.keyCode === 13) {
             var params = self.getParams($target);
 
             params && self.goto($target, params);
@@ -287,6 +299,8 @@
 
         var index = $this.data('page-index');
 
+        $target.ns.curPageIndex = index;
+
         self.goto($target, index);
       };
     },
@@ -301,6 +315,7 @@
       };
 
       $target.jq.$boxBtnList.html(self.createBtnListHtml($target));
+      self.updatePagination($target);
     },
 
     getParams: function ($target) {
@@ -310,7 +325,8 @@
 
       if (regex.test(pageIndex) && (pageIndex > 0)){
         pageIndex =  pageIndex > $target.ns.totalPage ? $target.ns.totalPage : pageIndex;
-
+        $target.jq.$input.val('');
+        $target.ns.curPageIndex = pageIndex;
         return {
           page: pageIndex,
           size: $target.ns.pageSize
