@@ -60,7 +60,9 @@ input, textarea, select, a {
   font-weight: bold;
   text-align: center;
   vertical-align: top;
-  margin: 0 3px;
+}
+.s-pagination-wrapper .s-pagination-function .s-pagination-btn-list {
+  margin-left: 10px;
 }
 .s-pagination-wrapper .s-pagination-function .s-pagination-btn-list .s-pagination-btn {
   padding: 0 10px;
@@ -70,12 +72,12 @@ input, textarea, select, a {
   color: #fff;
 }
 .s-pagination-wrapper .s-pagination-function .s-pagination-select {
-  margin: 0 5px;
-  padding: 0 5px;
   height: 26px;
+  line-height: 26px;
+  background: transparent;
+  margin-left: 10px;
 }
 .s-pagination-wrapper .s-pagination-function .s-pagination-input {
-  margin: 0 5px;
   vertical-align: top;
   letter-spacing: normal;
   word-spacing: normal;
@@ -85,6 +87,7 @@ input, textarea, select, a {
   text-align: center;
   height: 26px;
   line-height: 24px;
+  margin-left: 10px;
   -webkit-transition: all 0.3s ease-in-out;
   -moz-transition: all 0.3s ease-in-out;
   transition: all 0.3s ease-in-out;
@@ -103,7 +106,7 @@ input, textarea, select, a {
   background: #d1291a;
   color: #fff;
   padding: 0 10px;
-  margin-left: 5px;
+  margin-left: 10px;
   height: 26px;
   line-height: 26px;
 }
@@ -111,7 +114,7 @@ input, textarea, select, a {
   width: 26px;
   height: 26px;
   border: 1px solid #e7e7e7;
-  margin: 0 5px;
+  margin-left: 10px;
   background: url(../images/pagination/paginition_icons.png) 7px 6px no-repeat;
 }
 .s-pagination-wrapper .s-pagination-function .s-pagination-btn-first:hover {
@@ -124,7 +127,7 @@ input, textarea, select, a {
   width: 26px;
   height: 26px;
   border: 1px solid #e7e7e7;
-  margin: 0 5px;
+  margin-left: 10px;
   background: url(../images/pagination/paginition_icons.png) -53px 6px no-repeat;
 }
 .s-pagination-wrapper .s-pagination-function .s-pagination-btn-last:hover {
@@ -137,7 +140,7 @@ input, textarea, select, a {
   width: 26px;
   height: 26px;
   border: 1px solid #e7e7e7;
-  margin: 0 5px;
+  margin-left: 10px;
   background: url(../images/pagination/paginition_icons.png) -13px 6px no-repeat;
 }
 .s-pagination-wrapper .s-pagination-function .s-pagination-btn-prev:hover {
@@ -150,7 +153,7 @@ input, textarea, select, a {
   width: 26px;
   height: 26px;
   border: 1px solid #e7e7e7;
-  margin: 0 5px;
+  margin-left: 10px;
   background: url(../images/pagination/paginition_icons.png) -33px 6px no-repeat;
 }
 .s-pagination-wrapper .s-pagination-function .s-pagination-btn-next:hover {
@@ -165,7 +168,7 @@ input, textarea, select, a {
   display: inline-block;
   cursor: pointer;
   vertical-align: top;
-  margin: 0 5px;
+  margin-left: 10px;
   background: url(../images/pagination/refresh.gif) center center no-repeat;
 }
 .s-pagination-wrapper .s-pagination-function .s-pagination-refresh.disabled {

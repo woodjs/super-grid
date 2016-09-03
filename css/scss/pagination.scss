@@ -42,9 +42,9 @@
    font-weight: bold;
    text-align: center;
    vertical-align: top;
-   margin: 0 3px;
   }
   .s-pagination-btn-list{
+   margin-left:10px;
    .s-pagination-btn{
     padding:0 10px;
     &.active{
@@ -54,12 +54,12 @@
    }
   }
   .s-pagination-select{
-   margin:0 5px;
-   padding:0 5px;
    height: 26px;
+   line-height:26px;
+   background:transparent;
+   margin-left:10px;
   }
   .s-pagination-input{
-   margin: 0 5px;
    vertical-align: top;
    letter-spacing: normal;
    word-spacing: normal;
@@ -69,6 +69,7 @@
    text-align: center;
    height:26px;
    line-height: 24px;
+   margin-left:10px;
    @include transition(all 0.3s ease-in-out);
    &:focus{
     @include boxShadow(0 0 3px $paginationThemeColor);
@@ -83,14 +84,14 @@
    background: $paginationThemeColor;
    color:#fff;
    padding:0 10px;
-   margin-left:5px;
+   margin-left:10px;
    @include setHeightGroup(26px);
   }
   .s-pagination-btn-first{
    width:26px;
    height: 26px;
    border:1px solid $paginationBdColor;
-   margin:0 5px;
+   margin-left:10px;
    background: url(../images/pagination/paginition_icons.png) 7px 6px no-repeat;
    &:hover{
     background: $paginationThemeColor url(../images/pagination/paginition_icons.png) 7px -15px no-repeat;
@@ -103,7 +104,7 @@
    width:26px;
    height: 26px;
    border:1px solid $paginationBdColor;
-   margin:0 5px;
+   margin-left:10px;
    background: url(../images/pagination/paginition_icons.png) -53px 6px no-repeat;
    &:hover{
     background: $paginationThemeColor url(../images/pagination/paginition_icons.png) -53px -15px no-repeat;
@@ -116,7 +117,7 @@
    width:26px;
    height: 26px;
    border:1px solid $paginationBdColor;
-   margin:0 5px;
+   margin-left:10px;
    background: url(../images/pagination/paginition_icons.png) -13px 6px no-repeat;
    &:hover{
     background: $paginationThemeColor url(../images/pagination/paginition_icons.png) -13px -15px no-repeat;
@@ -129,7 +130,7 @@
    width:26px;
    height: 26px;
    border:1px solid $paginationBdColor;
-   margin:0 5px;
+   margin-left:10px;
    background: url(../images/pagination/paginition_icons.png) -33px 6px no-repeat;
    &:hover{
     background: $paginationThemeColor url(../images/pagination/paginition_icons.png) -33px -15px no-repeat;
@@ -144,7 +145,7 @@
    display: inline-block;
    cursor: pointer;
    vertical-align: top;
-   margin: 0 5px;
+   margin-left:10px;
    background: url(../images/pagination/refresh.gif) center center no-repeat;
    &.disabled{
     background: $paginationBgColor url(../images/pagination/refresh_disabled.gif) center center no-repeat;

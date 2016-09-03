@@ -358,7 +358,7 @@
       btnPrev: '<a class="s-pagination-btn s-pagination-btn-prev {disabled}" data-page-index="{pageIndex}" href="javascript:;"></a>',
       btnNext: '<a class="s-pagination-btn s-pagination-btn-next {disabled}" data-page-index="{pageIndex}" href="javascript:;"></a>',
       ellipsis: '<span class="s-pagination-ellipsis">&hellip;</span>',
-      refresh: '<a class="s-pagination-refresh {disabled}" data-page-index="{pageIndex}"></a>',
+      refresh: '<a class="s-pagination-refresh {disabled}"></a>',
       input: '<input class="s-pagination-input" type="text" />',
       jump: '<a class="s-pagination-jump" href="javascript:;">跳转</a>',
       select: {
