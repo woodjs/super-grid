@@ -99,7 +99,6 @@
       if ($target.ns.curPageIndex <= 0) $target.ns.curPageIndex = 1;
       if ($target.ns.curPageIndex > $target.ns.totalPage) $target.ns.curPageIndex = $target.ns.totalPage;
 
-
       temp = $target.ns.pageBtnCount / 2;
 
       isShowPrevEllipsis = self.isShowPrevEllipsis($target);
@@ -307,6 +306,7 @@
 
     goto: function ($target, pageInfo) {
       var self = this;
+      var opts = $target.data('pagination').options;
       var params;
 
       params = typeof pageInfo === 'object' ? pageInfo : {
@@ -314,8 +314,25 @@
         size: $target.ns.pageSize
       };
 
-      $target.jq.$boxBtnList.html(self.createBtnListHtml($target));
-      self.updatePagination($target);
+      if (opts.url) {
+        $.ajax({
+          url: opts.url,
+          type: opts.method,
+          cache: opts.cache,
+          timeout: opts.timeout,
+          beforeSend: opts.onAjaxBeforeSend,
+          complete: opts.onAjaxComplete,
+          error: opts.onAjaxError,
+          success: function (result) {
+            $target.jq.$boxBtnList.html(self.createBtnListHtml($target));
+            self.updatePagination($target);
+            opts.onDataLoaded && opts.onDataLoaded.apply(null, [result]);
+          }
+        });
+      } else {
+        $target.jq.$boxBtnList.html(self.createBtnListHtml($target));
+        self.updatePagination($target);
+      }
     },
 
     getParams: function ($target) {
@@ -391,9 +408,28 @@
     });
   };
 
-  $.fn.pagination.methods = {};
+  $.fn.pagination.methods = {
+
+  };
 
   $.fn.pagination.defaults = {
-
+    pageSize: 20,
+    pageBtnCount: 3,
+    total: 0,
+    curPageIndex: 1,
+    pageSizeList: [5, 10, 15, 20],
+    url: '',
+    method: 'GET',
+    cache: false,
+    timeout: 3000,
+    params: null,
+    onAjaxBeforeSend: null,
+    onAjaxComplete: null,
+    onAjaxError: null,
+    onDataLoaded: null,
+    onBeforeRender: null,
+    onAfterRender: null,
+    onBeforeChangePage: null,
+    onAfterChangePage: null
   };
 });

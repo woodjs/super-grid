@@ -285,12 +285,12 @@
     loadData: function ($target, opts, frozenAlign, beginColIndex, tbodyId) {
       var self = this;
 
-      if (opts.proxy && opts.proxy.url) {
+      if (opts.url) {
         $.ajax({
-          url: opts.proxy.url,
-          type: opts.proxy.method,
-          cache: opts.proxy.cache,
-          timeout: opts.proxy.timeout,
+          url: opts.url,
+          type: opts.method,
+          cache: opts.cache,
+          timeout: opts.timeout,
           beforeSend: opts.onAjaxBeforeSend,
           complete: opts.onAjaxComplete,
           error: opts.onAjaxError,
@@ -706,7 +706,9 @@
     });
   };
 
-  $.fn.grid.methods = {};
+  $.fn.grid.methods = {
+    getRecord: function () {}
+  };
 
   $.fn.grid.defaults = {
     width: '800px',
@@ -722,16 +724,15 @@
     trHeight: '24px',
     columns: [],
     localData: null,
-    proxy: {
-      url: '',
-      method: 'GET',
-      cache: false,
-      timeout: 3000,
-      params: null
-    },
+    url: '',
+    method: 'GET',
+    cache: false,
+    timeout: 3000,
+    params: null,
     onAjaxBeforeSend: null,
     onAjaxComplete: null,
     onAjaxError: null,
+    onBeforeRender: null,
     onAfterRender: null
   };
 });
