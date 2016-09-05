@@ -28,12 +28,14 @@
 
       $target.ns = {};
 
+      $target.ns.cssPrefix = $.trim(opts.cssPrefix);
       $target.ns.pageSize = parseInt(opts.pageSize);
       $target.ns.pageBtnCount = parseInt(opts.pageBtnCount);
       $target.ns.totalRecord = parseInt(opts.total);
       $target.ns.curPageIndex = parseInt(opts.curPageIndex);
       $target.ns.totalPage = Math.floor($target.ns.totalRecord / $target.ns.pageSize) + ($target.ns.totalRecord % $target.ns.pageSize > 0 ? 1 : 0);
       $target.ns.pageSizeList = opts.pageSizeList;
+      $target.ns.templateMap = $.parseJSON(JSON.stringify(self.templateMap).replace(/\{cssPrefix\}/g, $target.ns.cssPrefix));
     },
 
     render: function ($target) {
@@ -48,68 +50,70 @@
 
     createPaginationHtml: function ($target) {
       var self = this;
+      var templateMap = $target.ns.templateMap;
       var html = '';
 
-      html += self.templateMap.wrapper.begin;
-      html += self.templateMap.paginationInfo.begin;
+      html += templateMap.wrapper.begin;
+      html += templateMap.paginationInfo.begin;
 
-      html += self.templateMap.record
+      html += templateMap.record
         .replace('{totalRecord}', $target.ns.totalRecord);
 
-      html += self.templateMap.slash;
+      html += templateMap.slash;
 
-      html += self.templateMap.page
+      html += templateMap.page
         .replace('{totalPage}', $target.ns.totalPage);
 
-      html += self.templateMap.current.replace('{currentPage}', $target.ns.curPageIndex);
+      html += templateMap.current.replace('{currentPage}', $target.ns.curPageIndex);
 
-      html += self.templateMap.paginationInfo.end;
-      html += self.templateMap.paginationFunction.begin;
+      html += templateMap.paginationInfo.end;
+      html += templateMap.paginationFunction.begin;
 
-      html += self.templateMap.btnFirst
+      html += templateMap.btnFirst
         .replace('{pageIndex}', 1)
         .replace('{disabled}', self.isFirstBtnDisabled($target) ? 'disabled' : '');
 
-      html += self.templateMap.btnPrev
+      html += templateMap.btnPrev
         .replace('{pageIndex}', ($target.ns.curPageIndex - 1 > 0) ? ($target.ns.curPageIndex - 1) : 1)
         .replace('{disabled}', self.isPrevBtnDisabled($target) ? 'disabled' : '');
 
-      html += self.templateMap.btnList.begin;
+      html += templateMap.btnList.begin;
 
       html += self.createBtnListHtml($target);
 
-      html += self.templateMap.btnList.end;
+      html += templateMap.btnList.end;
 
-      html += self.templateMap.btnNext
+      html += templateMap.btnNext
         .replace('{pageIndex}', ($target.ns.curPageIndex + 1) <= $target.ns.totalPage ? ($target.ns.curPageIndex + 1) : $target.ns.totalPage)
         .replace('{disabled}', self.isNextBtnDisabled($target) ? 'disabled' : '');
 
-      html += self.templateMap.btnLast
+      html += templateMap.btnLast
         .replace('{pageIndex}', $target.ns.totalPage)
         .replace('{disabled}', self.isLastBtnDisabled($target) ? 'disabled' : '');
 
-      html += self.templateMap.refresh
+      html += templateMap.refresh
         .replace('{disabled}', self.isRefreshBtnDisabled($target) ? 'disabled' : '');
 
-      html += self.templateMap.select.begin;
+      html += templateMap.select.begin;
 
       for (var j = 0; j < $target.ns.pageSizeList.length; j++) {
-        html += self.templateMap.option
+        html += templateMap.option
           .replace(/\{value\}/g, $target.ns.pageSizeList[j])
           .replace('{isSelected}', $target.ns.pageSizeList[j] === $target.ns.pageSize ? 'selected' : '');
       }
 
-      html += self.templateMap.select.end;
-      html += self.templateMap.input;
-      html += self.templateMap.jump;
-      html += self.templateMap.paginationFunction.end;
-      html += self.templateMap.wrapper.end;
+      html += templateMap.select.end;
+      html += templateMap.input;
+      html += templateMap.jump;
+      html += templateMap.paginationFunction.end;
+      html += templateMap.wrapper.end;
 
       return html;
     },
 
     createBtnListHtml: function ($target) {
       var self = this;
+      var templateMap = $target.ns.templateMap;
       var btnListHtml = '';
       var pageNum;
       var temp;
@@ -135,14 +139,14 @@
       }
 
       if (isShowPrevEllipsis) {
-        btnListHtml += self.templateMap.ellipsis;
+        btnListHtml += templateMap.ellipsis;
       }
 
       for (var i = 0; i < $target.ns.pageBtnCount; i++) {
 
         if (pageNum > 0 && pageNum <= $target.ns.totalPage) {
 
-          btnListHtml += self.templateMap.btn
+          btnListHtml += templateMap.btn
             .replace(/\{pageIndex\}/g, pageNum)
             .replace('{active}', self.isBtnActive($target, pageNum) ? 'active' : '');
           pageNum++;
@@ -150,7 +154,7 @@
       }
 
       if (isShowNextEllipsis) {
-        btnListHtml += self.templateMap.ellipsis;
+        btnListHtml += templateMap.ellipsis;
       }
 
       return btnListHtml;
@@ -224,19 +228,20 @@
 
     initJqueryObject: function ($target) {
       var self = this;
+      var cssPrefix = $target.ns.cssPrefix;
 
       $target.jq = {};
 
-      $target.jq.$currentPage = $target.find('.s-pagination-page-current');
-      $target.jq.$boxBtnList = $target.find('.s-pagination-btn-list');
-      $target.jq.$btnFirst = $target.find('.s-pagination-btn-first');
-      $target.jq.$btnPrev = $target.find('.s-pagination-btn-prev');
-      $target.jq.$btnNext = $target.find('.s-pagination-btn-next');
-      $target.jq.$btnLast = $target.find('.s-pagination-btn-last');
-      $target.jq.$btnRefresh = $target.find('.s-pagination-refresh');
-      $target.jq.$select = $target.find('.s-pagination-select');
-      $target.jq.$input = $target.find('.s-pagination-input');
-      $target.jq.$btnJump = $target.find('.s-pagination-jump');
+      $target.jq.$currentPage = $target.find('.' + cssPrefix + 'pagination-page-current');
+      $target.jq.$boxBtnList = $target.find('.' + cssPrefix + 'pagination-btn-list');
+      $target.jq.$btnFirst = $target.find('.' + cssPrefix + 'pagination-btn-first');
+      $target.jq.$btnPrev = $target.find('.' + cssPrefix + 'pagination-btn-prev');
+      $target.jq.$btnNext = $target.find('.' + cssPrefix + 'pagination-btn-next');
+      $target.jq.$btnLast = $target.find('.' + cssPrefix + 'pagination-btn-last');
+      $target.jq.$btnRefresh = $target.find('.' + cssPrefix + 'pagination-refresh');
+      $target.jq.$select = $target.find('.' + cssPrefix + 'pagination-select');
+      $target.jq.$input = $target.find('.' + cssPrefix + 'pagination-input');
+      $target.jq.$btnJump = $target.find('.' + cssPrefix + 'pagination-jump');
     },
 
     initEvent: function ($target) {
@@ -377,39 +382,39 @@
 
     templateMap: {
       wrapper: {
-        begin: '<div class="s-pagination-wrapper">',
+        begin: '<div class="{cssPrefix}pagination-wrapper">',
         end: '</div>'
       },
       paginationInfo: {
-        begin: '<div class="s-pagination-info">',
+        begin: '<div class="{cssPrefix}pagination-info">',
         end: '</div>'
       },
-      record: '<span class="s-pagination-record">共<span class="s-pagination-record-total">{totalRecord}</span>条记录</span>',
-      slash: '<span class="s-pagination-slash">/</span>',
-      page: '<span class="s-pagination-page">共<span class="s-pagination-page-total">{totalPage}</span>页</span>',
-      current: '<span class="s-pagination-current">（当前第<span class="s-pagination-page-current">{currentPage}</span>页）</span>',
+      record: '<span class="{cssPrefix}pagination-record">共<span class="{cssPrefix}pagination-record-total">{totalRecord}</span>条记录</span>',
+      slash: '<span class="{cssPrefix}pagination-slash">/</span>',
+      page: '<span class="{cssPrefix}pagination-page">共<span class="{cssPrefix}pagination-page-total">{totalPage}</span>页</span>',
+      current: '<span class="{cssPrefix}pagination-current">（当前第<span class="{cssPrefix}pagination-page-current">{currentPage}</span>页）</span>',
       paginationFunction: {
-        begin: '<div class="s-pagination-function">',
+        begin: '<div class="{cssPrefix}pagination-function">',
         end: '</div>'
       },
-      btnFirst: '<a class="s-pagination-btn s-pagination-btn-first {disabled}" data-page-index="{pageIndex}" href="javascript:;"></a>',
-      btnLast: '<a class="s-pagination-btn s-pagination-btn-last {disabled}" data-page-index="{pageIndex}" href="javascript:;"></a>',
-      btnPrev: '<a class="s-pagination-btn s-pagination-btn-prev {disabled}" data-page-index="{pageIndex}" href="javascript:;"></a>',
-      btnNext: '<a class="s-pagination-btn s-pagination-btn-next {disabled}" data-page-index="{pageIndex}" href="javascript:;"></a>',
-      ellipsis: '<span class="s-pagination-ellipsis">&hellip;</span>',
-      refresh: '<a class="s-pagination-refresh {disabled}"></a>',
-      input: '<input class="s-pagination-input" type="text" />',
-      jump: '<a class="s-pagination-jump" href="javascript:;">跳转</a>',
+      btnFirst: '<a class="{cssPrefix}pagination-btn {cssPrefix}pagination-btn-first {disabled}" data-page-index="{pageIndex}" href="javascript:;"></a>',
+      btnLast: '<a class="{cssPrefix}pagination-btn {cssPrefix}pagination-btn-last {disabled}" data-page-index="{pageIndex}" href="javascript:;"></a>',
+      btnPrev: '<a class="{cssPrefix}pagination-btn {cssPrefix}pagination-btn-prev {disabled}" data-page-index="{pageIndex}" href="javascript:;"></a>',
+      btnNext: '<a class="{cssPrefix}pagination-btn {cssPrefix}pagination-btn-next {disabled}" data-page-index="{pageIndex}" href="javascript:;"></a>',
+      ellipsis: '<span class="{cssPrefix}pagination-ellipsis">&hellip;</span>',
+      refresh: '<a class="{cssPrefix}pagination-refresh {disabled}"></a>',
+      input: '<input class="{cssPrefix}pagination-input" type="text" />',
+      jump: '<a class="{cssPrefix}pagination-jump" href="javascript:;">跳转</a>',
       select: {
-        begin: '<select class="s-pagination-select">',
+        begin: '<select class="{cssPrefix}pagination-select">',
         end: '</select>'
       },
       option: '<option value="{value}" {isSelected}>{value}</option>',
       btnList: {
-        begin: '<span class="s-pagination-btn-list">',
+        begin: '<span class="{cssPrefix}pagination-btn-list">',
         end: '</span>'
       },
-      btn: '<a class="s-pagination-btn {active}" data-page-index="{pageIndex}" href="javascript:;">{pageIndex}</a>'
+      btn: '<a class="{cssPrefix}pagination-btn {active}" data-page-index="{pageIndex}" href="javascript:;">{pageIndex}</a>'
     }
   };
 
@@ -433,6 +438,7 @@
   $.fn.pagination.methods = {};
 
   $.fn.pagination.defaults = {
+    cssPrefix: 's-',
     pageSize: 20,
     pageBtnCount: 3,
     total: 0,
