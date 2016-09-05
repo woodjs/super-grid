@@ -60,9 +60,7 @@
     });
   };
 
-  $.fn.query.methods = {
-
-  };
+  $.fn.query.methods = {};
 
   $.fn.query.defaults = {
     url: '',
@@ -73,7 +71,6 @@
     onAjaxBeforeSend: null,
     onAjaxComplete: null,
     onAjaxError: null,
-    onDataLoaded: null,
     onBeforeRender: null,
     onAfterRender: null
   };

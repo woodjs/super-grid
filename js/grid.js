@@ -68,7 +68,7 @@
       self.assignColumns($target, opts);
 
       html += self.templateMap.wrapper.begin
-                .replace(/\{width\}/g, opts.width);
+        .replace(/\{width\}/g, opts.width);
 
       switch (opts.frozenColsAlign) {
         case 'right':
@@ -173,25 +173,25 @@
       }
 
       htmlGridTable += self.templateMap.gridTable.begin
-                        .replace('{frozenAlign}', frozenAlign)
-                        .replace('{width}', self.getGridTableW($target, opts, frozenAlign, beginColIndex, colsW, deltaW) + 'px');
+        .replace('{frozenAlign}', frozenAlign)
+        .replace('{width}', self.getGridTableW($target, opts, frozenAlign, beginColIndex, colsW, deltaW) + 'px');
 
       htmlGridTable += self.templateMap.tableHeader.begin
-                        .replace('{width}', self.getFixedTableHeaderW($target, opts, frozenAlign, beginColIndex, deltaW))
-                        .replace('{theadHeight}', opts.theadHeight)
-                        .replace('{theadLineHeight}', opts.theadHeight);
+        .replace('{width}', self.getFixedTableHeaderW($target, opts, frozenAlign, beginColIndex, deltaW))
+        .replace('{theadHeight}', opts.theadHeight)
+        .replace('{theadLineHeight}', opts.theadHeight);
 
       if (!originalColIndex && opts.withCheckbox) {
         htmlColgroup += self.templateMap.colgroup
-                          .replace('{width}', opts.checkboxWidth);
+          .replace('{width}', opts.checkboxWidth);
 
         htmlGridTable += self.templateMap.tableColumn.begin
-                          .replace('{classList}', self.createColumnClass({isCheckbox: true}))
-                          .replace('{colIndex}', beginColIndex++)
-                          .replace('{index}', 'checkbox')
-                          .replace('{width}', opts.checkboxWidth)
-                          .replace('{theadHeight}', opts.theadHeight)
-                          .replace('{theadLineHeight}', parseInt(opts.theadHeight) - 1 + 'px');
+          .replace('{classList}', self.createColumnClass({isCheckbox: true}))
+          .replace('{colIndex}', beginColIndex++)
+          .replace('{index}', 'checkbox')
+          .replace('{width}', opts.checkboxWidth)
+          .replace('{theadHeight}', opts.theadHeight)
+          .replace('{theadLineHeight}', parseInt(opts.theadHeight) - 1 + 'px');
 
         htmlGridTable += self.templateMap.checkbox;
         htmlGridTable += self.templateMap.tableColumn.end;
@@ -199,36 +199,36 @@
 
       if (!originalColIndex && opts.withRowNumber) {
         htmlColgroup += self.templateMap.colgroup
-                          .replace('{width}', opts.rowNumberWidth);
+          .replace('{width}', opts.rowNumberWidth);
 
         htmlGridTable += self.templateMap.tableColumn.begin
-                          .replace('{classList}', self.createColumnClass({isRowNumber: true}))
-                          .replace('{colIndex}', beginColIndex++)
-                          .replace('{index}', 'checkbox')
-                          .replace('{width}', opts.rowNumberWidth)
-                          .replace('{theadHeight}', opts.theadHeight)
-                          .replace('{theadLineHeight}', parseInt(opts.theadHeight) - 1 + 'px');
+          .replace('{classList}', self.createColumnClass({isRowNumber: true}))
+          .replace('{colIndex}', beginColIndex++)
+          .replace('{index}', 'checkbox')
+          .replace('{width}', opts.rowNumberWidth)
+          .replace('{theadHeight}', opts.theadHeight)
+          .replace('{theadLineHeight}', parseInt(opts.theadHeight) - 1 + 'px');
 
         htmlGridTable += self.templateMap.gridText
-                          .replace('{title}', '序号');
+          .replace('{title}', '序号');
         htmlGridTable += self.templateMap.tableColumn.end;
       }
 
       for (var i = 0; i < len; i++) {
         temp = cols[i];
         htmlColgroup += self.templateMap.colgroup
-                          .replace('{width}', temp.width);
+          .replace('{width}', temp.width);
 
         htmlGridTable += self.templateMap.tableColumn.begin
-                          .replace('{classList}', self.createColumnClass(temp))
-                          .replace('{colIndex}', beginColIndex++)
-                          .replace('{index}', temp.index)
-                          .replace('{width}', temp.width)
-                          .replace('{theadHeight}', opts.theadHeight)
-                          .replace('{theadLineHeight}', parseInt(opts.theadHeight) - 1 + 'px');
+          .replace('{classList}', self.createColumnClass(temp))
+          .replace('{colIndex}', beginColIndex++)
+          .replace('{index}', temp.index)
+          .replace('{width}', temp.width)
+          .replace('{theadHeight}', opts.theadHeight)
+          .replace('{theadLineHeight}', parseInt(opts.theadHeight) - 1 + 'px');
 
         htmlGridTable += self.templateMap.gridText
-                          .replace('{title}', temp.title);
+          .replace('{title}', temp.title);
 
         if (temp.resizeable) {
           htmlGridTable += self.templateMap.dragQuarantine;
@@ -239,7 +239,7 @@
       htmlGridTable += self.getTableWrapperBeginHtml($target, opts, frozenAlign);
       htmlGridTable += htmlColgroup;
       htmlGridTable += self.templateMap.tbody.begin
-                        .replace('{id}', tbodyId);
+        .replace('{id}', tbodyId);
 
       if (opts.localData) {
         $target.ns.store = opts.localData;
@@ -318,9 +318,9 @@
       }
 
       return self.templateMap.tableWrapper.begin
-              .replace(/\{width\}/g, width + 'px')
-              .replace(/\{height\}/g, height + 'px')
-              .replace('{overflowMode}', overflowMode);
+        .replace(/\{width\}/g, width + 'px')
+        .replace(/\{height\}/g, height + 'px')
+        .replace('{overflowMode}', overflowMode);
     },
 
     loadData: function ($target, opts, frozenAlign, beginColIndex, tbodyId) {
@@ -376,32 +376,33 @@
 
       for (var i = 0; i < listLen; i++) {
         htmlTbody += self.templateMap.tr.begin
-                      .replace('{rowIndex}', i);
+          .replace('{rowIndex}', i);
 
         if (self.isGridTableNeed($target, opts, frozenAlign)) {
           if (opts.withCheckbox) htmlTbody += self.templateMap.tdCheckbox
-                                                .replace('{trHeight}', opts.trHeight)
-                                                .replace('{trLineHeight}', parseInt(opts.trHeight) - 1 + 'px');
+            .replace('{trHeight}', opts.trHeight)
+            .replace('{trLineHeight}', parseInt(opts.trHeight) - 1 + 'px');
 
           if (opts.withRowNumber) htmlTbody += self.templateMap.tdRowNumber
-                                                .replace('{trHeight}', opts.trHeight)
-                                                .replace('{trLineHeight}', parseInt(opts.trHeight) - 1 + 'px')
-                                                .replace('{number}', i + 1);
+            .replace('{trHeight}', opts.trHeight)
+            .replace('{trLineHeight}', parseInt(opts.trHeight) - 1 + 'px')
+            .replace('{number}', i + 1);
         }
 
         for (var j = 0; j < colsLen; j++) {
           tempCol = cols[j];
           index = tempCol['index'];
           if (tempCol['renderer'] && typeof tempCol['renderer'] === 'function') {
-            temp  = tempCol['renderer'].apply(null, [list[i][index], list[i], list]);
+            temp = tempCol['renderer'].apply(null, [list[i][index], list[i], list]);
           } else {
             temp = list[i][index];
           }
 
           htmlTbody += self.templateMap.td
-                        .replace('{trHeight}', opts.trHeight)
-                        .replace('{trLineHeight}', parseInt(opts.trHeight) - 1 + 'px')
-                        .replace('{content}', temp);
+            .replace('{className}', tempCol.className ? 'class="' + tempCol['className'] + '"' : '')
+            .replace('{trHeight}', opts.trHeight)
+            .replace('{trLineHeight}', parseInt(opts.trHeight) - 1 + 'px')
+            .replace('{content}', temp);
         }
         htmlTbody += self.templateMap.tr.end;
       }
@@ -694,7 +695,7 @@
         begin: '<tr data-row-index="{rowIndex}">',
         end: '</tr>'
       },
-      td: '<td style="height:{trHeight};line-height:{trLineHeight};">{content}</td>',
+      td: '<td {className} style="height:{trHeight};line-height:{trLineHeight};">{content}</td>',
       tdCheckbox: '<td class="s-grid-checkbox" style="height:{trHeight};line-height:{trLineHeight};"><span class="s-grid-check-wrapper"><span class="s-grid-check"></span></span></td>',
       tdRowNumber: '<td class="s-grid-rownumber" style="height:{trHeight};line-height:{trLineHeight};">{number}</td>'
     }
@@ -758,7 +759,8 @@
   };
 
   $.fn.grid.methods = {
-    getRecord: function () {}
+    getRecord: function () {
+    }
   };
 
   $.fn.grid.defaults = {
