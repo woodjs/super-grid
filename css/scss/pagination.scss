@@ -86,6 +86,7 @@
    padding:0 10px;
    margin-left:10px;
    @include setHeightGroup(26px);
+   @include transition(all 0.3s ease-in-out);
   }
   .s-pagination-btn-first{
    width:26px;

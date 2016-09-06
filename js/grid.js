@@ -47,6 +47,7 @@
       $target.ns.unFrozenColsWrapperW = 0;
       $target.ns.store = null;
       $target.ns.templateMap = $.parseJSON(JSON.stringify(self.templateMap).replace(/\{cssPrefix\}/g, $target.ns.cssPrefix));
+      $target.ns.multiSelect = opts.multiSelect;
     },
 
     render: function ($target) {
@@ -198,7 +199,10 @@
           .replace('{theadHeight}', opts.theadHeight)
           .replace('{theadLineHeight}', parseInt(opts.theadHeight) - 1 + 'px');
 
-        htmlGridTable += templateMap.checkbox;
+        if (opts.multiSelect) {
+          htmlGridTable += templateMap.checkbox;
+        }
+
         htmlGridTable += templateMap.tableColumn.end;
       }
 
@@ -437,6 +441,7 @@
       $target.jq.$cols = $target.find('colgroup');
       $target.jq.$rows = $target.find('tr');
       $target.jq.$headerCols = $target.find('.' + cssPrefix + 'table-column');
+      $target.jq.$headerColsText = $target.find('.' + cssPrefix + 'table-column .s-grid-text');
       $target.jq.$btnSelectAll = $target.find('.' + cssPrefix + 'table-header .' + cssPrefix + 'grid-check-wrapper');
     },
 
@@ -526,9 +531,11 @@
           var $this = $(this);
           var rowIndex = $this.data('row-index');
           var len = $target.jq.$rows.length;
+          var count = 0;
           var $temp;
 
           if ($this.is('.' + cssPrefix + 'grid-row-selected')) {
+
             $target.jq.$btnSelectAll.removeClass(cssPrefix + 'grid-row-selected');
 
             for (var i = 0; i < len; i++) {
@@ -538,8 +545,29 @@
             return;
           }
 
-          for (var j = 0; j < len; j++) {
-            $temp = $($target.jq.$rows[j]);
+          if ($target.ns.multiSelect) {
+            for (var j = 0; j < len; j++) {
+              $temp = $($target.jq.$rows[j]);
+
+              if ($temp.is('tr[data-row-index="' + rowIndex + '"]')) {
+                $temp.addClass(cssPrefix + 'grid-row-selected');
+                count++;
+              } else if ($temp.is('.' + cssPrefix + 'grid-row-selected')) {
+                count++;
+              }
+            }
+
+            if (count === len) {
+              $target.jq.$btnSelectAll.addClass(cssPrefix + 'grid-row-selected');
+            } else {
+              $target.jq.$btnSelectAll.removeClass(cssPrefix + 'grid-row-selected');
+            }
+
+            return;
+          }
+
+          for (var k = 0; k < len; k++) {
+            $temp = $($target.jq.$rows[k]);
 
             $temp.is('tr[data-row-index="' + rowIndex + '"]') ? $temp.addClass(cssPrefix + 'grid-row-selected') : $temp.removeClass(cssPrefix + 'grid-row-selected');
           }
@@ -572,27 +600,27 @@
         }
       });
 
-      $target.jq.$headerCols.on({
+      $target.jq.$headerColsText.on({
         'click': function () {
-          var $this = $(this);
+          var $curCol = $(this).closest('.s-table-column');
           var len = $target.jq.$headerCols.length;
           var $temp = null;
 
           for (var i = 0; i < len; i++) {
 
-            if ($target.jq.$headerCols[i] !== this) {
+            if ($target.jq.$headerCols[i] !== $curCol[0]) {
               $temp = $($target.jq.$headerCols[i]);
               $temp.removeClass(cssPrefix + 'grid-sort-asc').removeClass(cssPrefix + 'grid-sort-desc');
             }
           }
 
-          if ($this.hasClass(cssPrefix + 'grid-sort-asc')) {
-            $this.removeClass(cssPrefix + 'grid-sort-asc').addClass(cssPrefix + 'grid-sort-desc');
-          } else if ($this.hasClass(cssPrefix + 'grid-sort-desc')) {
-            $this.removeClass(cssPrefix + 'grid-sort-desc');
+          if ($curCol.hasClass(cssPrefix + 'grid-sort-asc')) {
+            $curCol.removeClass(cssPrefix + 'grid-sort-asc').addClass(cssPrefix + 'grid-sort-desc');
+          } else if ($curCol.hasClass(cssPrefix + 'grid-sort-desc')) {
+            $curCol.removeClass(cssPrefix + 'grid-sort-desc');
           } else {
-            if ($this.is(':not(.' + cssPrefix + 'grid-disable-sort)')) {
-              $this.addClass(cssPrefix + 'grid-sort-asc');
+            if ($curCol.is(':not(.' + cssPrefix + 'grid-disable-sort)')) {
+              $curCol.addClass(cssPrefix + 'grid-sort-asc');
             }
           }
         }
@@ -622,11 +650,12 @@
         var mousePosition = util.getEventPosition(e);
         var $gridWrapper = $target.jq.$curDragTarget.closest('.' + cssPrefix + 'grid-wrapper');
         var gridWrapperW = $gridWrapper.outerWidth();
+        var gridWrapperLeft = $gridWrapper.offset().left;
 
         util.clearDocumentSelection();
 
         if (curDragTargetW + mousePosition.x - $target.ns.originPointX >= minColumnW) {
-          if (mousePosition.x < $gridWrapper.offset().left + gridWrapperW - self.scrollbarWidth) {
+          if (mousePosition.x < gridWrapperLeft + gridWrapperW - self.scrollbarWidth && mousePosition.x > gridWrapperLeft) {
             $target.ns.divDragLine.style.opacity = 1;
           } else {
             $target.ns.divDragLine.style.opacity = 0;
@@ -784,7 +813,7 @@
     checkboxWidth: '26px',
     withRowNumber: true,
     rowNumberWidth: '44px',
-    multiSelect: false,
+    multiSelect: true,
     frozenColsAlign: '',  // 'left' | 'right' | 'left-right'
     theadHeight: '24px',
     trHeight: '24px',
