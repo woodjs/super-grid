@@ -6,7 +6,7 @@
  width:100%;
  font-family: 'Microsoft Yahei', Arial, STHeiti, sans-serif;
  font-size:12px;
- color:#333;
+ color:$paginationFontColor;
  @include setHeightGroup(26px);
  @include boxSizing(border-box);
  a{

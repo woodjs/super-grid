@@ -33,6 +33,32 @@ input, textarea, select, a {
   border: 1px solid #e4e4e4;
   overflow: hidden;
 }
+.s-grid-wrapper-outer .s-grid-loading-mask {
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #ddd;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
+  -moz-opacity: 0.5;
+  -khtml-opacity: 0.5;
+  filter: alpha(opacity=50);
+  opacity: 0.5;
+  position: absolute;
+  z-index: 100;
+  display: none;
+}
+.s-grid-wrapper-outer .s-grid-loading-mask .s-grid-loading {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 150;
+  width: 31px;
+  height: 31px;
+  margin-top: -16px;
+  margin-left: -16px;
+  background: url(../images/grid/loading.gif) center center no-repeat;
+}
 
 .s-grid-wrapper {
   width: 100%;
@@ -194,10 +220,6 @@ input, textarea, select, a {
 
 .s-grid-drag-line {
   background: #999 !important;
-}
-
-tbody a {
-  color: #b00;
 }
 
 /*# sourceMappingURL=gird.css.map */

@@ -75,6 +75,9 @@
       html += templateMap.wrapper.begin
         .replace(/\{width\}/g, opts.width);
 
+      html += templateMap.loading
+        .replace('{top}', opts.theadHeight);
+
       switch (opts.frozenColsAlign) {
         case 'right':
           htmlUnfrozenPart = self.createGridTableHtml($target, opts, '', 0);
@@ -337,6 +340,8 @@
     loadData: function ($target, opts, frozenAlign, beginColIndex, tbodyId) {
       var self = this;
 
+      $target.jq.$loading.show();
+
       if (opts.url) {
         $.ajax({
           url: opts.url,
@@ -348,6 +353,7 @@
           error: opts.onAjaxError,
           success: function (result) {
             self.renderTbody($target, opts, frozenAlign, beginColIndex, tbodyId, result);
+            $target.jq.$loading.hide();
           }
         });
       }
@@ -443,6 +449,7 @@
       $target.jq.$headerCols = $target.find('.' + cssPrefix + 'table-column');
       $target.jq.$headerColsText = $target.find('.' + cssPrefix + 'table-column .s-grid-text');
       $target.jq.$btnSelectAll = $target.find('.' + cssPrefix + 'table-header .' + cssPrefix + 'grid-check-wrapper');
+      $target.jq.$loading = $target.find('.' + cssPrefix + 'grid-loading-mask');
     },
 
     initEvent: function ($target) {
@@ -738,7 +745,8 @@
       },
       td: '<td {className} style="height:{trHeight};line-height:{trLineHeight};">{content}</td>',
       tdCheckbox: '<td class="{cssPrefix}grid-checkbox" style="height:{trHeight};line-height:{trLineHeight};"><span class="{cssPrefix}grid-check-wrapper"><span class="{cssPrefix}grid-check"></span></span></td>',
-      tdRowNumber: '<td class="{cssPrefix}grid-rownumber" style="height:{trHeight};line-height:{trLineHeight};">{number}</td>'
+      tdRowNumber: '<td class="{cssPrefix}grid-rownumber" style="height:{trHeight};line-height:{trLineHeight};">{number}</td>',
+      loading: '<div class="{cssPrefix}grid-loading-mask" style="top:{top};"><span class="{cssPrefix}grid-loading"></span></div>'
     }
   };
 

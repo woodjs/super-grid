@@ -22,8 +22,11 @@
 }
 
 @mixin opacity($prop) {
- opacity: $prop;
+ -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=#{$prop * 100})";  // ie8
+ -moz-opacity: $prop;  // netscape
+ -khtml-opacity: $prop;  // safari 1.x
  filter: alpha(opacity = $prop * 100 );
+ opacity: $prop;
 }
 
 @mixin transition($prop...) { // ie10+

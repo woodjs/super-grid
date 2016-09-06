@@ -1,14 +1,11 @@
-$fontColor: #333;
-$lighterFontColor: #666;
-$lightestFontColor: #999;
-$bgColor: #e3e3e3;
-$bdColor: #e4e4e4;
-$lighterBdColor: #eee;
-$themeColor: #088BEE;
+$gridFontColor: #444;
+$gridBgColor: #ddd;
+$gridBdColor: #e4e4e4;
 $gridHoverColor:#e1eff8;
 $gridActiveColor:#fff5cc;
+$gridDragLineBgColor: #999;
+
+$paginationFontColor: #333;
 $paginationThemeColor: #d1291a;
 $paginationBgColor: #eff0f1;
 $paginationBdColor: #e7e7e7;
-$lighterThemeColor: lighten($themeColor, 8%);
-$darkerThemeColor: darken($themeColor, 8%);
