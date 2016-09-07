@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="keywords" content="">
+  <meta name="description" content="">
+  <title>demo</title>
+  <link rel="stylesheet" type="text/css" href="css/component/gird.css">
+  <link rel="stylesheet" type="text/css" href="css/component/pagination.css">
+  <style type="text/css">
+    .demo-grid {
+      width: 770px;
+      margin: 50px auto 0;
+    }
+    tbody a {
+      color: #b00;
+    }
+    .demo-pagination {
+      width: 770px;
+      margin: 10px auto 0;
+    }
+  </style>
+</head>
+<body>
+
+<div class="demo-grid" id="grid-1"></div>
+<div class="demo-pagination" id="pagination-1"></div>
+
+<script type="text/javascript" src="js/lib/jquery-1.11.3.min.js"></script>
+<script type="text/javascript" src="js/grid.js"></script>
+<script type="text/javascript" src="js/pagination.js"></script>
+<script type="text/javascript">
+
+  $(function () {
+    var pagination = $('#pagination-1').pagination({
+      pageSize: 20,
+      pageBtnCount: 3,
+      curPageIndex: 1,
+      pageSizeList: [5, 10, 15, 20]
+    });
+    console.log(pagination);
+
+    $('#grid-1').grid({
+      width: '770px',
+      height: '244px',
+      url: './data.json',
+      plugins: {
+        pagination: pagination
+      },
+      columns: [{
+        title: '测试1',
+        index: 'a1',
+        width: '100px',
+        sortable: true,
+        resizeable: true,
+        renderer: function (value, record, store) {
+          return '<a class="custom-a" href="http://www.baidu.com" target="_blank">' + value + '</a>';
+        }
+      }, {
+        title: '测试2',
+        index: 'b1',
+        width: '100px',
+        sortable: true,
+        resizeable: true
+      }, {
+        title: '测试3',
+        index: 'c1',
+        width: '100px',
+        sortable: true,
+        resizeable: true
+      }, {
+        title: '测试4',
+        index: 'd1',
+        width: '100px',
+        sortable: true,
+        resizeable: true
+      }, {
+        title: '测试5',
+        index: 'e1',
+        width: '100px',
+        sortable: true,
+        resizeable: true
+      }, {
+        title: '测试6',
+        index: 'f1',
+        width: '100px',
+        sortable: true,
+        resizeable: true
+      }, {
+        title: '测试7',
+        index: 'g1',
+        width: '100px',
+        sortable: true,
+        resizeable: true
+      }, {
+        title: '测试8',
+        index: 'h1',
+        width: '100px',
+        sortable: true,
+        resizeable: true
+      }]
+    });
+  });
+</script>
+</body>
+</html>

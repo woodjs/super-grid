@@ -43,9 +43,9 @@
     }
   };
 
-  $.fn.query = function (options, param) {
+  $.fn.query = function (options, params) {
     if (typeof options == 'string') {
-      return $.fn.query.methods[options](this, param);
+      return $.fn.query.methods[options]($(this), params);
     }
 
     options = options || {};

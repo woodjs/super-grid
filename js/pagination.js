@@ -20,6 +20,8 @@
 
       self.initGlobalScope($target);
       self.render($target);
+
+      return $target;
     },
 
     initGlobalScope: function ($target) {
@@ -301,6 +303,10 @@
           $target.ns.totalPage = Math.floor($target.ns.totalRecord / $target.ns.pageSize) + ($target.ns.totalRecord % $target.ns.pageSize > 0 ? 1 : 0);
 
           self.render($target);
+          $target.triggerHandler('changePage', {
+            page: $target.ns.curPageIndex,
+            size: $target.ns.pageSize
+          });
         }
       });
 
@@ -360,6 +366,8 @@
         $target.jq.$boxBtnList.html(self.createBtnListHtml($target));
         self.updatePagination($target);
       }
+
+      $target.triggerHandler('changePage', params)
     },
 
     getParams: function ($target) {
@@ -418,9 +426,9 @@
     }
   };
 
-  $.fn.pagination = function (options, param) {
+  $.fn.pagination = function (options, params) {
     if (typeof options == 'string') {
-      return $.fn.pagination.methods[options](this, param);
+      return $.fn.pagination.methods[options]($(this), params);
     }
 
     options = options || {};
@@ -431,11 +439,16 @@
         options: $.extend(true, {}, $.fn.pagination.defaults, options)
       });
 
-      pagination.init($(this));
+      return pagination.init($(this));
     });
   };
 
-  $.fn.pagination.methods = {};
+  $.fn.pagination.methods = {
+    update: function ($target, params) {
+
+      pagination.goto($target, params);
+    }
+  };
 
   $.fn.pagination.defaults = {
     cssPrefix: 's-',
