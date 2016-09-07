@@ -443,7 +443,7 @@
 
       if (!len) return '';
 
-      tbodyId = target.ns.id + '-' + target.ns.tbodyIdList.length;
+      tbodyId = target.ns.cssPrefix + 'grid-tbody-' + target.ns.id + '-' + target.ns.tbodyIdList.length;
       target.ns.tbodyIdList.push(tbodyId);
 
       if (originalColIndex) {
@@ -651,7 +651,6 @@
     renderTbody: function (target, opts, result) {
       var self = this;
       var $target = $(target);
-      var cssPrefix = target.ns.cssPrefix;
       var htmlList;
       var temp;
 
@@ -661,7 +660,7 @@
 
       for (var i = 0; i < target.ns.tbodyIdList.length; i++) {
         temp = target.ns.tbodyIdList[i];
-        $target.find('#' + cssPrefix + 'grid-tbody-' + temp).html(htmlList[i]);
+        $target.find('#' + temp).html(htmlList[i]);
       }
     },
 
@@ -836,7 +835,7 @@
       },
       colgroup: '<colgroup><col style="width:{width};"/></colgroup>',
       tbody: {
-        begin: '<tbody id="{cssPrefix}grid-tbody-{id}">',
+        begin: '<tbody id="{id}">',
         end: '</tbody>'
       },
       tr: {
