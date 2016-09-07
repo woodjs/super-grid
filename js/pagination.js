@@ -122,6 +122,8 @@
       var isShowPrevEllipsis;
       var isShowNextEllipsis;
 
+      target.ns.totalPage = Math.floor(target.ns.totalRecord / target.ns.pageSize) + (target.ns.totalRecord % target.ns.pageSize > 0 ? 1 : 0);
+
       if (target.ns.curPageIndex <= 0) target.ns.curPageIndex = 1;
       if (target.ns.curPageIndex > target.ns.totalPage) target.ns.curPageIndex = target.ns.totalPage;
 
@@ -339,7 +341,7 @@
       };
     },
 
-    goto: function (target, pageInfo) {
+    goto: function (target, pageInfo, isNotTriggerChangePage) {
       var self = this;
       var $target = $(target);
       var opts = $target.data('pagination').options;
@@ -350,15 +352,20 @@
         size: target.ns.pageSize
       };
 
+      $.extend(true, target.ns, params);
+
       if (opts.url) {
         $.ajax({
           url: opts.url,
           type: opts.method,
           cache: opts.cache,
           timeout: opts.timeout,
+          params: params,
           beforeSend: opts.onAjaxBeforeSend,
           complete: opts.onAjaxComplete,
-          error: opts.onAjaxError,
+          error: function (err) {
+            opts.onAjaxError && opts.onAjaxError.apply(null, err);
+          },
           success: function (result) {
             target.jq.$boxBtnList.html(self.createBtnListHtml(target));
             self.updatePagination(target);
@@ -366,11 +373,15 @@
           }
         });
       } else {
+        if (isNotTriggerChangePage) {
+          self.render(target);
+          return;
+        }
         target.jq.$boxBtnList.html(self.createBtnListHtml(target));
         self.updatePagination(target);
       }
 
-      $target.triggerHandler('changePage', params)
+      if (!isNotTriggerChangePage) $target.triggerHandler('changePage', params);
     },
 
     getParams: function (target) {
@@ -447,9 +458,13 @@
   };
 
   $.fn.pagination.methods = {
-    update: function (target, params) {
+    update: function ($target, params) {
+      var pageInfo = {
+        curPageIndex: parseInt(params.page) || 1,
+        totalRecord: parseInt(params.total) || 0
+      };
 
-      pagination.goto(target, params);
+      pagination.goto($target[0], pageInfo, true);
     }
   };
 

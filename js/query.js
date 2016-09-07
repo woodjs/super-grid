@@ -15,29 +15,29 @@
 
   var query = {
 
-    init: function ($target) {
+    init: function (target) {
       var self = this;
 
-      self.initGlobalScope($target);
-      self.render($target);
+      self.initGlobalScope(target);
+      self.render(target);
     },
 
-    initGlobalScope: function ($target) {
-      var self = this;
-
-    },
-
-    render: function ($target) {
+    initGlobalScope: function (target) {
       var self = this;
 
     },
 
-    initJqueryObject: function ($target) {
+    render: function (target) {
       var self = this;
 
     },
 
-    initEvent: function ($target) {
+    initJqueryObject: function (target) {
+      var self = this;
+
+    },
+
+    initEvent: function (target) {
       var self = this;
 
     }

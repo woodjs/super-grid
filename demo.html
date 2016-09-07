@@ -13,9 +13,11 @@
       width: 770px;
       margin: 50px auto 0;
     }
+
     tbody a {
       color: #b00;
     }
+
     .demo-pagination {
       width: 770px;
       margin: 10px auto 0;
@@ -33,19 +35,18 @@
 <script type="text/javascript">
 
   $(function () {
-    var pagination = $('#pagination-1').pagination({
-      pageSize: 20,
-      pageBtnCount: 3,
-      curPageIndex: 1,
-      pageSizeList: [5, 10, 15, 20]
-    });
 
     $('#grid-1').grid({
       width: '770px',
       height: '244px',
       url: './data.json',
       plugins: {
-        pagination: pagination
+        pagination: $('#pagination-1').pagination({
+          pageSize: 20,
+          pageBtnCount: 3,
+          curPageIndex: 1,
+          pageSizeList: [5, 10, 15, 20]
+        })
       },
       columns: [{
         title: '测试1',

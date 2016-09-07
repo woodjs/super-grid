@@ -147,9 +147,9 @@
    cursor: pointer;
    vertical-align: top;
    margin-left:10px;
-   background: url(../images/pagination/refresh.gif) center center no-repeat;
+   background: url(../images/pagination/refresh.png) center center no-repeat;
    &.disabled{
-    background: $paginationBgColor url(../images/pagination/refresh_disabled.gif) center center no-repeat;
+    background: $paginationBgColor url(../images/pagination/refresh.png) center center no-repeat;
    }
   }
  }
