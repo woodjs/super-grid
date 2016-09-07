@@ -8,7 +8,7 @@
   <title>pagination</title>
   <link rel="stylesheet" type="text/css" href="css/component/pagination.css">
   <style type="text/css">
-    .demo-pagination{
+    .demo-pagination {
       width: 770px;
       margin: 10px auto 0;
     }
@@ -28,7 +28,20 @@
       pageBtnCount: 3,
       total: 304,
       curPageIndex: 1,
-      pageSizeList: [5, 10, 15, 20]
+      withRefresh: true,
+      pageSizeList: [5, 10, 15, 20],
+      onBeforeRender: function () {
+        console.log('beforeRender');
+      },
+      onAfterRender: function () {
+        console.log('afterRender');
+      },
+      onBeforeChangePage: function () {
+        console.log('beforeChangePage');
+      },
+      onAfterChangePage: function () {
+        console.log('afterChangePage');
+      }
     });
   });
 </script>

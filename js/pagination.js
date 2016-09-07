@@ -34,7 +34,7 @@
       target.ns.pageBtnCount = parseInt(opts.pageBtnCount);
       target.ns.totalRecord = parseInt(opts.total);
       target.ns.curPageIndex = parseInt(opts.curPageIndex);
-      target.ns.totalPage = Math.floor(target.ns.totalRecord / target.ns.pageSize) + (target.ns.totalRecord % target.ns.pageSize > 0 ? 1 : 0);
+      target.ns.totalPage = 0;
       target.ns.pageSizeList = opts.pageSizeList;
       target.ns.templateMap = $.parseJSON(JSON.stringify(self.templateMap).replace(/\{cssPrefix\}/g, target.ns.cssPrefix));
     },
@@ -42,18 +42,26 @@
     render: function (target) {
       var self = this;
       var $target = $(target);
+      var opts = $(target).data('pagination').options;
       var html = self.createPaginationHtml(target);
+
+      opts.onBeforeRender && opts.onBeforeRender.call(null, target);
 
       $target.html(html);
 
       self.initJqueryObject(target);
       self.initEvent(target);
+
+      opts.onAfterRender && opts.onAfterRender.call(null, target);
     },
 
     createPaginationHtml: function (target) {
       var self = this;
       var templateMap = target.ns.templateMap;
+      var opts = $(target).data('pagination').options;
       var html = '';
+
+      target.ns.totalPage = Math.floor(target.ns.totalRecord / target.ns.pageSize) + (target.ns.totalRecord % target.ns.pageSize > 0 ? 1 : 0);
 
       html += templateMap.wrapper.begin;
       html += templateMap.paginationInfo.begin;
@@ -93,18 +101,18 @@
         .replace('{pageIndex}', target.ns.totalPage)
         .replace('{disabled}', self.isLastBtnDisabled(target) ? 'disabled' : '');
 
-      html += templateMap.refresh
-        .replace('{disabled}', self.isRefreshBtnDisabled(target) ? 'disabled' : '');
+      if (opts.withRefresh) html += templateMap.refresh;
 
-      html += templateMap.select.begin;
-
-      for (var j = 0; j < target.ns.pageSizeList.length; j++) {
-        html += templateMap.option
-          .replace(/\{value\}/g, target.ns.pageSizeList[j])
-          .replace('{isSelected}', target.ns.pageSizeList[j] === target.ns.pageSize ? 'selected' : '');
+      if (opts.withSelect) {
+        html += templateMap.select.begin;
+        for (var j = 0; j < target.ns.pageSizeList.length; j++) {
+          html += templateMap.option
+            .replace(/\{value\}/g, target.ns.pageSizeList[j])
+            .replace('{isSelected}', target.ns.pageSizeList[j] === target.ns.pageSize ? 'selected' : '');
+        }
+        html += templateMap.select.end;
       }
 
-      html += templateMap.select.end;
       html += templateMap.input;
       html += templateMap.jump;
       html += templateMap.paginationFunction.end;
@@ -121,8 +129,6 @@
       var temp;
       var isShowPrevEllipsis;
       var isShowNextEllipsis;
-
-      target.ns.totalPage = Math.floor(target.ns.totalRecord / target.ns.pageSize) + (target.ns.totalRecord % target.ns.pageSize > 0 ? 1 : 0);
 
       if (target.ns.curPageIndex <= 0) target.ns.curPageIndex = 1;
       if (target.ns.curPageIndex > target.ns.totalPage) target.ns.curPageIndex = target.ns.totalPage;
@@ -220,10 +226,6 @@
       return target.ns.curPageIndex < target.ns.totalPage ? false : true;
     },
 
-    isRefreshBtnDisabled: function (target) {
-      var self = this;
-    },
-
     isBtnActive: function (target, pageIndex) {
       var self = this;
 
@@ -283,6 +285,8 @@
         'click': function (e) {
           var $elem = $(e.target);
           var index = $elem.data('page-index');
+
+          if (!index) return;
 
           target.ns.curPageIndex = index;
 
@@ -354,6 +358,7 @@
 
       $.extend(true, target.ns, params);
 
+      opts.onBeforeChangePage && opts.onBeforeChangePage.call(null, target);
       if (opts.url) {
         $.ajax({
           url: opts.url,
@@ -369,7 +374,7 @@
           success: function (result) {
             target.jq.$boxBtnList.html(self.createBtnListHtml(target));
             self.updatePagination(target);
-            opts.onDataLoaded && opts.onDataLoaded.apply(null, [result]);
+            opts.onAjaxSuccess && opts.onAjaxSuccess.apply(null, [result]);
           }
         });
       } else {
@@ -382,6 +387,7 @@
       }
 
       if (!isNotTriggerChangePage) $target.triggerHandler('changePage', params);
+      opts.onAfterChangePage && opts.onAfterChangePage.call(null, target);
     },
 
     getParams: function (target) {
@@ -424,7 +430,7 @@
       btnPrev: '<a class="{cssPrefix}pagination-btn {cssPrefix}pagination-btn-prev {disabled}" data-page-index="{pageIndex}" href="javascript:;"></a>',
       btnNext: '<a class="{cssPrefix}pagination-btn {cssPrefix}pagination-btn-next {disabled}" data-page-index="{pageIndex}" href="javascript:;"></a>',
       ellipsis: '<span class="{cssPrefix}pagination-ellipsis">&hellip;</span>',
-      refresh: '<a class="{cssPrefix}pagination-refresh {disabled}"></a>',
+      refresh: '<a class="{cssPrefix}pagination-refresh"></a>',
       input: '<input class="{cssPrefix}pagination-input" type="text" />',
       jump: '<a class="{cssPrefix}pagination-jump" href="javascript:;">跳转</a>',
       select: {
@@ -475,6 +481,8 @@
     total: 0,
     curPageIndex: 1,
     pageSizeList: [5, 10, 15, 20],
+    withRefresh: false,
+    withSelect: true,
     url: '',
     method: 'GET',
     cache: false,
@@ -483,7 +491,7 @@
     onAjaxBeforeSend: null,
     onAjaxComplete: null,
     onAjaxError: null,
-    onDataLoaded: null,
+    onAjaxSuccess: null,
     onBeforeRender: null,
     onAfterRender: null,
     onBeforeChangePage: null,

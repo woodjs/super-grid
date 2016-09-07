@@ -60,7 +60,11 @@
       var opts = $target.data('grid').options;
       var html = self.createShellHtml(target, opts);
 
-      return $target.html(html);
+      opts.onBeforeRender && opts.onBeforeRender.call(null, target);
+
+      $target.html(html);
+
+      opts.onAfterRender && opts.onAfterRender.call(null, target);
     },
 
 
@@ -83,6 +87,7 @@
     initEvent: function (target) {
       var self = this;
       var $target = $(target);
+      var opts = $target.data('grid').options;
       var cssPrefix = target.ns.cssPrefix;
 
       $target.find('.' + cssPrefix + 'table-wrapper').on({
@@ -183,6 +188,8 @@
           var len = target.jq.$headerCols.length;
           var $temp = null;
 
+          opts.onBeforeSort && opts.onBeforeSort.call(null, this);
+
           for (var i = 0; i < len; i++) {
 
             if (target.jq.$headerCols[i] !== $curCol[0]) {
@@ -202,6 +209,8 @@
           }
 
           self.loadData(target);
+
+          opts.onAfterSort && opts.onAfterSort.call(null, this);
         }
       });
 
@@ -210,6 +219,7 @@
 
     initRowEvent: function (target) {
       var cssPrefix = target.ns.cssPrefix;
+      var opts = $(target).data('grid').options;
 
       target.jq.$rows.on({
         'mouseenter': function (e) {
@@ -229,6 +239,8 @@
           var len = target.jq.$rows.length;
           var count = 0;
           var $temp;
+
+          opts.onClickRow && opts.onClickRow.call(null, this);
 
           if ($this.is('.' + cssPrefix + 'grid-row-selected')) {
 
@@ -629,9 +641,10 @@
               var pagination = target.plugins.pagination;
 
               pagination && pagination.pagination && pagination.pagination('update', result);
+              opts.onAjaxSuccess && opts.onAjaxSuccess.apply(null, [result]);
             }
           });
-        }, 1000)
+        }, 1000);
       }
     },
 
@@ -926,7 +939,11 @@
     onAjaxBeforeSend: null,
     onAjaxComplete: null,
     onAjaxError: null,
+    onAjaxSuccess: null,
     onBeforeRender: null,
-    onAfterRender: null
+    onAfterRender: null,
+    onClickRow: null,
+    onBeforeSort: null,
+    onAfterSort: null
   };
 });
