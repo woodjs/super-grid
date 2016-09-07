@@ -15,93 +15,93 @@
 
   var pagination = {
 
-    init: function ($target) {
+    init: function (target) {
       var self = this;
 
-      self.initGlobalScope($target);
-      self.render($target);
-
-      return $target;
+      self.initGlobalScope(target);
+      self.render(target);
     },
 
-    initGlobalScope: function ($target) {
+    initGlobalScope: function (target) {
       var self = this;
+      var $target = $(target);
       var opts = $target.data('pagination').options;
 
-      $target.ns = {};
+      target.ns = {};
 
-      $target.ns.cssPrefix = $.trim(opts.cssPrefix);
-      $target.ns.pageSize = parseInt(opts.pageSize);
-      $target.ns.pageBtnCount = parseInt(opts.pageBtnCount);
-      $target.ns.totalRecord = parseInt(opts.total);
-      $target.ns.curPageIndex = parseInt(opts.curPageIndex);
-      $target.ns.totalPage = Math.floor($target.ns.totalRecord / $target.ns.pageSize) + ($target.ns.totalRecord % $target.ns.pageSize > 0 ? 1 : 0);
-      $target.ns.pageSizeList = opts.pageSizeList;
-      $target.ns.templateMap = $.parseJSON(JSON.stringify(self.templateMap).replace(/\{cssPrefix\}/g, $target.ns.cssPrefix));
+      target.ns.cssPrefix = $.trim(opts.cssPrefix);
+      target.ns.pageSize = parseInt(opts.pageSize);
+      target.ns.pageBtnCount = parseInt(opts.pageBtnCount);
+      target.ns.totalRecord = parseInt(opts.total);
+      target.ns.curPageIndex = parseInt(opts.curPageIndex);
+      target.ns.totalPage = Math.floor(target.ns.totalRecord / target.ns.pageSize) + (target.ns.totalRecord % target.ns.pageSize > 0 ? 1 : 0);
+      target.ns.pageSizeList = opts.pageSizeList;
+      target.ns.templateMap = $.parseJSON(JSON.stringify(self.templateMap).replace(/\{cssPrefix\}/g, target.ns.cssPrefix));
     },
 
-    render: function ($target) {
+    render: function (target) {
       var self = this;
-      var html = self.createPaginationHtml($target);
+      var $target = $(target);
+      var html = self.createPaginationHtml(target);
 
       $target.html(html);
 
-      self.initJqueryObject($target);
-      self.initEvent($target);
+      self.initJqueryObject(target);
+      self.initEvent(target);
     },
 
-    createPaginationHtml: function ($target) {
+    createPaginationHtml: function (target) {
       var self = this;
-      var templateMap = $target.ns.templateMap;
+      var templateMap = target.ns.templateMap;
       var html = '';
 
       html += templateMap.wrapper.begin;
       html += templateMap.paginationInfo.begin;
 
       html += templateMap.record
-        .replace('{totalRecord}', $target.ns.totalRecord);
+        .replace('{totalRecord}', target.ns.totalRecord);
 
       html += templateMap.slash;
 
       html += templateMap.page
-        .replace('{totalPage}', $target.ns.totalPage);
+        .replace('{totalPage}', target.ns.totalPage);
 
-      html += templateMap.current.replace('{currentPage}', $target.ns.curPageIndex);
+      html += templateMap.current.replace('{currentPage}', target.ns.curPageIndex);
 
       html += templateMap.paginationInfo.end;
       html += templateMap.paginationFunction.begin;
 
       html += templateMap.btnFirst
         .replace('{pageIndex}', 1)
-        .replace('{disabled}', self.isFirstBtnDisabled($target) ? 'disabled' : '');
+        .replace('{disabled}', self.isFirstBtnDisabled(target) ? 'disabled' : '');
 
       html += templateMap.btnPrev
-        .replace('{pageIndex}', ($target.ns.curPageIndex - 1 > 0) ? ($target.ns.curPageIndex - 1) : 1)
-        .replace('{disabled}', self.isPrevBtnDisabled($target) ? 'disabled' : '');
+        .replace('{pageIndex}', (target.ns.curPageIndex - 1 > 0) ? (target.ns.curPageIndex - 1) : 1)
+        .replace('{disabled}', self.isPrevBtnDisabled(target) ? 'disabled' : '');
 
       html += templateMap.btnList.begin;
 
-      html += self.createBtnListHtml($target);
+      html += self.createBtnListHtml(target);
 
       html += templateMap.btnList.end;
 
       html += templateMap.btnNext
-        .replace('{pageIndex}', ($target.ns.curPageIndex + 1) <= $target.ns.totalPage ? ($target.ns.curPageIndex + 1) : $target.ns.totalPage)
-        .replace('{disabled}', self.isNextBtnDisabled($target) ? 'disabled' : '');
+        .replace('{pageIndex}', (target.ns.curPageIndex + 1) <= target.ns.totalPage ? (target.ns.curPageIndex + 1) : target.ns.totalPage)
+        .replace('{disabled}', self.isNextBtnDisabled(target) ? 'disabled' : '');
 
       html += templateMap.btnLast
-        .replace('{pageIndex}', $target.ns.totalPage)
-        .replace('{disabled}', self.isLastBtnDisabled($target) ? 'disabled' : '');
+        .replace('{pageIndex}', target.ns.totalPage)
+        .replace('{disabled}', self.isLastBtnDisabled(target) ? 'disabled' : '');
 
       html += templateMap.refresh
-        .replace('{disabled}', self.isRefreshBtnDisabled($target) ? 'disabled' : '');
+        .replace('{disabled}', self.isRefreshBtnDisabled(target) ? 'disabled' : '');
 
       html += templateMap.select.begin;
 
-      for (var j = 0; j < $target.ns.pageSizeList.length; j++) {
+      for (var j = 0; j < target.ns.pageSizeList.length; j++) {
         html += templateMap.option
-          .replace(/\{value\}/g, $target.ns.pageSizeList[j])
-          .replace('{isSelected}', $target.ns.pageSizeList[j] === $target.ns.pageSize ? 'selected' : '');
+          .replace(/\{value\}/g, target.ns.pageSizeList[j])
+          .replace('{isSelected}', target.ns.pageSizeList[j] === target.ns.pageSize ? 'selected' : '');
       }
 
       html += templateMap.select.end;
@@ -113,44 +113,44 @@
       return html;
     },
 
-    createBtnListHtml: function ($target) {
+    createBtnListHtml: function (target) {
       var self = this;
-      var templateMap = $target.ns.templateMap;
+      var templateMap = target.ns.templateMap;
       var btnListHtml = '';
       var pageNum;
       var temp;
       var isShowPrevEllipsis;
       var isShowNextEllipsis;
 
-      if ($target.ns.curPageIndex <= 0) $target.ns.curPageIndex = 1;
-      if ($target.ns.curPageIndex > $target.ns.totalPage) $target.ns.curPageIndex = $target.ns.totalPage;
+      if (target.ns.curPageIndex <= 0) target.ns.curPageIndex = 1;
+      if (target.ns.curPageIndex > target.ns.totalPage) target.ns.curPageIndex = target.ns.totalPage;
 
-      temp = $target.ns.pageBtnCount / 2;
+      temp = target.ns.pageBtnCount / 2;
 
-      isShowPrevEllipsis = self.isShowPrevEllipsis($target);
-      isShowNextEllipsis = self.isShowNextEllipsis($target);
+      isShowPrevEllipsis = self.isShowPrevEllipsis(target);
+      isShowNextEllipsis = self.isShowNextEllipsis(target);
 
       if (!isShowPrevEllipsis) {
         pageNum = 1;
-      } else if ($target.ns.curPageIndex > temp && isShowNextEllipsis) {
-        pageNum = $target.ns.curPageIndex - (Math.floor(temp) + ($target.ns.pageBtnCount % 2 === 0 ? -1 : 0));
-      } else if ($target.ns.curPageIndex > temp && !isShowNextEllipsis) {
-        pageNum = $target.ns.totalPage - $target.ns.pageBtnCount + 1;
+      } else if (target.ns.curPageIndex > temp && isShowNextEllipsis) {
+        pageNum = target.ns.curPageIndex - (Math.floor(temp) + (target.ns.pageBtnCount % 2 === 0 ? -1 : 0));
+      } else if (target.ns.curPageIndex > temp && !isShowNextEllipsis) {
+        pageNum = target.ns.totalPage - target.ns.pageBtnCount + 1;
       } else {
-        pageNum = $target.ns.curPageIndex;
+        pageNum = target.ns.curPageIndex;
       }
 
       if (isShowPrevEllipsis) {
         btnListHtml += templateMap.ellipsis;
       }
 
-      for (var i = 0; i < $target.ns.pageBtnCount; i++) {
+      for (var i = 0; i < target.ns.pageBtnCount; i++) {
 
-        if (pageNum > 0 && pageNum <= $target.ns.totalPage) {
+        if (pageNum > 0 && pageNum <= target.ns.totalPage) {
 
           btnListHtml += templateMap.btn
             .replace(/\{pageIndex\}/g, pageNum)
-            .replace('{active}', self.isBtnActive($target, pageNum) ? 'active' : '');
+            .replace('{active}', self.isBtnActive(target, pageNum) ? 'active' : '');
           pageNum++;
         }
       }
@@ -162,166 +162,168 @@
       return btnListHtml;
     },
 
-    updatePagination: function ($target) {
+    updatePagination: function (target) {
       var self = this;
-      var pageIndex = $target.ns.curPageIndex;
+      var pageIndex = target.ns.curPageIndex;
       var prevPageIndex = pageIndex - 1;
       var nextPageIndex = pageIndex + 1;
 
-      $target.jq.$currentPage.html(pageIndex);
-      $target.jq.$btnPrev.data('page-index', prevPageIndex > 0 ? prevPageIndex : 1);
-      $target.jq.$btnNext.data('page-index', nextPageIndex <= $target.ns.totalPage ? nextPageIndex : $target.ns.totalPage);
+      target.jq.$currentPage.html(pageIndex);
+      target.jq.$btnPrev.data('page-index', prevPageIndex > 0 ? prevPageIndex : 1);
+      target.jq.$btnNext.data('page-index', nextPageIndex <= target.ns.totalPage ? nextPageIndex : target.ns.totalPage);
 
-      self.isFirstBtnDisabled($target) ? $target.jq.$btnFirst.addClass('disabled') : $target.jq.$btnFirst.removeClass('disabled');
-      self.isLastBtnDisabled($target) ? $target.jq.$btnLast.addClass('disabled') : $target.jq.$btnLast.removeClass('disabled');
-      self.isPrevBtnDisabled($target) ? $target.jq.$btnPrev.addClass('disabled') : $target.jq.$btnPrev.removeClass('disabled');
-      self.isNextBtnDisabled($target) ? $target.jq.$btnNext.addClass('disabled') : $target.jq.$btnNext.removeClass('disabled');
+      self.isFirstBtnDisabled(target) ? target.jq.$btnFirst.addClass('disabled') : target.jq.$btnFirst.removeClass('disabled');
+      self.isLastBtnDisabled(target) ? target.jq.$btnLast.addClass('disabled') : target.jq.$btnLast.removeClass('disabled');
+      self.isPrevBtnDisabled(target) ? target.jq.$btnPrev.addClass('disabled') : target.jq.$btnPrev.removeClass('disabled');
+      self.isNextBtnDisabled(target) ? target.jq.$btnNext.addClass('disabled') : target.jq.$btnNext.removeClass('disabled');
     },
 
-    isShowPrevEllipsis: function ($target) {
+    isShowPrevEllipsis: function (target) {
       var self = this;
 
-      if ($target.ns.curPageIndex === 1) return false;
+      if (target.ns.curPageIndex === 1) return false;
 
-      return $target.ns.curPageIndex < $target.ns.pageBtnCount ? false : true;
+      return target.ns.curPageIndex < target.ns.pageBtnCount ? false : true;
     },
 
-    isShowNextEllipsis: function ($target) {
+    isShowNextEllipsis: function (target) {
       var self = this;
 
-      if ($target.ns.curPageIndex === $target.ns.totalPage) return false;
+      if (target.ns.curPageIndex === target.ns.totalPage) return false;
 
-      return $target.ns.curPageIndex > ($target.ns.totalPage - $target.ns.pageBtnCount + 1) ? false : true;
+      return target.ns.curPageIndex > (target.ns.totalPage - target.ns.pageBtnCount + 1) ? false : true;
     },
 
-    isPrevBtnDisabled: function ($target) {
+    isPrevBtnDisabled: function (target) {
       var self = this;
 
-      return $target.ns.curPageIndex > 1 ? false : true;
+      return target.ns.curPageIndex > 1 ? false : true;
     },
 
-    isNextBtnDisabled: function ($target) {
+    isNextBtnDisabled: function (target) {
       var self = this;
 
-      return $target.ns.curPageIndex < $target.ns.totalPage ? false : true;
+      return target.ns.curPageIndex < target.ns.totalPage ? false : true;
     },
 
-    isFirstBtnDisabled: function ($target) {
+    isFirstBtnDisabled: function (target) {
       var self = this;
 
-      return $target.ns.curPageIndex > 1 ? false : true;
+      return target.ns.curPageIndex > 1 ? false : true;
     },
 
-    isLastBtnDisabled: function ($target) {
+    isLastBtnDisabled: function (target) {
       var self = this;
 
-      return $target.ns.curPageIndex < $target.ns.totalPage ? false : true;
+      return target.ns.curPageIndex < target.ns.totalPage ? false : true;
     },
 
-    isRefreshBtnDisabled: function ($target) {
+    isRefreshBtnDisabled: function (target) {
       var self = this;
     },
 
-    isBtnActive: function ($target, pageIndex) {
+    isBtnActive: function (target, pageIndex) {
       var self = this;
 
-      return $target.ns.curPageIndex === pageIndex ? true : false;
+      return target.ns.curPageIndex === pageIndex ? true : false;
     },
 
-    initJqueryObject: function ($target) {
+    initJqueryObject: function (target) {
       var self = this;
-      var cssPrefix = $target.ns.cssPrefix;
+      var $target = $(target);
+      var cssPrefix = target.ns.cssPrefix;
 
-      $target.jq = {};
+      target.jq = {};
 
-      $target.jq.$currentPage = $target.find('.' + cssPrefix + 'pagination-page-current');
-      $target.jq.$boxBtnList = $target.find('.' + cssPrefix + 'pagination-btn-list');
-      $target.jq.$btnFirst = $target.find('.' + cssPrefix + 'pagination-btn-first');
-      $target.jq.$btnPrev = $target.find('.' + cssPrefix + 'pagination-btn-prev');
-      $target.jq.$btnNext = $target.find('.' + cssPrefix + 'pagination-btn-next');
-      $target.jq.$btnLast = $target.find('.' + cssPrefix + 'pagination-btn-last');
-      $target.jq.$btnRefresh = $target.find('.' + cssPrefix + 'pagination-refresh');
-      $target.jq.$select = $target.find('.' + cssPrefix + 'pagination-select');
-      $target.jq.$input = $target.find('.' + cssPrefix + 'pagination-input');
-      $target.jq.$btnJump = $target.find('.' + cssPrefix + 'pagination-jump');
+      target.jq.$currentPage = $target.find('.' + cssPrefix + 'pagination-page-current');
+      target.jq.$boxBtnList = $target.find('.' + cssPrefix + 'pagination-btn-list');
+      target.jq.$btnFirst = $target.find('.' + cssPrefix + 'pagination-btn-first');
+      target.jq.$btnPrev = $target.find('.' + cssPrefix + 'pagination-btn-prev');
+      target.jq.$btnNext = $target.find('.' + cssPrefix + 'pagination-btn-next');
+      target.jq.$btnLast = $target.find('.' + cssPrefix + 'pagination-btn-last');
+      target.jq.$btnRefresh = $target.find('.' + cssPrefix + 'pagination-refresh');
+      target.jq.$select = $target.find('.' + cssPrefix + 'pagination-select');
+      target.jq.$input = $target.find('.' + cssPrefix + 'pagination-input');
+      target.jq.$btnJump = $target.find('.' + cssPrefix + 'pagination-jump');
     },
 
-    initEvent: function ($target) {
+    initEvent: function (target) {
       var self = this;
+      var $target = $(target);
 
-      $target.jq.$btnFirst.on({
-        'click': self.btnClickHandler($target)
+      target.jq.$btnFirst.on({
+        'click': self.btnClickHandler(target)
       });
 
-      $target.jq.$btnPrev.on({
-        'click': self.btnClickHandler($target)
+      target.jq.$btnPrev.on({
+        'click': self.btnClickHandler(target)
       });
 
-      $target.jq.$btnNext.on({
-        'click': self.btnClickHandler($target)
+      target.jq.$btnNext.on({
+        'click': self.btnClickHandler(target)
       });
 
-      $target.jq.$btnLast.on({
-        'click': self.btnClickHandler($target)
+      target.jq.$btnLast.on({
+        'click': self.btnClickHandler(target)
       });
 
-      $target.jq.$btnRefresh.on({
+      target.jq.$btnRefresh.on({
         'click': function () {
           var $this = $(this);
 
           if ($this.is('.disabled')) return;
 
-          self.goto($target, $target.ns.curPageIndex);
+          self.goto(target, target.ns.curPageIndex);
         }
       });
 
-      $target.jq.$boxBtnList.on({
+      target.jq.$boxBtnList.on({
         'click': function (e) {
           var $elem = $(e.target);
           var index = $elem.data('page-index');
 
-          $target.ns.curPageIndex = index;
+          target.ns.curPageIndex = index;
 
-          self.goto($target, index);
+          self.goto(target, index);
         }
       });
 
-      $target.jq.$btnJump.on({
+      target.jq.$btnJump.on({
         'click': function () {
-          var params = self.getParams($target);
+          var params = self.getParams(target);
 
-          params && self.goto($target, params);
+          params && self.goto(target, params);
         }
       });
 
-      $target.jq.$select.on({
+      target.jq.$select.on({
         'change': function () {
           var $this = $(this);
 
-          $target.ns.curPageIndex = 1;
-          $target.ns.pageSize = parseInt($this.val());
-          $target.ns.totalPage = Math.floor($target.ns.totalRecord / $target.ns.pageSize) + ($target.ns.totalRecord % $target.ns.pageSize > 0 ? 1 : 0);
+          target.ns.curPageIndex = 1;
+          target.ns.pageSize = parseInt($this.val());
+          target.ns.totalPage = Math.floor(target.ns.totalRecord / target.ns.pageSize) + (target.ns.totalRecord % target.ns.pageSize > 0 ? 1 : 0);
 
-          self.render($target);
+          self.render(target);
           $target.triggerHandler('changePage', {
-            page: $target.ns.curPageIndex,
-            size: $target.ns.pageSize
+            page: target.ns.curPageIndex,
+            size: target.ns.pageSize
           });
         }
       });
 
-      $target.jq.$input.on({
+      target.jq.$input.on({
         'keypress': function (e) {
           if (e.keyCode === 13) {
-            var params = self.getParams($target);
+            var params = self.getParams(target);
 
-            params && self.goto($target, params);
+            params && self.goto(target, params);
           }
         }
       });
     },
 
-    btnClickHandler: function ($target) {
+    btnClickHandler: function (target) {
       var self = this;
 
       return function (e) {
@@ -331,20 +333,21 @@
 
         var index = $this.data('page-index');
 
-        $target.ns.curPageIndex = index;
+        target.ns.curPageIndex = index;
 
-        self.goto($target, index);
+        self.goto(target, index);
       };
     },
 
-    goto: function ($target, pageInfo) {
+    goto: function (target, pageInfo) {
       var self = this;
+      var $target = $(target);
       var opts = $target.data('pagination').options;
       var params;
 
       params = typeof pageInfo === 'object' ? pageInfo : {
         page: pageInfo,
-        size: $target.ns.pageSize
+        size: target.ns.pageSize
       };
 
       if (opts.url) {
@@ -357,31 +360,31 @@
           complete: opts.onAjaxComplete,
           error: opts.onAjaxError,
           success: function (result) {
-            $target.jq.$boxBtnList.html(self.createBtnListHtml($target));
-            self.updatePagination($target);
+            target.jq.$boxBtnList.html(self.createBtnListHtml(target));
+            self.updatePagination(target);
             opts.onDataLoaded && opts.onDataLoaded.apply(null, [result]);
           }
         });
       } else {
-        $target.jq.$boxBtnList.html(self.createBtnListHtml($target));
-        self.updatePagination($target);
+        target.jq.$boxBtnList.html(self.createBtnListHtml(target));
+        self.updatePagination(target);
       }
 
       $target.triggerHandler('changePage', params)
     },
 
-    getParams: function ($target) {
+    getParams: function (target) {
       var self = this;
       var regex = /\d+/;
-      var pageIndex = parseInt($.trim($target.jq.$input.val()));
+      var pageIndex = parseInt($.trim(target.jq.$input.val()));
 
       if (regex.test(pageIndex) && (pageIndex > 0)) {
-        pageIndex = pageIndex > $target.ns.totalPage ? $target.ns.totalPage : pageIndex;
-        $target.jq.$input.val('');
-        $target.ns.curPageIndex = pageIndex;
+        pageIndex = pageIndex > target.ns.totalPage ? target.ns.totalPage : pageIndex;
+        target.jq.$input.val('');
+        target.ns.curPageIndex = pageIndex;
         return {
           page: pageIndex,
-          size: $target.ns.pageSize
+          size: target.ns.pageSize
         };
       }
 
@@ -428,7 +431,7 @@
 
   $.fn.pagination = function (options, params) {
     if (typeof options == 'string') {
-      return $.fn.pagination.methods[options]($(this), params);
+      return $.fn.pagination.methods[options](this, params);
     }
 
     options = options || {};
@@ -439,14 +442,14 @@
         options: $.extend(true, {}, $.fn.pagination.defaults, options)
       });
 
-      return pagination.init($(this));
+      return pagination.init(this);
     });
   };
 
   $.fn.pagination.methods = {
-    update: function ($target, params) {
+    update: function (target, params) {
 
-      pagination.goto($target, params);
+      pagination.goto(target, params);
     }
   };
 
