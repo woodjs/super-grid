@@ -9,7 +9,7 @@
   <link rel="stylesheet" type="text/css" href="css/component/gird.css">
   <style type="text/css">
     .demo-grid {
-      width: 670px;
+      width: 857px;
       margin: 50px auto;
     }
 
@@ -220,7 +220,7 @@
 
   $(function () {
     $('#test1').grid({
-      width: '670px',
+      width: '857px',
       height: '244px',
       url: './data.json',
       columns: [{
@@ -278,7 +278,7 @@
     });
 
     $('#test2').grid({
-      width: '670px',
+      width: '857px',
       height: '244px',
       frozenAlign: 'left',
       multiSelect: false,
@@ -338,9 +338,10 @@
     });
 
     $('#test3').grid({
-      width: '670px',
+      width: '857px',
       height: '244px',
       frozenAlign: 'right',
+      withCheckbox: false,
       columns: [{
         title: '测试1',
         index: 'a1',
@@ -398,29 +399,38 @@
     });
 
     $('#test4').grid({
-      width: '670px',
+      width: '857px',
       height: '244px',
-      frozenAlign: 'left-right',
       url: './data.json',
+      multiSelect: true,
+      frozenAlign: 'left-right',
       columns: [{
         title: '测试1',
         index: 'a1',
         width: '100px',
-        frozen: true,
         sortable: true,
-        resizeable: true
+        resizeable: false,
+        frozen: true,
+        align: 'left',
+        renderer: function (value, record, store) {
+          return '<a class="custom-a" href="http://www.baidu.com" target="_blank">' + value + '</a>';
+        }
       }, {
         title: '测试2',
         index: 'b1',
         width: '100px',
         sortable: true,
-        resizeable: true
+        resizeable: false,
+        frozen: true,
+        align: 'right'
       }, {
         title: '测试3',
         index: 'c1',
         width: '100px',
         sortable: true,
-        resizeable: true
+        resizeable: false,
+        frozen: true,
+        align: 'right'
       }, {
         title: '测试4',
         index: 'd1',
@@ -438,22 +448,19 @@
         index: 'f1',
         width: '100px',
         sortable: true,
-        resizeable: false,
-        frozen: true,
-        align: 'right'
+        resizeable: true
       }, {
         title: '测试7',
         index: 'g1',
         width: '100px',
-        resizeable: true,
-        sortable: true
+        sortable: true,
+        resizeable: true
       }, {
         title: '测试8',
         index: 'h1',
         width: '100px',
-        frozen: true,
-        align: 'right',
-        resizeable: false
+        sortable: true,
+        resizeable: true
       }]
     });
   });

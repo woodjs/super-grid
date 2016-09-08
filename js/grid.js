@@ -564,15 +564,22 @@
 
     getFixedTableHeaderW: function (target, opts, align, beginColIndex, deltaW) {
       var self = this;
+      var tempWidth;
 
       if (align) return '';
-      if (target.ns.unFrozenColsW > target.ns.unFrozenColsWrapperW) {
+
+      if (!beginColIndex) {
+        tempWidth = target.ns.unFrozenColsW + deltaW;
+      } else {
+        tempWidth = target.ns.unFrozenColsW + Math.abs(deltaW);
+      }
+
+      if (tempWidth > target.ns.unFrozenColsWrapperW) {
+
         if (target.ns.leftFrozenCols.length && beginColIndex) deltaW = 0;
 
         return (target.ns.unFrozenColsW + deltaW + self.scrollbarWidth) + 'px';
       }
-
-      return '';
     },
 
     getTableWrapperBeginHtml: function (target, opts, align) {
@@ -619,32 +626,31 @@
 
         $.extend(true, target.ns.params, params);
 
-        setTimeout(function () {
-          $.ajax({
-            url: opts.url,
-            type: opts.method,
-            cache: opts.cache,
-            timeout: opts.timeout,
-            params: target.ns.params,
-            beforeSend: opts.onAjaxBeforeSend,
-            complete: opts.onAjaxComplete,
-            error: function (err) {
-              target.jq.$loading.hide();
-              opts.onAjaxError && opts.onAjaxError.apply(null, err);
-            },
-            success: function (result) {
-              self.renderTbody(target, opts, result);
-              target.jq.$rows = $target.find('tr');
-              self.initRowEvent(target);
-              target.jq.$loading.hide();
+        $.ajax({
+          url: opts.url,
+          type: opts.method,
+          cache: opts.cache,
+          timeout: opts.timeout,
+          data: target.ns.params,
+          dataType: 'json',
+          beforeSend: opts.onAjaxBeforeSend,
+          complete: opts.onAjaxComplete,
+          error: function (err) {
+            target.jq.$loading.hide();
+            opts.onAjaxError && opts.onAjaxError.apply(null, err);
+          },
+          success: function (result) {
+            self.renderTbody(target, opts, result);
+            target.jq.$rows = $target.find('tr');
+            self.initRowEvent(target);
+            target.jq.$loading.hide();
 
-              var pagination = target.plugins.pagination;
+            var pagination = target.plugins.pagination;
 
-              pagination && pagination.pagination && pagination.pagination('update', result);
-              opts.onAjaxSuccess && opts.onAjaxSuccess.apply(null, [result]);
-            }
-          });
-        }, 1000);
+            pagination && pagination.pagination && pagination.pagination('update', result);
+            opts.onAjaxSuccess && opts.onAjaxSuccess.apply(null, [result]);
+          }
+        });
       }
     },
 
@@ -923,7 +929,7 @@
     withRowNumber: true,
     rowNumberWidth: '44px',
     multiSelect: false,
-    frozenAlign: '',  // 'left' | 'right' | 'left-right'
+    frozenAlign: '',  // 'left' | 'right' | 'left-right' | ''
     theadHeight: '24px',
     trHeight: '24px',
     columns: [],
