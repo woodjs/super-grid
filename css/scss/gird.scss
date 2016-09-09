@@ -53,6 +53,7 @@
  .s-table-header{
   width:100%;
   overflow: hidden;
+  position:relative;
   @include setHeightGroup(24px);
   &:after{
    content: '';
