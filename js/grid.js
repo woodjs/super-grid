@@ -1,4 +1,4 @@
-!(function (fn) {
+;(function (fn) {
   "use strict";
 
   if (typeof define === 'function' && typeof define.amd === 'object' && define.amd) {
