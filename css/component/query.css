@@ -65,13 +65,13 @@ input, textarea, select, a {
   font-weight: bold;
   float: right;
 }
-.s-query-wrapper .s-query-item .s-query-input {
+.s-query-wrapper .s-query-item .s-query-input-wrapper {
   display: inline-block;
   width: 180px;
   height: 26px;
   float: left;
 }
-.s-query-wrapper .s-query-item .s-query-input input[type="text"] {
+.s-query-wrapper .s-query-item .s-query-input-wrapper input[type="text"] {
   display: inline-block;
   width: 100%;
   height: 100%;
@@ -79,7 +79,7 @@ input, textarea, select, a {
   padding: 0 5px;
   line-height: 24px;
 }
-.s-query-wrapper .s-query-item .s-query-input select {
+.s-query-wrapper .s-query-item .s-query-input-wrapper select {
   display: inline-block;
   width: 100%;
   height: 100%;

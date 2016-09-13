@@ -19,27 +19,84 @@
       var self = this;
 
       self.initGlobalScope(target);
-      self.render(target);
+      self.initJqueryObject(target);
+      self.initEvent(target);
     },
 
     initGlobalScope: function (target) {
       var self = this;
+      var $target = $(target);
+      var opts = $target.data('query').options;
 
-    },
+      target.ns = {};
 
-    render: function (target) {
-      var self = this;
-
+      target.ns.cssPrefix = opts.cssPrefix;
     },
 
     initJqueryObject: function (target) {
       var self = this;
+      var $target = $(target);
 
+      target.jq = {};
+
+      target.jq.$queryItemList = $target.find('.' + target.ns.cssPrefix + 'query-item');
+      target.jq.$queryInputList = $target.find('.' + target.ns.cssPrefix + 'query-input');
+      target.jq.$btnQuery = $target.find('.' + target.ns.cssPrefix + 'query-action');
+      target.jq.$btnReset = $target.find('.' + target.ns.cssPrefix + 'query-reset');
     },
 
     initEvent: function (target) {
       var self = this;
 
+      target.jq.$queryInputList.on({
+        change: function () {
+
+        }
+      });
+
+      target.jq.$btnQuery.on({
+        click: function () {
+          self.getParams(target);
+        }
+      });
+
+      target.jq.$btnReset.on({
+        click: function () {
+          for (var i = 0; i < target.jq.$queryInputList.length; i++) {
+            self.resetItem($(target.jq.$queryInputList[i]));
+          }
+        }
+      });
+    },
+
+    resetItem: function ($item) {
+      var self = this;
+
+      $item.val('');
+    },
+
+    getParams: function (target) {
+      var self = this;
+      var len = target.jq.$queryItemList.length;
+      var $temp;
+      var $input;
+      var value;
+      var result = {};
+
+      for (var i = 0; i < len; i++) {
+        $temp = $(target.jq.$queryItemList[i]);
+        $input = $temp.find('.' + target.ns.cssPrefix + 'query-input');
+        value = $input.val();
+        if ($temp.is('.' + target.ns.cssPrefix + 'query-required') && value == '') {
+          alert('有必填项未填！');
+          return;
+        }
+        if (value != '') {
+          result[$input[0].name] = value;
+        }
+      }
+
+      return result;
     }
   };
 
@@ -63,6 +120,7 @@
   $.fn.query.methods = {};
 
   $.fn.query.defaults = {
+    cssPrefix: 's-',
     url: '',
     method: 'GET',
     cache: false,
@@ -71,7 +129,12 @@
     onAjaxBeforeSend: null,
     onAjaxComplete: null,
     onAjaxError: null,
+    onAjaxSuccess: null,
     onBeforeRender: null,
-    onAfterRender: null
+    onAfterRender: null,
+    onBeforeQuery: null,
+    onAfterQuery: null,
+    onBeforeReset: null,
+    onAfterReset: null
   };
 });
