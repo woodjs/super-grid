@@ -49,8 +49,19 @@
       var self = this;
 
       target.jq.$queryInputList.on({
-        change: function () {
+        click: function (e) {
+          var $this = $(this);
 
+          if ($this.is('select') && $this.data('loaded') != 'true') {
+            self.loadSelectData(target, $this);
+          }
+        },
+        change: function () {
+          var $this = $(this);
+
+          if ($this.is('select')) {
+            self.clearSelect(target, $this);
+          }
         }
       });
 
@@ -67,6 +78,92 @@
           }
         }
       });
+    },
+
+    loadSelectData: function (target, $select) {
+      var self = this;
+      var url = $select.data('url');
+      var queryString = self.getQueryString(target, $select);
+
+      var data = [{
+        id: 1,
+        code: 'temp1',
+        name: '哈哈' + Math.random()
+      }, {
+        id: 2,
+        code: 'temp2',
+        name: '呵呵' + Math.random()
+      }, {
+        id: 3,
+        code: 'temp3',
+        name: '嘻嘻' + Math.random()
+      }, {
+        id: 4,
+        code: 'temp4',
+        name: '嘿嘿' + Math.random()
+      }];
+
+      $.ajax({
+        url: url + queryString,
+        type: 'GET',
+        cache: false,
+        timeout: 3000,
+        success: function () {
+          self.clearSelect(target, $select);
+          self.updateSelect($select, data);
+          $select.data('loaded', 'true');
+        },
+        error: function () {
+          self.clearSelect(target, $select);
+          self.updateSelect($select, data);
+          $select.data('loaded', 'true');
+        }
+      });
+    },
+
+    getQueryString: function (target, $select) {
+      var self = this;
+      var dependenciesIdStr = $select.data('dependenciesids');
+      var dependenciesIdList = dependenciesIdStr && JSON.parse(dependenciesIdStr.replace(/\'/g, '"'));
+      var len = dependenciesIdList && dependenciesIdList.length;
+      var $target = $(target);
+      var $temp;
+      var list = [];
+
+      for (var i = 0; i < len; i++) {
+        $temp = $target.find(dependenciesIdList[i]);
+        list.push($temp[0].name + '=' + $temp.val());
+      }
+
+      return len ? '?' + list.join('&') : '';
+    },
+
+    clearSelect: function (target, $select) {
+      var self = this;
+      var clearIdStr = $select.data('clearids');
+      var clearIdList = clearIdStr && JSON.parse(clearIdStr.replace(/\'/g, '"'));
+      var len = clearIdList && clearIdList.length;
+      var $target = $(target);
+      var $temp;
+      var list = [];
+
+      for (var i = 0; i < len; i++) {
+        $temp = $target.find(clearIdList[i]);
+        $temp.val('');
+        $temp.html('');
+        $temp.data('loaded', 'false');
+      }
+    },
+
+    updateSelect: function ($select, data) {
+      var self = this;
+      var html = '';
+
+      for (var i = 0; i < data.length; i++) {
+        html += '<option value="'+ data[i].code +'">'+ data[i].name +'</option>';
+      }
+
+      $select.html(html);
     },
 
     resetItem: function ($item) {

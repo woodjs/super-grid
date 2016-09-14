@@ -22,7 +22,7 @@
       <div class="s-query-item s-query-required">
         <span class="s-query-label"><label>测试1：</label></span>
         <span class="s-query-input-wrapper">
-          <select name="a1" value="1" class="s-query-input">
+          <select name="a" value="" class="s-query-input" id="a" data-clearIds="['#b', '#c']" data-url="/data.json">
             <option value="1">111</option>
             <option value="2">222</option>
             <option value="3">333</option>
@@ -33,7 +33,7 @@
       <div class="s-query-item">
         <span class="s-query-label"><label>测试2：</label></span>
         <span class="s-query-input-wrapper">
-          <select name="a2" value="1" class="s-query-input">
+          <select name="b" value="" class="s-query-input" id="b" data-dependenciesIds="['#a']" data-clearIds="['#c']" data-url="/data.json">
             <option value="1">111</option>
             <option value="2">222</option>
             <option value="3">333</option>
@@ -44,7 +44,7 @@
       <div class="s-query-item">
         <span class="s-query-label"><label>测试3：</label></span>
         <span class="s-query-input-wrapper">
-           <select  name="a3" value="1" class="s-query-input">
+           <select  name="c" value="" class="s-query-input" id="c" data-dependenciesIds="['#a', '#b']" data-url="/data.json">
             <option value="1">111</option>
             <option value="2">222</option>
             <option value="3">333</option>
@@ -64,7 +64,6 @@
       <a class="s-query-btn s-query-reset" href="#">重置</a>
     </div>
   </div>
-
 </div>
 
 <script type="text/javascript" src="js/lib/jquery-1.11.3.min.js"></script>
