@@ -348,8 +348,8 @@
           dataType: 'json',
           beforeSend: opts.onAjaxBeforeSend,
           complete: opts.onAjaxComplete,
-          error: function (err) {
-            opts.onAjaxError && opts.onAjaxError.apply(null, err);
+          error: function () {
+            opts.onAjaxError && opts.onAjaxError.apply(null, Array.prototype.slice.apply(null, arguments));
           },
           success: function (result) {
             target.jq.$boxBtnList.html(self.createBtnListHtml(target));

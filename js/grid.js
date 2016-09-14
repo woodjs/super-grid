@@ -639,9 +639,9 @@
           dataType: 'json',
           beforeSend: opts.onAjaxBeforeSend,
           complete: opts.onAjaxComplete,
-          error: function (err) {
+          error: function () {
             target.jq.$loading.hide();
-            opts.onAjaxError && opts.onAjaxError.apply(null, err);
+            opts.onAjaxError && opts.onAjaxError.apply(null, Array.prototype.slice.apply(null, arguments));
           },
           success: function (result) {
             self.renderTbody(target, opts, result);

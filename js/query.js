@@ -40,7 +40,9 @@
       target.jq = {};
 
       target.jq.$queryItemList = $target.find('.' + target.ns.cssPrefix + 'query-item');
-      target.jq.$queryInputList = $target.find('.' + target.ns.cssPrefix + 'query-input');
+      target.jq.$querySelectList = $target.find('select.' + target.ns.cssPrefix + 'query-input');
+      target.jq.$queryInputList = $target.find('input.' + target.ns.cssPrefix + 'query-input');
+      target.jq.$queryAllInputList = $target.find('.' + target.ns.cssPrefix + 'query-input');
       target.jq.$btnQuery = $target.find('.' + target.ns.cssPrefix + 'query-action');
       target.jq.$btnReset = $target.find('.' + target.ns.cssPrefix + 'query-reset');
     },
@@ -48,33 +50,33 @@
     initEvent: function (target) {
       var self = this;
 
-      target.jq.$queryInputList.on({
+      target.jq.$querySelectList.on({
         click: function (e) {
           var $this = $(this);
 
-          if ($this.is('select') && $this.data('loaded') != 'true') {
+          if ($this.data('loaded') != 'true') {
             self.loadSelectData(target, $this);
           }
         },
         change: function () {
           var $this = $(this);
 
-          if ($this.is('select')) {
-            self.clearSelect(target, $this);
-          }
+          self.clearSelect(target, $this);
         }
       });
 
       target.jq.$btnQuery.on({
         click: function () {
-          self.getParams(target);
+          var params = self.getParams(target);
+
+          self.doQuery(target, params);
         }
       });
 
       target.jq.$btnReset.on({
         click: function () {
-          for (var i = 0; i < target.jq.$queryInputList.length; i++) {
-            self.resetItem($(target.jq.$queryInputList[i]));
+          for (var i = 0; i < target.jq.$queryAllInputList.length; i++) {
+            self.resetItem($(target.jq.$queryAllInputList[i]));
           }
         }
       });
@@ -145,19 +147,18 @@
       var len = clearIdList && clearIdList.length;
       var $target = $(target);
       var $temp;
-      var list = [];
 
       for (var i = 0; i < len; i++) {
         $temp = $target.find(clearIdList[i]);
         $temp.val('');
-        $temp.html('');
+        $temp.html('<option value="">全部</option>');
         $temp.data('loaded', 'false');
       }
     },
 
     updateSelect: function ($select, data) {
       var self = this;
-      var html = '';
+      var html = '<option value="">全部</option>';
 
       for (var i = 0; i < data.length; i++) {
         html += '<option value="'+ data[i].code +'">'+ data[i].name +'</option>';
@@ -168,6 +169,10 @@
 
     resetItem: function ($item) {
       var self = this;
+
+      if ($item.is('select')) {
+        $item.data('loaded', 'false');
+      }
 
       $item.val('');
     },
@@ -194,6 +199,31 @@
       }
 
       return result;
+    },
+    doQuery: function (target, params) {
+      var self = this;
+      var opts = $(target).data('query').options;
+
+      target.ns.params = params;
+
+      $.ajax({
+        url: '/',
+        type: 'POST',
+        cache: false,
+        timeout: 3000,
+        data: target.ns.params,
+        dataType: 'json',
+        beforeSend: opts.onAjaxBeforeSend,
+        complete: opts.onAjaxComplete,
+        error: function () {
+
+          opts.onAjaxError && opts.onAjaxError.apply(null, Array.prototype.slice.apply(null, arguments));
+        },
+        success: function (result) {
+
+          opts.onAjaxSuccess && opts.onAjaxSuccess.apply(null, [result]);
+        }
+      });
     }
   };
 
