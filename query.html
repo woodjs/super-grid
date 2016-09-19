@@ -22,30 +22,31 @@
       <div class="s-query-item s-query-required">
         <span class="s-query-label"><label>测试1：</label></span>
         <span class="s-query-input-wrapper">
-          <select name="a" value="" class="s-query-input" id="a" data-clearIds="['#b', '#c']" data-url="/data/data.json"><option value="">全部</option></select>
+          <select name="a" class="s-query-input" id="a" data-value="temp1" data-preload="true" data-next="#b" data-clearIds="['#b', '#c']"  data-url="/data/data.json"></select>
         </span>
       </div>
 
       <div class="s-query-item">
         <span class="s-query-label"><label>测试2：</label></span>
         <span class="s-query-input-wrapper">
-          <select name="b" value="" class="s-query-input" id="b" data-dependenciesIds="['#a']" data-clearIds="['#c']" data-url="/data/data.json"><option value="">全部</option></select>
+          <select name="b" class="s-query-input" id="b" data-withAll="false" data-preload="true" data-dependenciesIds="['#a']"  data-next="#c" data-clearIds="['#c']" data-url="/data/data.json"></select>
         </span>
       </div>
 
       <div class="s-query-item">
         <span class="s-query-label"><label>测试3：</label></span>
         <span class="s-query-input-wrapper">
-           <select  name="c" value="" class="s-query-input" id="c" data-dependenciesIds="['#a', '#b']" data-url="/data/data.json"><option value="">全部</option></select>
+           <select  name="c" class="s-query-input" id="c" data-withAll="true" data-dependenciesIds="['#a', '#b']" data-url="/data/data.json"></select>
         </span>
       </div>
 
       <div class="s-query-item">
         <span class="s-query-label"><label>测试4：</label></span>
         <span class="s-query-input-wrapper">
-          <input  name="a4" class="s-query-input" type="text" />
+          <input  name="d" class="s-query-input" type="text" />
         </span>
       </div>
+
     </div>
     <div class="s-query-operation">
       <a class="s-query-btn s-query-action" href="#">查询</a>
@@ -53,12 +54,35 @@
     </div>
   </div>
 </div>
+<script type="text/javascript">
 
+  var data = [{
+    id: 1,
+    code: 'temp1',
+    name: '哈哈' + Math.random()
+  }, {
+    id: 2,
+    code: 'temp2',
+    name: '呵呵' + Math.random()
+  }, {
+    id: 3,
+    code: 'temp3',
+    name: '嘻嘻' + Math.random()
+  }, {
+    id: 4,
+    code: 'temp4',
+    name: '嘿嘿' + Math.random()
+  }];
+</script>
 <script type="text/javascript" src="js/lib/jquery-1.11.3.min.js"></script>
 <script type="text/javascript" src="js/query.js"></script>
 <script type="text/javascript">
   $(function () {
-      $('.demo-query').query();
+      $('.demo-query').query({
+        selectMode: 'native',
+        withAll: true,
+        withAllText: '全部'
+      });
   });
 </script>
 </body>
