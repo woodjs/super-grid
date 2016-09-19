@@ -6,44 +6,58 @@
   <meta name="keywords" content="">
   <meta name="description" content="">
   <title>query</title>
+  <link rel="stylesheet" type="text/css" href="css/component/servision.combobox.css">
   <link rel="stylesheet" type="text/css" href="css/component/query.css">
   <style type="text/css">
     .demo-query {
       width: 770px;
       margin: 10px auto 0;
     }
+    .content-view { padding: 20px; overflow: hidden; border: 1px solid #eee; }
+    .content-view input { height: 26px; }
+    .source-title { background: #FAFAFA; line-height: 40px; }
+    .source-title h4 { color: #2575ed; text-align: left; text-indent: 2em; padding: 0; margin: 0; }
   </style>
 </head>
 <body>
+<div class="content-view">
 
+  品牌：<input type="text" id="brand">
+  目录：<input type="text" id="series">
+  年份：<input type="text" id="year">
+</div>
 <div class="demo-query">
   <div class="s-query-wrapper">
     <div class="s-query-content">
       <div class="s-query-item s-query-required">
         <span class="s-query-label"><label>测试1：</label></span>
         <span class="s-query-input-wrapper">
-          <select name="a" class="s-query-input" id="a" data-value="temp1" data-preload="true" data-next="#b" data-clearIds="['#b', '#c']"  data-url="/data/data.json"></select>
+          <select name="a" class="s-query-input" id="a" data-value="temp1" data-preload="true" data-next="#b"
+                  data-clearIds="['#b', '#c']" data-url="/data/data.json"></select>
         </span>
       </div>
 
       <div class="s-query-item">
         <span class="s-query-label"><label>测试2：</label></span>
         <span class="s-query-input-wrapper">
-          <select name="b" class="s-query-input" id="b" data-withAll="false" data-preload="true" data-dependenciesIds="['#a']"  data-next="#c" data-clearIds="['#c']" data-url="/data/data.json"></select>
+          <select name="b" class="s-query-input" id="b" data-withAll="false" data-preload="true"
+                  data-dependenciesIds="['#a']" data-next="#c" data-clearIds="['#c']"
+                  data-url="/data/data.json"></select>
         </span>
       </div>
 
       <div class="s-query-item">
         <span class="s-query-label"><label>测试3：</label></span>
         <span class="s-query-input-wrapper">
-           <select  name="c" class="s-query-input" id="c" data-withAll="true" data-dependenciesIds="['#a', '#b']" data-url="/data/data.json"></select>
+           <select name="c" class="s-query-input" id="c" data-withAll="true" data-dependenciesIds="['#a', '#b']"
+                   data-url="/data/data.json"></select>
         </span>
       </div>
 
       <div class="s-query-item">
         <span class="s-query-label"><label>测试4：</label></span>
         <span class="s-query-input-wrapper">
-          <input  name="d" class="s-query-input" type="text" />
+          <input name="d" class="s-query-input" type="text"/>
         </span>
       </div>
 
@@ -75,14 +89,52 @@
   }];
 </script>
 <script type="text/javascript" src="js/lib/jquery-1.11.3.min.js"></script>
+<script type="text/javascript" src="js/component/jquery.servision.combobox.js"></script>
 <script type="text/javascript" src="js/query.js"></script>
 <script type="text/javascript">
   $(function () {
-      $('.demo-query').query({
-        selectMode: 'native',
-        withAll: true,
-        withAllText: '全部'
-      });
+
+    $("#brand").combobox({
+      url: '/combobox/getComboList/brand',
+      mode: 'remote',
+      textField: 'Description',
+      valueField: 'Code',
+      queryMatch: 'Description',
+      clearIds: ["#series", "#year"],
+      loadFilter: function (data) {
+        return data.Data;
+      }
+    });
+    $("#series").combobox({
+      url: '/combobox/getComboList/series',
+      mode: 'remote',
+      textField: 'Description',
+      valueField: 'Code',
+      dependenciesIds: ["#brand"],
+      queryMatch: 'Description',
+      clearIds: ["#year"],
+      loadFilter: function (data) {
+        return data.Data;
+      }
+    });
+
+    $("#year").combobox({
+      url: '/combobox/getComboList/year',
+      mode: 'remote',
+      textField: 'Description',
+      valueField: 'Code',
+      queryMatch: 'Description',
+      dependenciesIds: ["#series"],
+      loadFilter: function (data) {
+        return data.Data;
+      }
+    });
+
+    $('.demo-query').query({
+      selectMode: 'native',
+      withAll: true,
+      withAllText: '全部'
+    });
   });
 </script>
 </body>
