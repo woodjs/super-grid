@@ -13,51 +13,42 @@
       width: 770px;
       margin: 10px auto 0;
     }
-    .content-view { padding: 20px; overflow: hidden; border: 1px solid #eee; }
-    .content-view input { height: 26px; }
-    .source-title { background: #FAFAFA; line-height: 40px; }
-    .source-title h4 { color: #2575ed; text-align: left; text-indent: 2em; padding: 0; margin: 0; }
+
+    .content-view input {
+      height: 26px;
+    }
+
   </style>
 </head>
 <body>
-<div class="content-view">
-
-  品牌：<input type="text" id="brand">
-  目录：<input type="text" id="series">
-  年份：<input type="text" id="year">
-</div>
-<div class="demo-query">
+<div class="demo-query content-view">
   <div class="s-query-wrapper">
     <div class="s-query-content">
       <div class="s-query-item s-query-required">
         <span class="s-query-label"><label>测试1：</label></span>
         <span class="s-query-input-wrapper">
-          <select name="a" class="s-query-input" id="a" data-value="temp1" data-preload="true" data-next="#b"
-                  data-clearIds="['#b', '#c']" data-url="/data/data.json"></select>
+            <input type="text" class="s-query-input" name="test1" id="test1">
         </span>
       </div>
 
       <div class="s-query-item">
         <span class="s-query-label"><label>测试2：</label></span>
         <span class="s-query-input-wrapper">
-          <select name="b" class="s-query-input" id="b" data-withAll="false" data-preload="true"
-                  data-dependenciesIds="['#a']" data-next="#c" data-clearIds="['#c']"
-                  data-url="/data/data.json"></select>
+           <input type="text" class="s-query-input" name="test2" id="test2">
         </span>
       </div>
 
       <div class="s-query-item">
         <span class="s-query-label"><label>测试3：</label></span>
         <span class="s-query-input-wrapper">
-           <select name="c" class="s-query-input" id="c" data-withAll="true" data-dependenciesIds="['#a', '#b']"
-                   data-url="/data/data.json"></select>
+           <input type="text" class="s-query-input"  name="test3" id="test3">
         </span>
       </div>
 
       <div class="s-query-item">
         <span class="s-query-label"><label>测试4：</label></span>
         <span class="s-query-input-wrapper">
-          <input name="d" class="s-query-input" type="text"/>
+          <input type="text" class="s-query-input" name="test4" id="test4" />
         </span>
       </div>
 
@@ -68,6 +59,49 @@
     </div>
   </div>
 </div>
+
+<!--<div class="demo-query">-->
+<!--<div class="s-query-wrapper">-->
+<!--<div class="s-query-content">-->
+<!--<div class="s-query-item s-query-required">-->
+<!--<span class="s-query-label"><label>测试1：</label></span>-->
+<!--<span class="s-query-input-wrapper">-->
+<!--<select name="a" class="s-query-input" id="a" data-value="temp1" data-preload="true" data-next="#b"-->
+<!--data-clearIds="['#b', '#c']" data-url="/data/data.json"></select>-->
+<!--</span>-->
+<!--</div>-->
+
+<!--<div class="s-query-item">-->
+<!--<span class="s-query-label"><label>测试2：</label></span>-->
+<!--<span class="s-query-input-wrapper">-->
+<!--<select name="b" class="s-query-input" id="b" data-withAll="false" data-preload="true"-->
+<!--data-dependenciesIds="['#a']" data-next="#c" data-clearIds="['#c']"-->
+<!--data-url="/data/data.json"></select>-->
+<!--</span>-->
+<!--</div>-->
+
+<!--<div class="s-query-item">-->
+<!--<span class="s-query-label"><label>测试3：</label></span>-->
+<!--<span class="s-query-input-wrapper">-->
+<!--<select name="c" class="s-query-input" id="c" data-withAll="true" data-dependenciesIds="['#a', '#b']"-->
+<!--data-url="/data/data.json"></select>-->
+<!--</span>-->
+<!--</div>-->
+
+<!--<div class="s-query-item">-->
+<!--<span class="s-query-label"><label>测试4：</label></span>-->
+<!--<span class="s-query-input-wrapper">-->
+<!--<input name="d" class="s-query-input" type="text"/>-->
+<!--</span>-->
+<!--</div>-->
+
+<!--</div>-->
+<!--<div class="s-query-operation">-->
+<!--<a class="s-query-btn s-query-action" href="#">查询</a>-->
+<!--<a class="s-query-btn s-query-reset" href="#">重置</a>-->
+<!--</div>-->
+<!--</div>-->
+<!--</div>-->
 <script type="text/javascript">
 
   var data = [{
@@ -94,47 +128,62 @@
 <script type="text/javascript">
   $(function () {
 
-    $("#brand").combobox({
-      url: '/combobox/getComboList/brand',
-      mode: 'remote',
-      textField: 'Description',
-      valueField: 'Code',
-      queryMatch: 'Description',
-      clearIds: ["#series", "#year"],
-      loadFilter: function (data) {
-        return data.Data;
-      }
-    });
-    $("#series").combobox({
-      url: '/combobox/getComboList/series',
-      mode: 'remote',
-      textField: 'Description',
-      valueField: 'Code',
-      dependenciesIds: ["#brand"],
-      queryMatch: 'Description',
-      clearIds: ["#year"],
-      loadFilter: function (data) {
-        return data.Data;
+    $('.content-view').query({
+      selectMode: 'combobox',
+      plugins: {
+        combobox: [{
+          id: '#test1',
+          config: {
+            url: './data/query/data.json',
+            mode: 'remote',
+            textField: 'Description',
+            valueField: 'Code',
+            queryMatch: 'Description',
+            clearIds: ["#test2", "#test3"],
+            loadFilter: function (data) {
+              return data;
+            }
+          }
+        }, {
+          id: '#test2',
+          config: {
+            url: './data/query/data.json',
+            mode: 'remote',
+            textField: 'Description',
+            valueField: 'Code',
+            dependenciesIds: ["#test1"],
+            queryMatch: 'Description',
+            clearIds: ["#test3"],
+            loadFilter: function (data) {
+              return data;
+            }
+          }
+        }, {
+          id: '#test3',
+          config: {
+            url: './data/query/data.json',
+            mode: 'remote',
+            textField: 'Description',
+            valueField: 'Code',
+            queryMatch: 'Description',
+            dependenciesIds: ["#test2"],
+            loadFilter: function (data) {
+              return data;
+            }
+          }
+        }]
       }
     });
 
-    $("#year").combobox({
-      url: '/combobox/getComboList/year',
-      mode: 'remote',
-      textField: 'Description',
-      valueField: 'Code',
-      queryMatch: 'Description',
-      dependenciesIds: ["#series"],
-      loadFilter: function (data) {
-        return data.Data;
-      }
-    });
+    setTimeout(function () {
+      console.log($('#test4').combobox);
+    }, 5000);
 
-    $('.demo-query').query({
-      selectMode: 'native',
-      withAll: true,
-      withAllText: '全部'
-    });
+//    $('.demo-query').query({
+//      selectMode: 'native',
+//      withAll: true,
+//      withAllText: '全部'
+//    });
   });
 </script>
 </body>

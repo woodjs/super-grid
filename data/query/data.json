@@ -1,0 +1,68 @@
+[
+ {
+  "BrandCode": "BaoJun",
+  "CodeDesc": "CN180C - 宝骏310",
+  "Code": "CN180C",
+  "Description": "宝骏310"
+ },
+ {
+  "BrandCode": "BaoJun",
+  "CodeDesc": "GP53 - 宝骏630 2016款",
+  "Code": "GP53",
+  "Description": "宝骏630 2016款"
+ },
+ {
+  "BrandCode": "BaoJun",
+  "CodeDesc": "CN201 - 宝骏730 2016款",
+  "Code": "CN201",
+  "Description": "宝骏730 2016款"
+ },
+ {
+  "BrandCode": "BaoJun",
+  "CodeDesc": "CN200S - 宝骏560",
+  "Code": "CN200S",
+  "Description": "宝骏560"
+ },
+ {
+  "BrandCode": "BaoJun",
+  "CodeDesc": "GP30 - 宝骏330",
+  "Code": "GP30",
+  "Description": "宝骏330"
+ },
+ {
+  "BrandCode": "BaoJun",
+  "CodeDesc": "CN200 - 宝骏730",
+  "Code": "CN200",
+  "Description": "宝骏730"
+ },
+ {
+  "BrandCode": "BaoJun",
+  "CodeDesc": "GP50HB - 宝骏610",
+  "Code": "GP50HB",
+  "Description": "宝骏610"
+ },
+ {
+  "BrandCode": "BaoJun",
+  "CodeDesc": "GP5X - 升级款宝骏630(GP51/52)",
+  "Code": "GP5X",
+  "Description": "升级款宝骏630(GP51/52)"
+ },
+ {
+  "BrandCode": "BaoJun",
+  "CodeDesc": "GP50 - 经典款宝骏630",
+  "Code": "GP50",
+  "Description": "经典款宝骏630"
+ },
+ {
+  "BrandCode": "BaoJun",
+  "CodeDesc": "M150 - 乐驰配P-TEC发动机",
+  "Code": "M150",
+  "Description": "乐驰配P-TEC发动机"
+ },
+ {
+  "BrandCode": "BaoJun",
+  "CodeDesc": "N5 - 乐驰",
+  "Code": "N5",
+  "Description": "乐驰"
+ }
+]
