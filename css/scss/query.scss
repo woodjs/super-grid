@@ -25,6 +25,7 @@
    display: inline-block;
    background: $queryThemeColor;
    padding:0 12px;
+   font-size:12px;
    color:#fff;
    @include setHeightGroup(26px);
    margin:0 5px;
@@ -37,7 +38,7 @@
   line-height:26px;
   .s-query-label{
    display: inline-block;
-   width:115px;
+   width:85px;
    float:left;
    padding-right:5px;
    line-height:26px;

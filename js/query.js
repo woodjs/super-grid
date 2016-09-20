@@ -103,16 +103,20 @@
         click: function () {
           var params = self.getParams(target);
 
-          opts.onBeforeQuery && opts.onBeforeQuery.call(null);
-          self.doQuery(target, params);
-          opts.onAfterQuery && opts.onAfterQuery.call(null);
+          opts.onBeforeQuery && opts.onBeforeQuery.call(null, target);
+
+          if (params) {
+            self.doQuery(target, params);
+          }
+
+          opts.onAfterQuery && opts.onAfterQuery.call(null, target);
         }
       });
 
       target.jq.$btnReset.on({
         click: function () {
 
-          opts.onBeforeReset && opts.onBeforeReset.call(null);
+          opts.onBeforeReset && opts.onBeforeReset.call(null, target);
 
           for (var i = 0; i < target.jq.$queryAllInputList.length; i++) {
             self.resetItem($(target.jq.$queryAllInputList[i]));
@@ -122,7 +126,7 @@
             target.jq.$comboboxList[j].combobox('clear');
           }
 
-          opts.onAfterReset && opts.onAfterReset.call(null);
+          opts.onAfterReset && opts.onAfterReset.call(null, target);
         }
       });
     },
@@ -186,6 +190,8 @@
       var withAllText = config.withAllText || opts.withAllText;
       var html = withAll ? '<option value="">' + withAllText + '</option>' : '';
 
+      if (!config.localData) return '';
+
       for (var i = 0; i < config.localData.length; i++) {
         html += '<option value="' + config.localData[i].code + '">' + config.localData[i].name + '</option>';
       }
@@ -230,7 +236,7 @@
           self.updateSelect(target, $select, result);
           $select.data('loaded', true);
         },
-        error: opts.onSelectAjaxError && opts.onSelectAjaxError.call(null, url + queryString)
+        error: opts.onSelectAjaxError && opts.onSelectAjaxError.call(null, $select)
       });
     },
 
@@ -317,7 +323,7 @@
         }
 
         if ($temp.is('.' + target.ns.cssPrefix + 'query-required') && value == '') {
-          opts.onRequiredIsEmpty.call(null);
+          opts.onRequiredIsEmpty.call(null, target);
           return;
         }
         if (value != '') {
