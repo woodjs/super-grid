@@ -14,94 +14,16 @@
       margin: 10px auto 0;
     }
 
-    .content-view input {
+    .demo-query input {
       height: 26px;
+      width: 100% !important;
     }
 
   </style>
 </head>
 <body>
-<div class="demo-query content-view">
-  <div class="s-query-wrapper">
-    <div class="s-query-content">
-      <div class="s-query-item s-query-required">
-        <span class="s-query-label"><label>测试1：</label></span>
-        <span class="s-query-input-wrapper">
-            <input type="text" class="s-query-input" name="test1" id="test1">
-        </span>
-      </div>
+<div class="demo-query"></div>
 
-      <div class="s-query-item">
-        <span class="s-query-label"><label>测试2：</label></span>
-        <span class="s-query-input-wrapper">
-           <input type="text" class="s-query-input" name="test2" id="test2">
-        </span>
-      </div>
-
-      <div class="s-query-item">
-        <span class="s-query-label"><label>测试3：</label></span>
-        <span class="s-query-input-wrapper">
-           <input type="text" class="s-query-input"  name="test3" id="test3">
-        </span>
-      </div>
-
-      <div class="s-query-item">
-        <span class="s-query-label"><label>测试4：</label></span>
-        <span class="s-query-input-wrapper">
-          <input type="text" class="s-query-input" name="test4" id="test4" />
-        </span>
-      </div>
-
-    </div>
-    <div class="s-query-operation">
-      <a class="s-query-btn s-query-action" href="#">查询</a>
-      <a class="s-query-btn s-query-reset" href="#">重置</a>
-    </div>
-  </div>
-</div>
-
-<!--<div class="demo-query">-->
-<!--<div class="s-query-wrapper">-->
-<!--<div class="s-query-content">-->
-<!--<div class="s-query-item s-query-required">-->
-<!--<span class="s-query-label"><label>测试1：</label></span>-->
-<!--<span class="s-query-input-wrapper">-->
-<!--<select name="a" class="s-query-input" id="a" data-value="temp1" data-preload="true" data-next="#b"-->
-<!--data-clearIds="['#b', '#c']" data-url="/data/data.json"></select>-->
-<!--</span>-->
-<!--</div>-->
-
-<!--<div class="s-query-item">-->
-<!--<span class="s-query-label"><label>测试2：</label></span>-->
-<!--<span class="s-query-input-wrapper">-->
-<!--<select name="b" class="s-query-input" id="b" data-withAll="false" data-preload="true"-->
-<!--data-dependenciesIds="['#a']" data-next="#c" data-clearIds="['#c']"-->
-<!--data-url="/data/data.json"></select>-->
-<!--</span>-->
-<!--</div>-->
-
-<!--<div class="s-query-item">-->
-<!--<span class="s-query-label"><label>测试3：</label></span>-->
-<!--<span class="s-query-input-wrapper">-->
-<!--<select name="c" class="s-query-input" id="c" data-withAll="true" data-dependenciesIds="['#a', '#b']"-->
-<!--data-url="/data/data.json"></select>-->
-<!--</span>-->
-<!--</div>-->
-
-<!--<div class="s-query-item">-->
-<!--<span class="s-query-label"><label>测试4：</label></span>-->
-<!--<span class="s-query-input-wrapper">-->
-<!--<input name="d" class="s-query-input" type="text"/>-->
-<!--</span>-->
-<!--</div>-->
-
-<!--</div>-->
-<!--<div class="s-query-operation">-->
-<!--<a class="s-query-btn s-query-action" href="#">查询</a>-->
-<!--<a class="s-query-btn s-query-reset" href="#">重置</a>-->
-<!--</div>-->
-<!--</div>-->
-<!--</div>-->
 <script type="text/javascript">
 
   var data = [{
@@ -128,11 +50,14 @@
 <script type="text/javascript">
   $(function () {
 
-    $('.content-view').query({
-      selectMode: 'combobox',
-      plugins: {
-        combobox: [{
-          id: '#test1',
+    $('.demo-query').query({
+      items: [
+        {
+          type: 'combobox',
+          id: 'test1',
+          name: 'test1',
+          label: '测试1',
+          required: true,
           config: {
             url: './data/query/data.json',
             mode: 'remote',
@@ -145,7 +70,10 @@
             }
           }
         }, {
-          id: '#test2',
+          type: 'combobox',
+          id: 'test2',
+          name: 'test2',
+          label: '测试2',
           config: {
             url: './data/query/data.json',
             mode: 'remote',
@@ -159,7 +87,10 @@
             }
           }
         }, {
-          id: '#test3',
+          type: 'combobox',
+          id: 'test3',
+          name: 'test3',
+          label: '测试3',
           config: {
             url: './data/query/data.json',
             mode: 'remote',
@@ -171,15 +102,36 @@
               return data;
             }
           }
-        }]
-      }
+        }, {
+          type: 'input',
+          id: 'test4',
+          name: 'test4',
+          label: '测试4'
+        }, {
+          type: 'select',
+          id: 'test5',
+          name: 'test5',
+          label: '测试5',
+          required: true,
+          config: {
+            withAll: true,
+            withAllText: '请选择',
+            preload: false,
+            localData: [{
+              code: 1,
+              name: 'a1'
+            }, {
+              code: 2,
+              name: 'a2'
+            }, {
+              code: 3,
+              name: 'a3'
+            }]
+          }
+        }
+      ]
     });
 
-//    $('.demo-query').query({
-//      selectMode: 'native',
-//      withAll: true,
-//      withAllText: '全部'
-//    });
   });
 </script>
 </body>

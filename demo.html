@@ -38,43 +38,7 @@
 </head>
 <body>
 
-<div class="demo-query" id="query-1">
-  <div class="s-query-wrapper">
-    <div class="s-query-content">
-      <div class="s-query-item s-query-required">
-        <span class="s-query-label"><label>测试1：</label></span>
-        <span class="s-query-input-wrapper">
-            <input type="text" class="s-query-input" name="test1" id="test1">
-        </span>
-      </div>
-
-      <div class="s-query-item">
-        <span class="s-query-label"><label>测试2：</label></span>
-        <span class="s-query-input-wrapper">
-           <input type="text" class="s-query-input" name="test2" id="test2">
-        </span>
-      </div>
-
-      <div class="s-query-item">
-        <span class="s-query-label"><label>测试3：</label></span>
-        <span class="s-query-input-wrapper">
-           <input type="text" class="s-query-input"  name="test3" id="test3">
-        </span>
-      </div>
-
-      <div class="s-query-item">
-        <span class="s-query-label"><label>测试4：</label></span>
-        <span class="s-query-input-wrapper">
-          <input type="text" class="s-query-input" name="test4" id="test4" />
-        </span>
-      </div>
-    </div>
-    <div class="s-query-operation">
-      <a class="s-query-btn s-query-action" href="#">查询</a>
-      <a class="s-query-btn s-query-reset" href="#">重置</a>
-    </div>
-  </div>
-</div>
+<div class="demo-query" id="query-1"></div>
 <div class="demo-grid" id="grid-1"></div>
 <div class="demo-pagination" id="pagination-1"></div>
 
@@ -99,10 +63,13 @@
           pageSizeList: [5, 10, 15, 20]
         }),
         query: $('#query-1').query({
-          selectMode: 'combobox',
-          plugins: {
-            combobox: [{
-              id: '#test1',
+          items: [
+            {
+              type: 'combobox',
+              id: 'test1',
+              name: 'test1',
+              label: '测试1',
+              required: true,
               config: {
                 url: './data/query/data.json',
                 mode: 'remote',
@@ -115,7 +82,10 @@
                 }
               }
             }, {
-              id: '#test2',
+              type: 'combobox',
+              id: 'test2',
+              name: 'test2',
+              label: '测试2',
               config: {
                 url: './data/query/data.json',
                 mode: 'remote',
@@ -129,7 +99,10 @@
                 }
               }
             }, {
-              id: '#test3',
+              type: 'combobox',
+              id: 'test3',
+              name: 'test3',
+              label: '测试3',
               config: {
                 url: './data/query/data.json',
                 mode: 'remote',
@@ -141,8 +114,13 @@
                   return data;
                 }
               }
-            }]
-          }
+            }, {
+              type: 'input',
+              id: 'test4',
+              name: 'test4',
+              label: '测试4'
+            }
+          ]
         })
       },
       columns: [{

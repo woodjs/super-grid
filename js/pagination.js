@@ -44,7 +44,7 @@
       var self = this;
       var $target = $(target);
       var opts = $(target).data('pagination').options;
-      var html = self.createPaginationHtml(target);
+      var html = self.createPaginationHtml(target, opts);
 
       opts.onBeforeRender && opts.onBeforeRender.call(null, target);
 
@@ -56,10 +56,9 @@
       opts.onAfterRender && opts.onAfterRender.call(null, target);
     },
 
-    createPaginationHtml: function (target) {
+    createPaginationHtml: function (target, opts) {
       var self = this;
       var templateMap = target.ns.templateMap;
-      var opts = $(target).data('pagination').options;
       var html = '';
 
       target.ns.totalPage = Math.floor(target.ns.totalRecord / target.ns.pageSize) + (target.ns.totalRecord % target.ns.pageSize > 0 ? 1 : 0);

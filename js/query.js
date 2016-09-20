@@ -17,15 +17,13 @@
 
     init: function (target) {
       var self = this;
-      var opts = $(target).data('query').options;
 
-      opts.onBeforeRender && opts.onBeforeRender.call(null);
       self.initGlobalScope(target);
+      self.render(target);
       self.initJqueryObject(target);
+      self.initCombobox(target);
       self.initEvent(target);
-      self.initPlugins(target);
       self.loadData(target);
-      opts.onAfterRender && opts.onAfterRender.call(null);
     },
 
     initGlobalScope: function (target) {
@@ -36,6 +34,20 @@
       target.ns = {};
 
       target.ns.cssPrefix = opts.cssPrefix;
+      target.ns.templateMap = $.parseJSON(JSON.stringify(self.templateMap).replace(/\{cssPrefix\}/g, target.ns.cssPrefix));
+    },
+
+    render: function (target) {
+      var self = this;
+      var $target = $(target);
+      var opts = $target.data('query').options;
+      var html = self.createQueryHtml(target, opts);
+
+      opts.onBeforeRender && opts.onBeforeRender.call(null, target);
+
+      $target.html(html);
+
+      opts.onAfterRender && opts.onAfterRender.call(null, target);
     },
 
     initJqueryObject: function (target) {
@@ -53,29 +65,39 @@
       target.jq.$comboboxList = [];
     },
 
+    initCombobox: function (target) {
+      var self = this;
+      var $target = $(target);
+      var items = $target.data('query').options.items;
+
+      for (var i = 0; i < items.length; i++) {
+        if (items[i].type === 'combobox') {
+          target.jq.$comboboxList.push($target.find('#' + items[i].id).combobox(items[i].config || {}));
+        }
+      }
+    },
+
     initEvent: function (target) {
       var self = this;
       var $target = $(target);
       var opts = $target.data('query').options;
 
-      if (opts.selectMode === 'native') {
-        target.jq.$querySelectList.on({
-          click: function () {
-            var $this = $(this);
+      target.jq.$querySelectList.on({
+        click: function () {
+          var $this = $(this);
 
-            if ($this.data('noCache') === true || $this.data('loaded') !== true) {
+          if ($this.data('noCache') === true || $this.data('loaded') !== true) {
 
-              self.loadSelectData(target, $this);
-            }
-          },
-          change: function () {
-            var $this = $(this);
-            var $nextSelect = $target.find($this.data('next'));
-
-            if ($nextSelect.length) self.loadSelectData(target, $nextSelect, true);
+            self.loadSelectData(target, $this);
           }
-        });
-      }
+        },
+        change: function () {
+          var $this = $(this);
+          var $nextSelect = $target.find($this.data('next'));
+
+          if ($nextSelect.length) self.loadSelectData(target, $nextSelect, true);
+        }
+      });
 
       target.jq.$btnQuery.on({
         click: function () {
@@ -96,10 +118,8 @@
             self.resetItem($(target.jq.$queryAllInputList[i]));
           }
 
-          if (opts.selectMode === 'combobox') {
-            for (var j = 0; j < target.jq.$comboboxList.length; j++) {
-              target.jq.$comboboxList[j].combobox('clear');
-            }
+          for (var j = 0; j < target.jq.$comboboxList.length; j++) {
+            target.jq.$comboboxList[j].combobox('clear');
           }
 
           opts.onAfterReset && opts.onAfterReset.call(null);
@@ -107,15 +127,70 @@
       });
     },
 
-    initPlugins: function (target) {
+    createQueryHtml: function (target, opts) {
       var self = this;
-      var $target = $(target);
-      var plugins = $target.data('query').options.plugins;
-      var comboboxList = plugins.combobox || [];
+      var templateMap = target.ns.templateMap;
+      var html = '';
 
-      for (var i = 0; i < comboboxList.length; i++) {
-        target.jq.$comboboxList.push($(comboboxList[i].id).combobox(comboboxList[i].config || {}));
+      html += templateMap.wrapper.begin;
+
+      html += templateMap.content.begin;
+      html += self.createItemsHtml(target, opts);
+      html += templateMap.content.end;
+
+      html += templateMap.operation.begin;
+      html += templateMap.query;
+      html += templateMap.reset;
+      html += templateMap.operation.end;
+
+      html += templateMap.wrapper.end;
+      return html;
+    },
+
+    createItemsHtml: function (target, opts) {
+      var self = this;
+      var templateMap = target.ns.templateMap;
+      var html = '';
+      var temp;
+
+      for (var i = 0; i < opts.items.length; i++) {
+        temp = opts.items[i];
+        html += templateMap.item.begin
+          .replace('{required}', temp.required ? target.ns.cssPrefix + 'query-required' : '')
+          .replace('{label}', temp.label);
+
+        if (temp.type !== 'select') {
+          html += templateMap.input.replace('{name}', temp.name).replace('{id}', temp.id);
+        } else {
+          html += templateMap.select
+            .replace('{name}', temp.name)
+            .replace('{id}', temp.id)
+            .replace('{url}', temp.config.url || '')
+            .replace('{withAll}', temp.config.withAll || '')
+            .replace('{withAllText}', temp.config.withAllText || '')
+            .replace('{preload}', temp.config.preload || '')
+            .replace('{dependenciesIds}', temp.config.dependenciesIds ? JSON.stringify(temp.config.dependenciesIds).replace(/\"/g, '\'') : '')
+            .replace('{clearIds}', temp.config.clearIds ? JSON.stringify(temp.config.clearIds).replace(/\"/g, '\'') : '')
+            .replace('{next}', temp.config.next || '')
+            .replace('{options}', self.createOptionsHtml(target, opts, temp.config || []));
+        }
+        html += templateMap.item.end;
       }
+
+      return html;
+    },
+
+    createOptionsHtml: function (target, opts, config) {
+      var self = this;
+      var withAll = config.withAll || opts.withAll;
+      var withAllText = config.withAllText || opts.withAllText;
+      var html = withAll ? '<option value="">' + withAllText + '</option>' : '';
+
+      for (var i = 0; i < config.localData.length; i++) {
+        html += '<option value="' + config.localData[i].code + '">' + config.localData[i].name + '</option>';
+      }
+
+      return html;
     },
 
     loadData: function (target) {
@@ -138,6 +213,8 @@
       var opts = $(target).data('query').options;
       var queryString = self.getQueryString(target, $select);
 
+      if (!url) return;
+
       if (queryString === false) {
         self.clearSelect(target, $select, isClearSelf);
         return;
@@ -148,9 +225,9 @@
         type: 'GET',
         cache: false,
         timeout: 3000,
-        success: function () {
+        success: function (result) {
           self.clearSelect(target, $select);
-          self.updateSelect(target, $select, data);
+          self.updateSelect(target, $select, result);
           $select.data('loaded', true);
         },
         error: opts.onSelectAjaxError && opts.onSelectAjaxError.call(null, url + queryString)
@@ -168,7 +245,7 @@
 
       for (var i = 0; i < len; i++) {
         $temp = $target.find(dependenciesIdList[i]);
-        if ($temp.val() === '') return false;
+        if ($temp.length === 0 || $temp.val() === '') return false;
         list.push($temp[0].name + '=' + $temp.val());
       }
 
@@ -253,32 +330,60 @@
 
     doQuery: function (target, params) {
       var self = this;
-      var opts = $(target).data('query').options;
+      var $target = $(target);
+      var opts = $target.data('query').options;
 
       target.ns.params = params;
 
-      $.ajax({
-        url: opts.url,
-        type: opts.method,
-        cache: opts.cache,
-        timeout: opts.timeout,
-        data: target.ns.params,
-        dataType: 'json',
-        beforeSend: opts.onAjaxBeforeSend,
-        complete: opts.onAjaxComplete,
-        error: function () {
-          opts.onAjaxError && opts.onAjaxError.apply(null, Array.prototype.slice.apply(null, arguments));
-        },
-        success: function (result) {
-          opts.onAjaxSuccess && opts.onAjaxSuccess.apply(null, [result]);
-        }
-      });
+      if (opts.url) {
+        $.ajax({
+          url: opts.url,
+          type: opts.method,
+          cache: opts.cache,
+          timeout: opts.timeout,
+          data: target.ns.params,
+          dataType: 'json',
+          beforeSend: opts.onAjaxBeforeSend,
+          complete: opts.onAjaxComplete,
+          error: function () {
+            opts.onAjaxError && opts.onAjaxError.apply(null, Array.prototype.slice.apply(null, arguments));
+          },
+          success: function (result) {
+            opts.onAjaxSuccess && opts.onAjaxSuccess.apply(null, [result]);
+          }
+        });
+      }
+
+      $target.triggerHandler('query', target.ns.params);
+    },
+
+    templateMap: {
+      wrapper: {
+        begin: '<div class="{cssPrefix}query-wrapper">',
+        end: '</div>'
+      },
+      content: {
+        begin: '<div class="{cssPrefix}query-content">',
+        end: '</div>'
+      },
+      operation: {
+        begin: '<div class="{cssPrefix}query-operation">',
+        end: '</div>'
+      },
+      item: {
+        begin: '<div class="{cssPrefix}query-item {required}"><span class="{cssPrefix}query-label"><label>{label}：</label></span><span class="{cssPrefix}query-input-wrapper">',
+        end: '</span></div>'
+      },
+      input: '<input type="text" class="{cssPrefix}query-input" name="{name}" id="{id}">',
+      select: '<select class="{cssPrefix}query-input" name="{name}" id="{id}" data-withall="{withAll}" data-withalltext="{withAllText}" data-preload="{preload}" data-dependenciesids="{dependenciesIds}"  data-clearids="{clearIds}" data-next="{next}" data-url="{url}">{options}</select>',
+      query: '<a class="{cssPrefix}query-btn {cssPrefix}query-action" href="javascript:;">查询</a>',
+      reset: '<a class="{cssPrefix}query-btn {cssPrefix}query-reset" href="javascript:;">重置</a>'
     }
   };
 
   $.fn.query = function (options, params) {
     if (typeof options == 'string') {
-      return $.fn.query.methods[options]($(this), params);
+      return $.fn.query.methods[options](this, params);
     }
 
     options = options || {};
@@ -293,11 +398,14 @@
     });
   };
 
-  $.fn.query.methods = {};
+  $.fn.query.methods = {
+    getParams: function ($target) {
+      return query.getParams($target[0]);
+    }
+  };
 
   $.fn.query.defaults = {
     cssPrefix: 's-',
-    selectMode: 'native',
     withAll: true,
     withAllText: '全部',
     url: '',
