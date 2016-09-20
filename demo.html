@@ -6,12 +6,23 @@
   <meta name="keywords" content="">
   <meta name="description" content="">
   <title>demo</title>
+  <link rel="stylesheet" type="text/css" href="css/component/servision.combobox.css">
+  <link rel="stylesheet" type="text/css" href="css/component/query.css">
   <link rel="stylesheet" type="text/css" href="css/component/gird.css">
   <link rel="stylesheet" type="text/css" href="css/component/pagination.css">
   <style type="text/css">
+    .demo-query {
+      width: 837px;
+      margin: 10px auto 0;
+    }
+
+    .demo-query input {
+      height: 26px;
+    }
+
     .demo-grid {
       width: 837px;
-      margin: 50px auto 0;
+      margin: 10px auto 0;
     }
 
     tbody a {
@@ -22,14 +33,54 @@
       width: 837px;
       margin: 10px auto 0;
     }
+
   </style>
 </head>
 <body>
 
+<div class="demo-query" id="query-1">
+  <div class="s-query-wrapper">
+    <div class="s-query-content">
+      <div class="s-query-item s-query-required">
+        <span class="s-query-label"><label>测试1：</label></span>
+        <span class="s-query-input-wrapper">
+            <input type="text" class="s-query-input" name="test1" id="test1">
+        </span>
+      </div>
+
+      <div class="s-query-item">
+        <span class="s-query-label"><label>测试2：</label></span>
+        <span class="s-query-input-wrapper">
+           <input type="text" class="s-query-input" name="test2" id="test2">
+        </span>
+      </div>
+
+      <div class="s-query-item">
+        <span class="s-query-label"><label>测试3：</label></span>
+        <span class="s-query-input-wrapper">
+           <input type="text" class="s-query-input"  name="test3" id="test3">
+        </span>
+      </div>
+
+      <div class="s-query-item">
+        <span class="s-query-label"><label>测试4：</label></span>
+        <span class="s-query-input-wrapper">
+          <input type="text" class="s-query-input" name="test4" id="test4" />
+        </span>
+      </div>
+    </div>
+    <div class="s-query-operation">
+      <a class="s-query-btn s-query-action" href="#">查询</a>
+      <a class="s-query-btn s-query-reset" href="#">重置</a>
+    </div>
+  </div>
+</div>
 <div class="demo-grid" id="grid-1"></div>
 <div class="demo-pagination" id="pagination-1"></div>
 
 <script type="text/javascript" src="js/lib/jquery-1.11.3.min.js"></script>
+<script type="text/javascript" src="js/component/jquery.servision.combobox.js"></script>
+<script type="text/javascript" src="js/query.js"></script>
 <script type="text/javascript" src="js/grid.js"></script>
 <script type="text/javascript" src="js/pagination.js"></script>
 <script type="text/javascript">
@@ -46,6 +97,52 @@
           pageBtnCount: 3,
           curPageIndex: 1,
           pageSizeList: [5, 10, 15, 20]
+        }),
+        query: $('#query-1').query({
+          selectMode: 'combobox',
+          plugins: {
+            combobox: [{
+              id: '#test1',
+              config: {
+                url: './data/query/data.json',
+                mode: 'remote',
+                textField: 'Description',
+                valueField: 'Code',
+                queryMatch: 'Description',
+                clearIds: ["#test2", "#test3"],
+                loadFilter: function (data) {
+                  return data;
+                }
+              }
+            }, {
+              id: '#test2',
+              config: {
+                url: './data/query/data.json',
+                mode: 'remote',
+                textField: 'Description',
+                valueField: 'Code',
+                dependenciesIds: ["#test1"],
+                queryMatch: 'Description',
+                clearIds: ["#test3"],
+                loadFilter: function (data) {
+                  return data;
+                }
+              }
+            }, {
+              id: '#test3',
+              config: {
+                url: './data/query/data.json',
+                mode: 'remote',
+                textField: 'Description',
+                valueField: 'Code',
+                queryMatch: 'Description',
+                dependenciesIds: ["#test2"],
+                loadFilter: function (data) {
+                  return data;
+                }
+              }
+            }]
+          }
         })
       },
       columns: [{
