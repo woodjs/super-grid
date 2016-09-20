@@ -67,7 +67,6 @@
       opts.onAfterRender && opts.onAfterRender.call(null, target);
     },
 
-
     initJqueryObject: function (target) {
       var self = this;
       var $target = $(target);
