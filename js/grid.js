@@ -36,6 +36,7 @@
 
       target.ns = {};
 
+      target.ns.minWidth = '30px';
       target.ns.cssPrefix = $.trim(opts.cssPrefix);
       target.ns.id = _id++;
       target.ns.tbodyIdList = [];
@@ -120,7 +121,7 @@
           $closestGridTable
             .find('.' + cssPrefix + 'table-header')
             .css({
-              left: - $this.scrollLeft() + 'px'
+              left: -$this.scrollLeft() + 'px'
             });
 
           $closestGridTable
@@ -347,35 +348,75 @@
       var len = cols.length;
       var temp;
 
+      self.resetFlexWidth(target, opts);
+
       for (var i = 0; i < len; i++) {
-        temp = opts.columns[i];
+        temp = cols[i];
         if (temp.frozen) {
           switch (opts.frozenAlign) {
             case 'right':
-              target.ns.rightFrozenColsW += parseInt(temp.width);
+              target.ns.rightFrozenColsW += temp.width;
               target.ns.rightFrozenCols.push(temp);
               break;
             case 'left-right':
               if (temp.align === 'right') {
-                target.ns.rightFrozenColsW += parseInt(temp.width);
+                target.ns.rightFrozenColsW += temp.width;
                 target.ns.rightFrozenCols.push(temp);
               } else {
-                target.ns.leftFrozenColsW += parseInt(temp.width);
+                target.ns.leftFrozenColsW += temp.width;
                 target.ns.leftFrozenCols.push(temp);
               }
               break;
             case 'left':
             default:
-              target.ns.leftFrozenColsW += parseInt(temp.width);
+              target.ns.leftFrozenColsW += temp.width;
               target.ns.leftFrozenCols.push(temp);
           }
         } else {
-          target.ns.unFrozenColsW += parseInt(temp.width);
+          target.ns.unFrozenColsW += temp.width;
           target.ns.unFrozenCols.push(temp);
         }
       }
 
       target.ns.unFrozenColsWrapperW = parseInt(opts.width) - target.ns.leftFrozenColsW - target.ns.rightFrozenColsW;
+    },
+
+    resetFlexWidth: function (target, opts) {
+      var self = this;
+      var cols = opts.columns;
+      var len = cols.length;
+      var widthCount = 0;
+      var flexCount = 0;
+      var temp;
+      var flexCols = [];
+      var unitWidth;
+      var result;
+
+      if (opts.withCheckbox) widthCount += parseInt(opts.checkboxWidth);
+      if (opts.withRowNumber) widthCount += parseInt(opts.rowNumberWidth);
+
+      for (var i = 0; i < len; i++) {
+        temp = cols[i];
+        if (temp.width) {
+          temp.width = parseInt(temp.width);
+          widthCount += temp.width;
+        } else if (temp.flex) {
+          temp.flex = parseInt(temp.flex);
+          flexCount += temp.flex;
+          flexCols.push(temp);
+        } else {
+          temp.width = parseInt(target.ns.minWidth);
+          widthCount += temp.width;
+        }
+      }
+
+      unitWidth = flexCount ? (parseInt(opts.width) - widthCount) / flexCount : 0;
+      result = parseInt(unitWidth > parseInt(target.ns.minWidth) ? unitWidth : target.ns.minWidth);
+
+      for (var j = 0; j < flexCols.length; j++) {
+        temp = flexCols[j];
+        temp.width = result * temp.flex;
+      }
     },
 
     controlCreateHtml: function (target, opts, isOnlyUpdateTbody) {
@@ -503,13 +544,13 @@
       for (var i = 0; i < len; i++) {
         temp = cols[i];
         htmlColgroup += templateMap.colgroup
-          .replace('{width}', temp.width);
+          .replace('{width}', temp.width + 'px');
 
         htmlGridTable += templateMap.tableColumn.begin
           .replace('{classList}', self.createColumnClass(target, temp))
           .replace('{colIndex}', beginColIndex++)
           .replace('{index}', temp.index)
-          .replace('{width}', temp.width)
+          .replace('{width}', temp.width + 'px')
           .replace('{theadHeight}', opts.theadHeight)
           .replace('{theadLineHeight}', parseInt(opts.theadHeight) - 1 + 'px');
 
@@ -760,7 +801,7 @@
       });
 
       function dragAndCalculate(e) {
-        var minColumnW = 30;
+        var minColumnW = parseInt(target.ns.minWidth);
         var curDragTargetW = target.jq.$curDragTarget.outerWidth();
         var mousePosition = util.getEventPosition(e);
         var $gridWrapper = target.jq.$curDragTarget.closest('.' + cssPrefix + 'grid-wrapper');

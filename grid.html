@@ -24,6 +24,7 @@
 <div class="demo-grid" id="test2"></div>
 <div class="demo-grid" id="test3"></div>
 <div class="demo-grid" id="test4"></div>
+<div class="demo-grid" id="test5"></div>
 
 <script type="text/javascript" src="js/lib/jquery-1.11.3.min.js"></script>
 <script type="text/javascript" src="js/grid.js"></script>
@@ -461,6 +462,41 @@
         title: '测试8',
         index: 'h1',
         width: '100px',
+        sortable: true,
+        resizeable: true
+      }]
+    });
+
+    $('#test5').grid({
+      width: '857px',
+      height: '244px',
+      url: './data/grid/data.json',
+      withCheckbox: false,
+      columns: [{
+        title: '测试1',
+        index: 'a1',
+        width: '100px',
+        sortable: true,
+        resizeable: true,
+        renderer: function (value, record, store) {
+          return '<a class="custom-a" href="http://www.baidu.com" target="_blank">' + value + '</a>';
+        }
+      }, {
+        title: '测试2',
+        index: 'b1',
+        flex: 1,
+        sortable: true,
+        resizeable: true
+      }, {
+        title: '测试3',
+        index: 'c1',
+        flex: 1,
+        sortable: true,
+        resizeable: true
+      }, {
+        title: '测试4',
+        index: 'd1',
+        flex: 1,
         sortable: true,
         resizeable: true
       }]
