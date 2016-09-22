@@ -56,6 +56,12 @@
       width: '837px',
       height: '244px',
       url: './data/grid/data.json',
+      rebuildAjaxParams: function (p) {
+        console.log(p);
+      },
+      rebuildAjaxResponse: function (r) {
+        console.log(r);
+      },
       plugins: {
         pagination: $('#pagination-1').pagination({
           pageSize: 20,

@@ -52,7 +52,11 @@
       target.ns.store = null;
       target.ns.templateMap = $.parseJSON(JSON.stringify(self.templateMap).replace(/\{cssPrefix\}/g, target.ns.cssPrefix));
       target.ns.multiSelect = opts.multiSelect;
-      target.ns.params = {};
+      target.ns.params = {
+        paging: {},
+        filters: {},
+        sorts: []
+      };
     },
 
     render: function (target) {
@@ -189,8 +193,14 @@
           var $curCol = $(this).closest('.s-table-column');
           var len = target.jq.$headerCols.length;
           var $temp = null;
+          var query = target.plugins.query;
+          var params = {
+            sorts: []
+          };
 
           opts.onBeforeSort && opts.onBeforeSort.call(null, this);
+
+          if (query && query.query && query.query('isRequiredIsEmpty')) return;
 
           for (var i = 0; i < len; i++) {
 
@@ -210,7 +220,16 @@
             }
           }
 
-          self.loadData(target);
+          var index = $curCol.data('index');
+          var isAsc = $curCol.is('.' + cssPrefix + 'grid-sort-asc') ? true : $curCol.is('.' + cssPrefix + 'grid-sort-desc') ? false : null;
+
+          if (typeof isAsc === 'boolean') {
+            params.sorts.push({
+              field: index,
+              asc: isAsc
+            });
+          }
+          self.loadData(target, params);
 
           opts.onAfterSort && opts.onAfterSort.call(null, this);
         }
@@ -292,7 +311,7 @@
 
       target.plugins = {};
 
-      plugins && $.extend(target.plugins, plugins);
+      plugins && $.extend(true, target.plugins, plugins);
 
       self.initPluginsEvent(target);
     },
@@ -308,13 +327,13 @@
           if (i === 'pagination') {
             $temp.on({
               'changePage': function (e, params) {
-                self.loadData(target, params);
+                self.loadData(target, {paging: params});
               }
             });
           } else if (i === 'query') {
             $temp.on({
               'query': function (e, params) {
-                self.loadData(target, params);
+                self.loadData(target, {filters: params});
               }
             });
           }
@@ -663,19 +682,24 @@
       var self = this;
       var $target = $(target);
       var opts = $target.data('grid').options;
+      var pagination = target.plugins.pagination;
 
       if (opts.url) {
+        var paginationParams = {
+          paging: pagination && pagination.pagination && pagination.pagination('getParams')
+        };
 
         target.jq.$loading.show();
 
-        $.extend(true, target.ns.params, params);
+        $.extend(target.ns.params, paginationParams, params);
+
+        var queryString = opts.rebuildAjaxParams ? (opts.rebuildAjaxParams.call(target, target.ns.params) || '?args=' + JSON.stringify(target.ns.params)) : '?args=' + JSON.stringify(target.ns.params);
 
         $.ajax({
-          url: opts.url,
+          url: encodeURI(opts.url + queryString),
           type: opts.method,
           cache: opts.cache,
           timeout: opts.timeout,
-          data: target.ns.params,
           dataType: 'json',
           beforeSend: opts.onAjaxBeforeSend,
           complete: opts.onAjaxComplete,
@@ -684,12 +708,12 @@
             opts.onAjaxError && opts.onAjaxError.apply(null, Array.prototype.slice.apply(null, arguments));
           },
           success: function (result) {
+            result = opts.rebuildAjaxResponse ? (opts.rebuildAjaxResponse.call(target, result) || result) : result;
+
             self.renderTbody(target, opts, result);
             target.jq.$rows = $target.find('tr');
             self.initRowEvent(target);
             target.jq.$loading.hide();
-
-            var pagination = target.plugins.pagination;
 
             pagination && pagination.pagination && pagination.pagination('update', result);
             opts.onAjaxSuccess && opts.onAjaxSuccess.apply(null, [result]);
@@ -720,6 +744,7 @@
       var htmlTbody = '';
       var originalColIndex = beginColIndex;
       var list = target.ns.store[opts.root];
+      var rowNumberStart = target.ns.store.start || 0;
       var listLen = list.length;
       var cols;
       var colsLen;
@@ -751,7 +776,7 @@
           if (opts.withRowNumber) htmlTbody += templateMap.tdRowNumber
             .replace('{trHeight}', opts.trHeight)
             .replace('{trLineHeight}', parseInt(opts.trHeight) - 1 + 'px')
-            .replace('{number}', i + 1);
+            .replace('{number}', rowNumberStart + i + 1);
         }
 
         for (var j = 0; j < colsLen; j++) {
@@ -952,7 +977,7 @@
         options: $.extend(true, {}, $.fn.grid.defaults, options)
       });
 
-      grid.init(this);
+      return grid.init(this);
     });
   };
 
@@ -993,6 +1018,8 @@
     onAfterRender: null,
     onClickRow: null,
     onBeforeSort: null,
-    onAfterSort: null
+    onAfterSort: null,
+    rebuildAjaxParams: null,
+    rebuildAjaxResponse: null
   };
 });
