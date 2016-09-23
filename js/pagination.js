@@ -364,6 +364,7 @@
       } else {
         if (isNotTriggerChangePage) {
           self.render(target);
+          self.updatePagination(target);
           return;
         }
         target.jq.$boxBtnList.html(self.createBtnListHtml(target));
