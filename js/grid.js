@@ -985,9 +985,11 @@
     options = options || {};
 
     return this.each(function () {
+      var tempW = $(this).width();
       $.data(this, 'grid', {
         options: $.extend(true, {}, $.fn.grid.defaults, {
-          width: ($(this).width() || 0) + 'px'
+          width: tempW ? tempW + 'px' : '800px',
+          height: parseInt(options.theadHeight || 24) + parseInt(options.trHeight || 24) * parseInt(options.size || 20)
         }, options)
       });
 
@@ -1004,8 +1006,8 @@
 
   $.fn.grid.defaults = {
     cssPrefix: 's-',
-    width: '800px',
-    height: '200px',
+    width: '',
+    height: '',
     size: 20,
     autoLoad: false,
     withCheckbox: true,
