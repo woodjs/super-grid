@@ -51,7 +51,10 @@
       target.ns.unFrozenColsW = 0;
       target.ns.unFrozenColsWrapperW = 0;
       target.ns.store = null;
-      target.ns.templateMap = $.parseJSON(JSON.stringify(self.templateMap).replace(/\{cssPrefix\}/g, target.ns.cssPrefix));
+      target.ns.templateMap = JSON.parse(
+        JSON.stringify(self.templateMap)
+          .replace(/\{cssPrefix\}/g, target.ns.cssPrefix)
+      );
       target.ns.multiSelect = opts.multiSelect;
       target.ns.params = {
         paging: {},
@@ -557,7 +560,7 @@
           .replace('{theadLineHeight}', parseInt(opts.theadHeight) - 1 + 'px');
 
         htmlGridTable += templateMap.gridText
-          .replace('{title}', '序号');
+          .replace('{title}', opts.lang.toLowerCase() === 'en_us' ? 'NO.' : '序号');
         htmlGridTable += templateMap.tableColumn.end;
       }
 
@@ -1006,6 +1009,7 @@
 
   $.fn.grid.defaults = {
     cssPrefix: 's-',
+    lang: 'zh_CN',  // 'en_US ' | 'zh_CN'
     width: '',
     height: '',
     size: 20,
