@@ -292,7 +292,10 @@
         frozen: true,
         sortable: true,
         align: 'right',
-        resizeable: true
+        resizeable: true,
+        renderer: function (value, record, store) {
+          return '<a class="custom-a" href="http://www.baidu.com" target="_blank">' + value + '</a>';
+        }
       }, {
         title: '测试2',
         index: 'b1',
@@ -352,7 +355,10 @@
         frozen: true,
         sortable: true,
         align: 'right',
-        resizeable: false
+        resizeable: false,
+        renderer: function (value, record, store) {
+          return '<a class="custom-a" href="http://www.baidu.com" target="_blank">' + value + '</a>';
+        }
       }, {
         title: '测试2',
         index: 'b1',
@@ -365,7 +371,10 @@
         index: 'c1',
         width: '100px',
         sortable: true,
-        resizeable: true
+        resizeable: true,
+        renderer: function (value, record, store) {
+          return '<a class="custom-a" href="http://www.baidu.com" target="_blank">' + value + '</a>';
+        }
       }, {
         title: '测试4',
         index: 'd1',
